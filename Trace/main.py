@@ -11,6 +11,7 @@ class Trace:
         self.app = ctk.CTk()
         self.app.geometry("1000x1200")
         self.app.title("TRACE")
+        self.app.resizable(width=False, height=False)
 
         ctk.set_appearance_mode("dark")
 
