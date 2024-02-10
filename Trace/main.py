@@ -17,6 +17,7 @@ class Trace:
         self.app = ctk.CTk()
         self.app.geometry("1500x1200")
         self.app.title("TRACE")
+        self.app.resizable(False, False)
 
         canvas = tk.Canvas(self.app, width=1500, height=1200)
         canvas.place(relx=.5, rely=.5, anchor="center")
