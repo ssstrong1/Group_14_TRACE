@@ -23,8 +23,8 @@ class Trace:
         canvas.place(relx=.5, rely=.5, anchor="center")
 
         if screensize == (1920, 1080):
-            ctk.set_widget_scaling(.75)
-            ctk.set_window_scaling(.75)
+            ctk.set_widget_scaling(.7465)
+            ctk.set_window_scaling(.7465)
             d_2_img = ImageTk.PhotoImage(Image.open("pattern_back.png").resize((1500, 1200)))
             canvas.create_image(0, 0, anchor=tk.NW, image=d_2_img)
             cosmos = canvas.create_text(635, 150, anchor="nw", fill="yellow")
@@ -82,79 +82,163 @@ class Trace:
 
         # Employee Social Security Number
 
-        essn_entry = ctk.CTkEntry(master=self.app, placeholder_text="ESSN", width=256, height=25, text_color="#000000",
+        essn_entry = ctk.CTkEntry(master=self.app, placeholder_text="ESSN", width=283, height=25, text_color="#000000",
                                   bg_color="white", fg_color="transparent")
 
         # Employer ID Number
 
-        ein_entry = ctk.CTkEntry(master=self.app, placeholder_text="EIN", width=370, text_color="#000000",
+        ein_entry = ctk.CTkEntry(master=self.app, placeholder_text="EIN", width=653, height=25, text_color="#000000",
                                  bg_color="white", fg_color="transparent")
 
         # Wages, Tips, Other Compensation
 
-        wages_tips_c = ctk.CTkEntry(master=self.app, placeholder_text="wages", width=235, height=25,
+        wages_tips_c = ctk.CTkEntry(master=self.app, placeholder_text="wages", width=269, height=25,
                                     text_color="#000000",
                                     bg_color="white", fg_color="transparent")
 
         # Social Security Wages
 
-        social_wages = ctk.CTkEntry(master=self.app, placeholder_text="social wages", width=235, height=25,
+        social_wages = ctk.CTkEntry(master=self.app, placeholder_text="social wages", width=269, height=25,
                                     text_color="#000000",
                                     bg_color="white", fg_color="transparent")
 
         # Medicare Wages
 
-        medicare_wages = ctk.CTkEntry(master=self.app, placeholder_text="medicare", width=235, height=25,
+        medicare_wages = ctk.CTkEntry(master=self.app, placeholder_text="medicare", width=269, height=25,
                                       text_color="#000000",
                                       bg_color="white", fg_color="transparent")
 
         # Social Security Tips
 
-        social_security_tips = ctk.CTkEntry(master=self.app, placeholder_text="SS Tips", width=235, height=25,
+        social_security_tips = ctk.CTkEntry(master=self.app, placeholder_text="SS Tips", width=269, height=25,
                                             text_color="#000000",
                                             bg_color="white", fg_color="transparent")
 
         # 9 box
 
-        nine_box = ctk.CTkEntry(master=self.app, placeholder_text="Nine", width=235, height=25,
+        nine_box = ctk.CTkEntry(master=self.app, placeholder_text="Nine", width=235, height=35,
                                 text_color="#000000",
                                 bg_color="#c0c0c0", fg_color="white")
 
         #  Non-Qualified Plans
 
-        non_qualified_plans = ctk.CTkEntry(master=self.app, placeholder_text="plans", width=235, height=25,
+        non_qualified_plans = ctk.CTkEntry(master=self.app, placeholder_text="plans", width=269, height=25,
                                            text_color="#000000",
                                            bg_color="white", fg_color="transparent")
 
         #  Federal Income Tax Withheld
 
-        fed_income_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="fed", width=235, height=25,
+        fed_income_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="fed", width=269, height=25,
                                                text_color="#000000",
                                                bg_color="white", fg_color="transparent")
 
         #  Social Security Tax Withheld
 
-        social_security_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="SS Tax", width=235, height=25,
+        social_security_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="SS Tax", width=269, height=25,
                                                     text_color="#000000",
                                                     bg_color="white", fg_color="transparent")
 
         #  Medicare Tax Withheld
 
-        medicare_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="medicare withheld", width=235, height=25,
+        medicare_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="medicare withheld", width=269, height=25,
                                              text_color="#000000",
                                              bg_color="white", fg_color="transparent")
 
         #  Allocated Tips
 
-        allocated_tips = ctk.CTkEntry(master=self.app, placeholder_text="A Tips", width=235, height=25,
+        allocated_tips = ctk.CTkEntry(master=self.app, placeholder_text="A Tips", width=269, height=25,
                                       text_color="#000000",
                                       bg_color="white", fg_color="transparent")
 
         #  Dependent Care Benefits
 
-        dependent_care_benefits = ctk.CTkEntry(master=self.app, placeholder_text="DCB", width=235, height=25,
+        dependent_care_benefits = ctk.CTkEntry(master=self.app, placeholder_text="DCB", width=269, height=25,
                                                text_color="#000000",
                                                bg_color="white", fg_color="transparent")
+
+        #  12-A
+
+        twelve_a = ctk.CTkEntry(master=self.app, placeholder_text="12a", width=190, height=25,
+                                               text_color="#000000",
+                                               bg_color="white", fg_color="transparent")
+
+        #  12-B
+
+        twelve_b = ctk.CTkEntry(master=self.app, placeholder_text="12b", width=190, height=25,
+                                text_color="#000000",
+                                bg_color="white", fg_color="transparent")
+
+        #  12-C
+
+        twelve_c = ctk.CTkEntry(master=self.app, placeholder_text="12c", width=190, height=25,
+                                text_color="#000000",
+                                bg_color="white", fg_color="transparent")
+
+        #  12-D
+
+        twelve_d = ctk.CTkEntry(master=self.app, placeholder_text="12d", width=190, height=25,
+                                text_color="#000000",
+                                bg_color="white", fg_color="transparent")
+
+        #  Local Income Tax
+
+        local_income_tax = ctk.CTkEntry(master=self.app, placeholder_text="12d", width=174, height=25,
+                                text_color="#000000",
+                                bg_color="white", fg_color="transparent")
+
+        #  State Income Tax
+
+        state_income_tax = ctk.CTkEntry(master=self.app, placeholder_text="12d", width=174, height=25,
+                                        text_color="#000000",
+                                        bg_color="white", fg_color="transparent")
+
+        #  State Wages, Tips, ETC.
+
+        state_wage_tips = ctk.CTkEntry(master=self.app, placeholder_text="12d", width=190, height=25,
+                                        text_color="#000000",
+                                        bg_color="white", fg_color="transparent")
+
+        #  Employer's State ID
+
+        employers_state_id = ctk.CTkEntry(master=self.app, placeholder_text="12d", width=287, height=25,
+                                        text_color="#000000",
+                                        bg_color="white", fg_color="transparent")
+
+        #  State
+
+        state_field = ctk.CTkEntry(master=self.app, placeholder_text="12d", width=60, height=25,
+                                          text_color="#000000",
+                                          bg_color="white", fg_color="transparent")
+
+        #  Locality Name
+
+        locality_name = ctk.CTkEntry(master=self.app, placeholder_text="12d", width=109, height=25,
+                                          text_color="#000000",
+                                          bg_color="white", fg_color="transparent")
+
+        #  Local Wages, Tips, ETC.
+
+        local_wage_tips = ctk.CTkEntry(master=self.app, placeholder_text="12d", width=190, height=25,
+                                       text_color="#000000",
+                                       bg_color="white", fg_color="transparent")
+
+        #  Statutory Employee
+
+        statutory_emp = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0, bg_color="white")
+
+        #  Retirement Plan
+
+        retirement_p = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0, bg_color="white")
+
+        #  Third Party Sick Pay
+
+        third_party_sp = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0, bg_color="white")
+
+        #  Other
+
+        other_field = ctk.CTkEntry(master=self.app, placeholder_text="other", width=269, height=90,
+                                text_color="#000000",
+                                bg_color="white", fg_color="transparent")
 
         # Employer Name, Address, ZIP
 
@@ -167,32 +251,32 @@ class Trace:
 
         # Control Number
 
-        cn_entry = ctk.CTkEntry(master=self.app, placeholder_text="CN", width=510, text_color="#000000",
+        cn_entry = ctk.CTkEntry(master=self.app, placeholder_text="CN", width=653, height=25, text_color="#000000",
                                 bg_color="white", fg_color="transparent")
 
         # Employee Name And Initial
 
-        employee_name_i = ctk.CTkEntry(master=self.app, placeholder_text="Name and Initial", width=230,
+        employee_name_i = ctk.CTkEntry(master=self.app, placeholder_text="Name and Initial", width=300,
                                        text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Employee Last Name
 
-        employee_last_name = ctk.CTkEntry(master=self.app, placeholder_text="Last", width=230,
+        employee_last_name = ctk.CTkEntry(master=self.app, placeholder_text="Last", width=305,
                                           text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Employee Suffix
 
-        employee_suffix = ctk.CTkEntry(master=self.app, placeholder_text="Suff.", width=40,
+        employee_suffix = ctk.CTkEntry(master=self.app, placeholder_text="Suff.", width=43,
                                        text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Employee Address
 
-        employee_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=230, height=25,
+        employee_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=230, height=20,
                                         text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Employee ZIP
 
-        employee_zip = ctk.CTkEntry(master=self.app, placeholder_text="ZIP", width=100, height=25,
+        employee_zip = ctk.CTkEntry(master=self.app, placeholder_text="ZIP", width=100, height=20,
                                     text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Cover And Replacer For Year On Form
@@ -215,7 +299,7 @@ class Trace:
 
         # EIN
 
-        ein_entry.place(relx=.535, rely=0.160, anchor="e")
+        ein_entry.place(relx=.535, rely=0.162, anchor="e")
 
         # Wages TC
 
@@ -235,7 +319,7 @@ class Trace:
 
         # Nine
 
-        nine_box.place(relx=.719, rely=0.315, anchor="e")
+        nine_box.place(relx=.719, rely=0.31, anchor="e")
 
         # NQP
 
@@ -261,6 +345,66 @@ class Trace:
 
         dependent_care_benefits.place(relx=.902, rely=0.315, anchor="e")
 
+        #  12-A
+
+        twelve_a.place(relx=.902, rely=0.355, anchor="e")
+
+        #  12-B
+
+        twelve_b.place(relx=.902, rely=0.393, anchor="e")
+
+        #  12-C
+
+        twelve_c.place(relx=.902, rely=0.432, anchor="e")
+
+        #  12-D
+
+        twelve_d.place(relx=.902, rely=0.47, anchor="e")
+
+        #  Local Income Tax
+
+        local_income_tax.place(relx=.8265, rely=0.528, anchor="e")
+
+        #  Local Wages
+
+        local_wage_tips.place(relx=.7085, rely=0.528, anchor="e")
+
+        #  State Income Tax
+
+        state_income_tax.place(relx=.5795, rely=0.528, anchor="e")
+
+        #  State Wages
+
+        state_wage_tips.place(relx=.461, rely=0.528, anchor="e")
+
+        #  Employer's State ID
+
+        employers_state_id.place(relx=.3325, rely=0.528, anchor="e")
+
+        #  State Field
+
+        state_field.place(relx=.1385, rely=0.528, anchor="e")
+
+        #  Locality Name
+
+        locality_name.place(relx=.902, rely=0.528, anchor="e")
+
+        #  Stat Emp
+
+        statutory_emp.place(relx=.691, rely=0.395, anchor="e")
+
+        #  retire plan
+
+        retirement_p.place(relx=.6365, rely=0.395, anchor="e")
+
+        #  third party
+
+        third_party_sp.place(relx=.583, rely=0.395, anchor="e")
+
+        #  Other
+
+        other_field.place(relx=.719, rely=0.462, anchor="e")
+
         # Employer NAZ
 
         employer_name.place(relx=.285, rely=0.21, anchor="e")
@@ -269,27 +413,27 @@ class Trace:
 
         # CN
 
-        cn_entry.place(relx=.535, rely=0.314, anchor="e")
+        cn_entry.place(relx=.535, rely=0.316, anchor="e")
 
         # Employee NI
 
-        employee_name_i.place(relx=.270, rely=0.36, anchor="e")
+        employee_name_i.place(relx=.3, rely=0.357, anchor="e")
 
         # Employee LN
 
-        employee_last_name.place(relx=.46, rely=0.36, anchor="e")
+        employee_last_name.place(relx=.505, rely=0.357, anchor="e")
 
         # Employee S
 
-        employee_suffix.place(relx=.535, rely=0.36, anchor="e")
+        employee_suffix.place(relx=.535, rely=0.357, anchor="e")
 
         # Employee A
 
-        employee_address.place(relx=.433, rely=0.489, anchor="e")
+        employee_address.place(relx=.433, rely=0.4915, anchor="e")
 
         # Employee Z
 
-        employee_zip.place(relx=.535, rely=0.489, anchor="e")
+        employee_zip.place(relx=.535, rely=0.4915, anchor="e")
 
         # Blocker
 
