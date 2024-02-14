@@ -57,6 +57,8 @@ class UserInterface:
 
         __init__(self): Part 5
 
+        Most if not all variables are attributes. This will allow for usability throughout the whole class.
+
         ctk.set_appearance_mode("") is used to set the appearance mode for a custom GUI application.
 
         The menubar is created using the Menu widget.
@@ -469,9 +471,9 @@ class UserInterface:
 
         # Edit menu
         edit_menu = Menu(menubar, tearoff=0)
+        edit_menu.add_command(label="W-2", command=self.positions)
+        edit_menu.add_command(label="1099", command=self.remove)
         edit_menu.add_command(label="1040")
-        edit_menu.add_command(label="1099")
-        edit_menu.add_command(label="W-2")
         menubar.add_cascade(label="Form", menu=edit_menu)
 
         # Help menu
@@ -481,372 +483,225 @@ class UserInterface:
 
         ###############################
 
-        # W-2 Form Section
-
         # Start Of Input Fields
 
-        w_2_img = ctk.CTkImage(light_image=Image.open('w_2_form.png'), size=(1300, 700))
-        w_2_label_for_img = ctk.CTkLabel(self.app, text="", image=w_2_img)
+        # Other Form Image
+
+        self.ten_ninety_nine_img = ctk.CTkImage(light_image=Image.open('background3.png'), size=(1300, 700))
+        self.ten_ninety_nine_label_for_img = ctk.CTkLabel(self.app, text="", image=self.ten_ninety_nine_img)
+
+        # W-2 Form Section
+
+        self.w_2_img = ctk.CTkImage(light_image=Image.open('w_2_form.png'), size=(1300, 700))
+        self.w_2_label_for_img = ctk.CTkLabel(self.app, text="", image=self.w_2_img)
 
         # Employee Social Security Number
 
-        essn_entry = ctk.CTkEntry(master=self.app, placeholder_text="ESSN", width=283, height=25, text_color="#000000",
+        self.essn_entry = ctk.CTkEntry(master=self.app, placeholder_text="ESSN", width=283, height=25, text_color="#000000",
                                   bg_color="white", fg_color="transparent")
 
         # Employer ID Number
 
-        ein_entry = ctk.CTkEntry(master=self.app, placeholder_text="EIN", width=653, height=25, text_color="#000000",
+        self.ein_entry = ctk.CTkEntry(master=self.app, placeholder_text="EIN", width=653, height=25, text_color="#000000",
                                  bg_color="white", fg_color="transparent")
 
         # Wages, Tips, Other Compensation
 
-        wages_tips_c = ctk.CTkEntry(master=self.app, placeholder_text="wages", width=269, height=25,
+        self.wages_tips_c = ctk.CTkEntry(master=self.app, placeholder_text="wages", width=269, height=25,
                                     text_color="#000000",
                                     bg_color="white", fg_color="transparent")
 
         # Social Security Wages
 
-        social_wages = ctk.CTkEntry(master=self.app, placeholder_text="social wages", width=269, height=25,
+        self.social_wages = ctk.CTkEntry(master=self.app, placeholder_text="social wages", width=269, height=25,
                                     text_color="#000000",
                                     bg_color="white", fg_color="transparent")
 
         # Medicare Wages
 
-        medicare_wages = ctk.CTkEntry(master=self.app, placeholder_text="medicare", width=269, height=25,
+        self.medicare_wages = ctk.CTkEntry(master=self.app, placeholder_text="medicare", width=269, height=25,
                                       text_color="#000000",
                                       bg_color="white", fg_color="transparent")
 
         # Social Security Tips
 
-        social_security_tips = ctk.CTkEntry(master=self.app, placeholder_text="SS Tips", width=269, height=25,
+        self.social_security_tips = ctk.CTkEntry(master=self.app, placeholder_text="SS Tips", width=269, height=25,
                                             text_color="#000000",
                                             bg_color="white", fg_color="transparent")
 
         # 9 box
 
-        nine_box = ctk.CTkEntry(master=self.app, placeholder_text="Nine", width=235, height=35,
+        self.nine_box = ctk.CTkEntry(master=self.app, placeholder_text="Nine", width=235, height=35,
                                 text_color="#000000",
                                 bg_color="#c0c0c0", fg_color="white")
 
         #  Non-Qualified Plans
 
-        non_qualified_plans = ctk.CTkEntry(master=self.app, placeholder_text="plans", width=269, height=25,
+        self.non_qualified_plans = ctk.CTkEntry(master=self.app, placeholder_text="plans", width=269, height=25,
                                            text_color="#000000",
                                            bg_color="white", fg_color="transparent")
 
         #  Federal Income Tax Withheld
 
-        fed_income_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="fed", width=269, height=25,
+        self.fed_income_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="fed", width=269, height=25,
                                                text_color="#000000",
                                                bg_color="white", fg_color="transparent")
 
         #  Social Security Tax Withheld
 
-        social_security_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="SS Tax", width=269, height=25,
+        self.social_security_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="SS Tax", width=269, height=25,
                                                     text_color="#000000",
                                                     bg_color="white", fg_color="transparent")
 
         #  Medicare Tax Withheld
 
-        medicare_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="medicare withheld", width=269, height=25,
+        self.medicare_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="medicare withheld", width=269, height=25,
                                              text_color="#000000",
                                              bg_color="white", fg_color="transparent")
 
         #  Allocated Tips
 
-        allocated_tips = ctk.CTkEntry(master=self.app, placeholder_text="A Tips", width=269, height=25,
+        self.allocated_tips = ctk.CTkEntry(master=self.app, placeholder_text="A Tips", width=269, height=25,
                                       text_color="#000000",
                                       bg_color="white", fg_color="transparent")
 
         #  Dependent Care Benefits
 
-        dependent_care_benefits = ctk.CTkEntry(master=self.app, placeholder_text="DCB", width=269, height=25,
+        self.dependent_care_benefits = ctk.CTkEntry(master=self.app, placeholder_text="DCB", width=269, height=25,
                                                text_color="#000000",
                                                bg_color="white", fg_color="transparent")
 
         #  12-A
 
-        twelve_a = ctk.CTkEntry(master=self.app, placeholder_text="12a", width=190, height=25,
+        self.twelve_a = ctk.CTkEntry(master=self.app, placeholder_text="12a", width=190, height=25,
                                                text_color="#000000",
                                                bg_color="white", fg_color="transparent")
 
         #  12-B
 
-        twelve_b = ctk.CTkEntry(master=self.app, placeholder_text="12b", width=190, height=25,
+        self.twelve_b = ctk.CTkEntry(master=self.app, placeholder_text="12b", width=190, height=25,
                                 text_color="#000000",
                                 bg_color="white", fg_color="transparent")
 
         #  12-C
 
-        twelve_c = ctk.CTkEntry(master=self.app, placeholder_text="12c", width=190, height=25,
+        self.twelve_c = ctk.CTkEntry(master=self.app, placeholder_text="12c", width=190, height=25,
                                 text_color="#000000",
                                 bg_color="white", fg_color="transparent")
 
         #  12-D
 
-        twelve_d = ctk.CTkEntry(master=self.app, placeholder_text="12d", width=190, height=25,
+        self.twelve_d = ctk.CTkEntry(master=self.app, placeholder_text="12d", width=190, height=25,
                                 text_color="#000000",
                                 bg_color="white", fg_color="transparent")
 
         #  Local Income Tax
 
-        local_income_tax = ctk.CTkEntry(master=self.app, placeholder_text="local income", width=174, height=25,
+        self.local_income_tax = ctk.CTkEntry(master=self.app, placeholder_text="local income", width=174, height=25,
                                 text_color="#000000",
                                 bg_color="white", fg_color="transparent")
 
         #  State Income Tax
 
-        state_income_tax = ctk.CTkEntry(master=self.app, placeholder_text="state income", width=174, height=25,
+        self.state_income_tax = ctk.CTkEntry(master=self.app, placeholder_text="state income", width=174, height=25,
                                         text_color="#000000",
                                         bg_color="white", fg_color="transparent")
 
         #  State Wages, Tips, ETC.
 
-        state_wage_tips = ctk.CTkEntry(master=self.app, placeholder_text="state wages", width=190, height=25,
+        self.state_wage_tips = ctk.CTkEntry(master=self.app, placeholder_text="state wages", width=190, height=25,
                                         text_color="#000000",
                                         bg_color="white", fg_color="transparent")
 
         #  Employer's State ID
 
-        employers_state_id = ctk.CTkEntry(master=self.app, placeholder_text="employer's state", width=287, height=25,
+        self.employers_state_id = ctk.CTkEntry(master=self.app, placeholder_text="employer's state", width=287, height=25,
                                         text_color="#000000",
                                         bg_color="white", fg_color="transparent")
 
         #  State
 
-        state_field = ctk.CTkEntry(master=self.app, placeholder_text="state", width=60, height=25,
+        self.state_field = ctk.CTkEntry(master=self.app, placeholder_text="state", width=60, height=25,
                                           text_color="#000000",
                                           bg_color="white", fg_color="transparent")
 
         #  Locality Name
 
-        locality_name = ctk.CTkEntry(master=self.app, placeholder_text="locality", width=109, height=25,
+        self.locality_name = ctk.CTkEntry(master=self.app, placeholder_text="locality", width=109, height=25,
                                           text_color="#000000",
                                           bg_color="white", fg_color="transparent")
 
         #  Local Wages, Tips, ETC.
 
-        local_wage_tips = ctk.CTkEntry(master=self.app, placeholder_text="local wages", width=190, height=25,
+        self.local_wage_tips = ctk.CTkEntry(master=self.app, placeholder_text="local wages", width=190, height=25,
                                        text_color="#000000",
                                        bg_color="white", fg_color="transparent")
 
         #  Statutory Employee
 
-        statutory_emp = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0, bg_color="white")
+        self.statutory_emp = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0, bg_color="white")
 
         #  Retirement Plan
 
-        retirement_p = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0, bg_color="white")
+        self.retirement_p = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0, bg_color="white")
 
         #  Third Party Sick Pay
 
-        third_party_sp = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0, bg_color="white")
+        self.third_party_sp = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0, bg_color="white")
 
         #  Other
 
-        other_field = ctk.CTkEntry(master=self.app, placeholder_text="other", width=269, height=90,
+        self.other_field = ctk.CTkEntry(master=self.app, placeholder_text="other", width=269, height=90,
                                 text_color="#000000",
                                 bg_color="white", fg_color="transparent")
 
         # Employer Name, Address, ZIP
 
-        employer_name = ctk.CTkEntry(master=self.app, placeholder_text="Name", width=250, text_color="#000000",
+        self.employer_name = ctk.CTkEntry(master=self.app, placeholder_text="Name", width=250, text_color="#000000",
                                      bg_color="white", fg_color="transparent")
-        employer_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=250, text_color="#000000",
+        self.employer_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=250, text_color="#000000",
                                         bg_color="white", fg_color="transparent")
-        employer_zip = ctk.CTkEntry(master=self.app, placeholder_text="ZIP Code", width=250, text_color="#000000",
+        self.employer_zip = ctk.CTkEntry(master=self.app, placeholder_text="ZIP Code", width=250, text_color="#000000",
                                     bg_color="white", fg_color="transparent")
 
         # Control Number
 
-        cn_entry = ctk.CTkEntry(master=self.app, placeholder_text="CN", width=653, height=25, text_color="#000000",
+        self.cn_entry = ctk.CTkEntry(master=self.app, placeholder_text="CN", width=653, height=25, text_color="#000000",
                                 bg_color="white", fg_color="transparent")
 
         # Employee Name And Initial
 
-        employee_name_i = ctk.CTkEntry(master=self.app, placeholder_text="Name and Initial", width=300,
+        self.employee_name_i = ctk.CTkEntry(master=self.app, placeholder_text="Name and Initial", width=300,
                                        text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Employee Last Name
 
-        employee_last_name = ctk.CTkEntry(master=self.app, placeholder_text="Last", width=305,
+        self.employee_last_name = ctk.CTkEntry(master=self.app, placeholder_text="Last", width=305,
                                           text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Employee Suffix
 
-        employee_suffix = ctk.CTkEntry(master=self.app, placeholder_text="Suff.", width=43,
+        self.employee_suffix = ctk.CTkEntry(master=self.app, placeholder_text="Suff.", width=43,
                                        text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Employee Address
 
-        employee_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=230, height=20,
+        self.employee_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=230, height=20,
                                         text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Employee ZIP
 
-        employee_zip = ctk.CTkEntry(master=self.app, placeholder_text="ZIP", width=100, height=20,
+        self.employee_zip = ctk.CTkEntry(master=self.app, placeholder_text="ZIP", width=100, height=20,
                                     text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Cover And Replacer For Year On Form
 
-        blocker = ctk.CTkImage(light_image=Image.open('blocker.png'), size=(150, 85))
-        blocker_img = ctk.CTkLabel(self.app, text="", image=blocker)
-        twenty_four = ctk.CTkImage(light_image=Image.open('2024.png'), size=(100, 30))
-        twenty_four_img = ctk.CTkLabel(self.app, text="", image=twenty_four)
-
-        # Positioning of Input Fields
-
-        # W-2
-
-        w_2_label_for_img.place(relx=0.5, rely=0.5, anchor="s")
-        w_2_label_for_img.pack(pady=88)
-
-        # Employee SSN
-
-        essn_entry.place(relx=.46, rely=0.123, anchor="e")
-
-        # EIN
-
-        ein_entry.place(relx=.535, rely=0.162, anchor="e")
-
-        # Wages TC
-
-        wages_tips_c.place(relx=.719, rely=0.162, anchor="e")
-
-        # SS Wages
-
-        social_wages.place(relx=.719, rely=0.2, anchor="e")
-
-        # M Wages and T
-
-        medicare_wages.place(relx=.719, rely=0.238, anchor="e")
-
-        # SS Tips
-
-        social_security_tips.place(relx=.719, rely=0.277, anchor="e")
-
-        # Nine
-
-        nine_box.place(relx=.719, rely=0.31, anchor="e")
-
-        # NQP
-
-        non_qualified_plans.place(relx=.719, rely=0.354, anchor="e")
-
-        # FED Income
-
-        fed_income_tax_withheld.place(relx=.902, rely=0.162, anchor="e")
-
-        # SST Withheld
-
-        social_security_tax_withheld.place(relx=.902, rely=0.2, anchor="e")
-
-        # M Withheld
-
-        medicare_tax_withheld.place(relx=.902, rely=0.238, anchor="e")
-
-        # A Tips
-
-        allocated_tips.place(relx=.902, rely=0.277, anchor="e")
-
-        # DC Benefits
-
-        dependent_care_benefits.place(relx=.902, rely=0.315, anchor="e")
-
-        #  12-A
-
-        twelve_a.place(relx=.902, rely=0.355, anchor="e")
-
-        #  12-B
-
-        twelve_b.place(relx=.902, rely=0.393, anchor="e")
-
-        #  12-C
-
-        twelve_c.place(relx=.902, rely=0.432, anchor="e")
-
-        #  12-D
-
-        twelve_d.place(relx=.902, rely=0.47, anchor="e")
-
-        #  Local Income Tax
-
-        local_income_tax.place(relx=.8265, rely=0.528, anchor="e")
-
-        #  Local Wages
-
-        local_wage_tips.place(relx=.7085, rely=0.528, anchor="e")
-
-        #  State Income Tax
-
-        state_income_tax.place(relx=.5795, rely=0.528, anchor="e")
-
-        #  State Wages
-
-        state_wage_tips.place(relx=.461, rely=0.528, anchor="e")
-
-        #  Employer's State ID
-
-        employers_state_id.place(relx=.3325, rely=0.528, anchor="e")
-
-        #  State Field
-
-        state_field.place(relx=.1385, rely=0.528, anchor="e")
-
-        #  Locality Name
-
-        locality_name.place(relx=.902, rely=0.528, anchor="e")
-
-        #  Stat Emp
-
-        statutory_emp.place(relx=.691, rely=0.395, anchor="e")
-
-        #  retire plan
-
-        retirement_p.place(relx=.6365, rely=0.395, anchor="e")
-
-        #  third party
-
-        third_party_sp.place(relx=.583, rely=0.395, anchor="e")
-
-        #  Other
-
-        other_field.place(relx=.719, rely=0.462, anchor="e")
-
-        # Employer NAZ
-
-        employer_name.place(relx=.285, rely=0.21, anchor="e")
-        employer_address.place(relx=.285, rely=0.24, anchor="e")
-        employer_zip.place(relx=.285, rely=0.27, anchor="e")
-
-        # CN
-
-        cn_entry.place(relx=.535, rely=0.316, anchor="e")
-
-        # Employee NI
-
-        employee_name_i.place(relx=.3, rely=0.357, anchor="e")
-
-        # Employee LN
-
-        employee_last_name.place(relx=.505, rely=0.357, anchor="e")
-
-        # Employee S
-
-        employee_suffix.place(relx=.535, rely=0.357, anchor="e")
-
-        # Employee A
-
-        employee_address.place(relx=.433, rely=0.4915, anchor="e")
-
-        # Employee Z
-
-        employee_zip.place(relx=.535, rely=0.4915, anchor="e")
-
-        # Blocker
-
-        blocker_img.place(relx=0.525, rely=0.655, anchor="s")
-        twenty_four_img.place(relx=0.525, rely=0.607, anchor="s")
+        self.blocker = ctk.CTkImage(light_image=Image.open('blocker.png'), size=(150, 85))
+        self.blocker_img = ctk.CTkLabel(self.app, text="", image=self.blocker)
+        self.twenty_four = ctk.CTkImage(light_image=Image.open('2024.png'), size=(100, 30))
+        self.twenty_four_img = ctk.CTkLabel(self.app, text="", image=self.twenty_four)
+
+        UserInterface.positions(self)
 
         # End Of Input Fields
 
@@ -859,7 +714,7 @@ class UserInterface:
 
         # Results Positioning
 
-        results_textbox.pack(pady=20)
+        results_textbox.place(relx=.5, rely=0.85, anchor="center")
 
         # Buttons
 
@@ -868,6 +723,202 @@ class UserInterface:
         Button(self.app, text="Load Session").place(relx=.6, rely=0.965, anchor="center")
 
         self.app.mainloop()
+
+    def positions(self):
+        # Positioning of Input Fields
+
+        placements = [self.ten_ninety_nine_label_for_img]
+
+        for i in placements:
+            i.place_forget()
+            i.pack_forget()
+
+        # W-2
+
+        self.w_2_label_for_img.place(relx=0.5, rely=0.5, anchor="s")
+        self.w_2_label_for_img.pack(pady=88)
+
+        # Employee SSN
+
+        self.essn_entry.place(relx=.46, rely=0.123, anchor="e")
+
+        # EIN
+
+        self.ein_entry.place(relx=.535, rely=0.162, anchor="e")
+
+        # Wages TC
+
+        self.wages_tips_c.place(relx=.719, rely=0.162, anchor="e")
+
+        # SS Wages
+
+        self.social_wages.place(relx=.719, rely=0.2, anchor="e")
+
+        # M Wages and T
+
+        self.medicare_wages.place(relx=.719, rely=0.238, anchor="e")
+
+        # SS Tips
+
+        self.social_security_tips.place(relx=.719, rely=0.277, anchor="e")
+
+        # Nine
+
+        self.nine_box.place(relx=.719, rely=0.31, anchor="e")
+
+        # NQP
+
+        self.non_qualified_plans.place(relx=.719, rely=0.354, anchor="e")
+
+        # FED Income
+
+        self.fed_income_tax_withheld.place(relx=.902, rely=0.162, anchor="e")
+
+        # SST Withheld
+
+        self.social_security_tax_withheld.place(relx=.902, rely=0.2, anchor="e")
+
+        # M Withheld
+
+        self.medicare_tax_withheld.place(relx=.902, rely=0.238, anchor="e")
+
+        # A Tips
+
+        self.allocated_tips.place(relx=.902, rely=0.277, anchor="e")
+
+        # DC Benefits
+
+        self.dependent_care_benefits.place(relx=.902, rely=0.315, anchor="e")
+
+        #  12-A
+
+        self.twelve_a.place(relx=.902, rely=0.355, anchor="e")
+
+        #  12-B
+
+        self.twelve_b.place(relx=.902, rely=0.393, anchor="e")
+
+        #  12-C
+
+        self.twelve_c.place(relx=.902, rely=0.432, anchor="e")
+
+        #  12-D
+
+        self.twelve_d.place(relx=.902, rely=0.47, anchor="e")
+
+        #  Local Income Tax
+
+        self.local_income_tax.place(relx=.8265, rely=0.528, anchor="e")
+
+        #  Local Wages
+
+        self.local_wage_tips.place(relx=.7085, rely=0.528, anchor="e")
+
+        #  State Income Tax
+
+        self.state_income_tax.place(relx=.5795, rely=0.528, anchor="e")
+
+        #  State Wages
+
+        self.state_wage_tips.place(relx=.461, rely=0.528, anchor="e")
+
+        #  Employer's State ID
+
+        self.employers_state_id.place(relx=.3325, rely=0.528, anchor="e")
+
+        #  State Field
+
+        self.state_field.place(relx=.1385, rely=0.528, anchor="e")
+
+        #  Locality Name
+
+        self.locality_name.place(relx=.902, rely=0.528, anchor="e")
+
+        #  Stat Emp
+
+        self.statutory_emp.place(relx=.691, rely=0.395, anchor="e")
+
+        #  retire plan
+
+        self.retirement_p.place(relx=.6365, rely=0.395, anchor="e")
+
+        #  third party
+
+        self.third_party_sp.place(relx=.583, rely=0.395, anchor="e")
+
+        #  Other
+
+        self.other_field.place(relx=.719, rely=0.462, anchor="e")
+
+        # Employer NAZ
+
+        self.employer_name.place(relx=.285, rely=0.21, anchor="e")
+        self.employer_address.place(relx=.285, rely=0.24, anchor="e")
+        self.employer_zip.place(relx=.285, rely=0.27, anchor="e")
+
+        # CN
+
+        self.cn_entry.place(relx=.535, rely=0.316, anchor="e")
+
+        # Employee NI
+
+        self.employee_name_i.place(relx=.3, rely=0.357, anchor="e")
+
+        # Employee LN
+
+        self.employee_last_name.place(relx=.505, rely=0.357, anchor="e")
+
+        # Employee S
+
+        self.employee_suffix.place(relx=.535, rely=0.357, anchor="e")
+
+        # Employee A
+
+        self.employee_address.place(relx=.433, rely=0.4915, anchor="e")
+
+        # Employee Z
+
+        self.employee_zip.place(relx=.535, rely=0.4915, anchor="e")
+
+        # Blocker
+
+        self.blocker_img.place(relx=0.525, rely=0.655, anchor="s")
+        self.twenty_four_img.place(relx=0.525, rely=0.607, anchor="s")
+
+    def remove(self):
+        """
+        Removes certain UI elements from the display.
+        This method hides and forgets the placement of various UI widgets.
+        The list of widgets to be removed is stored in the 'placements' list.
+        """
+
+        self.other_form()
+        placements = [self.twenty_four_img, self.blocker_img, self.employee_zip,
+                      self.employee_address, self.employee_suffix,
+                      self.employee_last_name, self.employee_name_i,
+                      self.cn_entry, self.employer_address, self.employer_zip,
+                      self.employer_name, self.other_field, self.third_party_sp,
+                      self.retirement_p, self.statutory_emp, self.locality_name,
+                      self.state_field, self.employers_state_id, self.state_wage_tips,
+                      self.state_income_tax, self.local_wage_tips, self.local_income_tax,
+                      self.twelve_a, self.twelve_b, self.twelve_c, self.twelve_d,
+                      self.dependent_care_benefits, self.allocated_tips, self.medicare_tax_withheld,
+                      self.social_security_tax_withheld, self.fed_income_tax_withheld,
+                      self.non_qualified_plans, self.nine_box, self.social_security_tips,
+                      self.medicare_wages, self.social_wages, self.wages_tips_c, self.ein_entry,
+                      self.essn_entry, self.w_2_label_for_img]
+
+        for i in placements:
+            i.place_forget()
+            i.pack_forget()
+
+    def other_form(self):
+        """
+        Places the 'ten_ninety_nine_label_for_img' widget at the center of the screen
+        and sets vertical padding to 88 pixels.
+        """
+        self.ten_ninety_nine_label_for_img.place(relx=0.5, rely=0.5, anchor="s")
+        self.ten_ninety_nine_label_for_img.pack(pady=88)
 
 
 UserInterface()
