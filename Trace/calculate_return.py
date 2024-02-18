@@ -30,9 +30,9 @@ dict_1099 = {"RENT": 0000,
 
 def calculate_state_return(forms_w2, forms_1099, other_income, filing_status, is_dependant, user_age, spouse_age=0, is_blind=False, spouse_is_blind=False):
     """
-    :param forms_w2: list composed of dictionary objects that represent W-2 forms.
-    :param forms_1099: list composed of dictionary objects that represent 1099 forms.
-    :param other_income: any other taxable income not recorded in forms W-2 and 1099.
+    :param forms_w2: list composed of dictionary objects that represent W-2 forms
+    :param forms_1099: list composed of dictionary objects that represent 1099 forms
+    :param other_income: any other taxable income not recorded in forms W-2 and 1099
     :param filing_status: an integer 1-5 representing the user's filing status
         1 - Single
         2 - Married Filing Jointly
@@ -44,19 +44,26 @@ def calculate_state_return(forms_w2, forms_1099, other_income, filing_status, is
     :param spouse_age: age of the users spouse (Default value=0. If 0, assume no spouse)
     :param is_blind: boolean, is the user blind (Receive the same standard deduction as someone over 65)
     :param spouse_is_blind: boolean, is the user's spouse blind
-    :return: value of refund or value of additional payment due.
+    :return: value of refund or value of additional payment due
 
     Function to calculate state tax returns.
     """
-    total_income_w2 = 0     # total amount of income from form(s) W-2, box 1 (Wages, tips, other compensation).
-    total_income_1099 = 0   # total amount of income from form(s) 1099.
+    STANDARD_DEDUCTION = [13850, 13850, 27700, 20800, 27700]
+    STANDARD_DEDUCTION_SENIOR =
+    total_income_w2 = 0             # total amount of income from form(s) W-2, box 1 (Wages, tips, other compensation)
+    total_tax_w2 = 0                # total taxes paid from form(s) W-2
+    total_income_1099 = 0           # total amount of income from form(s) 1099
+    total_tax_1099 = 0              # total taxes paid from form(s) 1099
+    total_income = 0                # total taxable income from all sources
+    total_tax = 0                   # total taxes paid from all sources
+    adjusted_gross_income = 0       # total taxable income after adjustments from schedule 1
 
     for form in forms_w2:
-        # Loop through list of W-2 forms and total up any required values.
+        # Loop through list of W-2 forms and total up any required values
         break
 
     for form in forms_1099:
-        # Loop through list of 1099 forms and total up any required values.
+        # Loop through list of 1099 forms and total up any required values
         break
 
     pass
