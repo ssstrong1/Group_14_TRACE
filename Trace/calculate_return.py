@@ -49,7 +49,8 @@ def calculate_state_return(forms_w2, forms_1099, other_income, filing_status, is
     Function to calculate state tax returns.
     """
     STANDARD_DEDUCTION = [13850, 13850, 27700, 20800, 27700]
-    STANDARD_DEDUCTION_SENIOR =
+    STANDARD_DEDUCTION_SENIOR = []
+    STANDARD_DEDUCTION_SENIOR_AND_BLIND = []
     total_income_w2 = 0             # total amount of income from form(s) W-2, box 1 (Wages, tips, other compensation)
     total_tax_w2 = 0                # total taxes paid from form(s) W-2
     total_income_1099 = 0           # total amount of income from form(s) 1099
