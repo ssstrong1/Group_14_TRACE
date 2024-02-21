@@ -703,8 +703,131 @@ class UserInterface:
 
         UserInterface.positions(self)
 
-        # End Of Input Fields
+        # End Of W-2 Input Fields
 
+        # Start 1099 Input Fields
+
+        # Payer name, street address, city/town, state/province, country, zip/postal, phone no.
+
+        self.ten_ninety_nine_payer_name = ctk.CTkEntry(master=self.app, placeholder_text="Name", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        self.ten_ninety_nine_payer_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        self.ten_ninety_nine_payer_city = ctk.CTkEntry(master=self.app, placeholder_text="City or Town", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        self.ten_ninety_nine_payer_state = ctk.CTkEntry(master=self.app, placeholder_text="State or Province", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        self.ten_ninety_nine_payer_country = ctk.CTkEntry(master=self.app, placeholder_text="Country", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        self.ten_ninety_nine_payer_ZIP = ctk.CTkEntry(master=self.app, placeholder_text="ZIP or Postal Code", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        self.ten_ninety_nine_payer_phone = ctk.CTkEntry(master=self.app, placeholder_text="Phone #", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+
+        # Payer TIN
+
+        self.ten_ninety_nine_payer_tin = ctk.CTkEntry(master=self.app, placeholder_text="Payer TIN", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+
+        # Recipient TIN
+
+        self.ten_ninety_nine_recipient_tin = ctk.CTkEntry(master=self.app, placeholder_text="Recipient TIN", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+
+        # Recipient Name
+
+        self.ten_ninety_nine_recipient_name = ctk.CTkEntry(master=self.app, placeholder_text="Name", width=500, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+
+        # Recipient Street Address
+
+        self.ten_ninety_nine_recipient_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=500, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+
+        # Recipient Location Info
+
+        self.ten_ninety_nine_recipient_city = ctk.CTkEntry(master=self.app, placeholder_text="City or Town", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        self.ten_ninety_nine_recipient_state = ctk.CTkEntry(master=self.app, placeholder_text="State or Province", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        self.ten_ninety_nine_recipient_country = ctk.CTkEntry(maser=self.app, placeholder_text="Country", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        self.ten_ninety_nine_recipient_ZIP = ctk.CTkEntry(master=self.app, placeholder_text="ZIP or Postal Code", width=250, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+
+        # Total Ordinary Dividends
+
+        self.ten_ninety_nine_ordinary_dividends = ctk.CTkEntry(master=self.app, placeholder_text="Ordinary Dividends",width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Qualified Dividends
+        self.ten_ninety_nine_qualified_dividends = ctk.CTkEntry(master=self.app, placeholder_text="Qualified Dividends", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Total Capital Gain
+        self.ten_ninety_nine_capital_gain = ctk.CTkEntry(master=self.app, placeholder_text="Total Capital Gain", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Unrecap. Section 1250 Gain
+        self.ten_ninety_nine_1250_gain = ctk.CTkEntry(master=self.app, placeholder_text="Section 1250 Gain", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Section 1202 Gain
+        self.ten_ninety_nine_1202_gain = ctk.CTkEntry(master=self.app, placeholder_text="Section 1202 Gain", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Collectibles gain
+        self.ten_ninety_nine_collectibles_gain = ctk.CTkEntry(master=self.app, placeholder_text="Collections Gain", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Section 897 Ordinary Dividends
+        self.ten_ninety_nine_897_dividends = ctk.CTkEntry(master=self.app, placeholder_text="897 Ordinary Dividends", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Section 897 Capital Gain
+        self.ten_ninety_nine_897_gain = ctk.CTkEntry(master=self.app, placeholder_text="897 Gains", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Nondividend Distributions
+        self.ten_ninety_nine_nondividend = ctk.CTkEntry(master=self.app, placeholder_text="Nondividend Distributions", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Federal Income Tax Withheld
+        self.ten_ninety_nine_federal_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="Federal Tax Withheld", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Section 199A Dividends
+        self.ten_ninety_nine_199a = ctk.CTkEntry(master=self.app, placeholder_text="199A Dividends", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Investment Expenses
+        self.ten_ninety_nine_investment_expenses = ctk.CTkEntry(master=self.app, placeholder_text="Investment Expenses", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Foreign Tax Paid
+        self.ten_ninety_nine_foreign_tax = ctk.CTkEntry(master=self.app, placeholder_text="Foreign Tax", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Foreign Country or U.S. Possession
+        self.ten_ninety_nine_foreign_tax_country = ctk.CTkEntry(master=self.app, placeholder_text="Country", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Cash Liquidation Distributions
+        self.ten_ninety_nine_cash_liquidation = ctk.CTkEntry(master_self.app, placeholder_text="Cash Liquidation", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Noncash Liquidation Distributions
+        self.ten_ninety_nine_noncash_liquidation = ctk.CTkEntry(master=self.app, placeholder_text="Noncash Liquidation", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # FACTA Filing Requirement [checkbox]
+        self.ten_ninety_nine_facta_filing = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0, bg_color="white")
+        # Exempt-Interest Dividends
+        self.ten_ninety_nine_exempt_dividends = ctk.CTkEntry(master=self.app, placeholder_text="Interest-Exempt", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Specified Private Activity Bond Interest Dividends
+        self.ten_ninety_nine_specified_bond_dividends = ctk.CTkEntry(master=self.app, placeholder_text="Specified Bond Dividends", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # Account Number
+        self.ten_ninety_nine_account_number = ctk.CTkEntry(master=self.app, placeholder_text="Account Number", width=500, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # State
+        self.ten_ninety_nine_state = ctk.CTkEntry(master=self.app, placeholder_text="ST", width=50, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # State Identification Number
+        self.ten_ninety_nine_state_id_number = ctk.CTkEntry(master=self.app, placeholder_text="State ID", width=130, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+        # State Tax Withheld
+        self.ten_ninety_nine_state_tax_withheld = ctk.CTkEntry(master=self.app, placeholder_text="State Tax", width=200, text_color="#000000",
+                                     bg_color="white", fg_color="transparent")
+
+        # End 1099 Input Fields
+
+        # End Input Fields
         ###############################
 
         # Results Section
