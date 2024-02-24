@@ -30,6 +30,8 @@ dict_1099 = {"RENT": 0000,
 
 def calculate_state_return(forms_w2, forms_1099, other_income, filing_status, is_dependant, user_age, spouse_age=0, is_blind=False, spouse_is_blind=False):
     """
+    Function to calculate state tax returns.
+
     :param forms_w2: list composed of dictionary objects that represent W-2 forms
     :param forms_1099: list composed of dictionary objects that represent 1099 forms
     :param other_income: any other taxable income not recorded in forms W-2 and 1099
@@ -45,8 +47,6 @@ def calculate_state_return(forms_w2, forms_1099, other_income, filing_status, is
     :param is_blind: boolean, is the user blind (Receive the same standard deduction as someone over 65)
     :param spouse_is_blind: boolean, is the user's spouse blind
     :return: value of refund or value of additional payment due
-
-    Function to calculate state tax returns.
     """
     STANDARD_DEDUCTION = [13850, 13850, 27700, 20800, 27700]
     STANDARD_DEDUCTION_SENIOR = []

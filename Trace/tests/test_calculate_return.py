@@ -9,7 +9,7 @@ import test_calculate_return
 def setup_data_W2():
     """
     Fixture setup, initialize test data.
-    :return: Lsit of dictionary objects representing input from W-2 forms.
+    :return: List of dictionary objects representing input from W-2 forms.
     """
     form_w2 = list()
     return form_w2
