@@ -434,7 +434,7 @@ class UserInterface:
         if screensize == (1920, 1080):
             ctk.set_widget_scaling(.7465)
             ctk.set_window_scaling(.7465)
-            d_2_img = ImageTk.PhotoImage(Image.open("pattern_back.png").resize((1500, 1200)))
+            d_2_img = ImageTk.PhotoImage(Image.open("images/pattern_back.png").resize((1500, 1200)))
             canvas.create_image(0, 0, anchor=tk.NW, image=d_2_img)
             cosmos = canvas.create_text(635, 150, anchor="nw", fill="yellow")
             canvas.itemconfig(cosmos, text="TRACE", width=780)
@@ -443,7 +443,7 @@ class UserInterface:
             canvas.itemconfig(aqua, text="Results", width=780)
             canvas.itemconfig(aqua, font=("Arial", 35))
         else:
-            d_2_img = ImageTk.PhotoImage(Image.open("pattern_back.png").resize((1500, 1200)))
+            d_2_img = ImageTk.PhotoImage(Image.open("images/pattern_back.png").resize((1500, 1200)))
             canvas.create_image(2, 2, anchor=tk.NW, image=d_2_img)
             cosmos = canvas.create_text(635, 5, anchor="nw", fill="yellow")
             canvas.itemconfig(cosmos, text="TRACE", width=780)
@@ -486,12 +486,12 @@ class UserInterface:
 
         # Other Form Image
 
-        self.ten_ninety_nine_img = ctk.CTkImage(light_image=Image.open('background3.png'), size=(1300, 700))
+        self.ten_ninety_nine_img = ctk.CTkImage(light_image=Image.open('images/background3.png'), size=(1300, 700))
         self.ten_ninety_nine_label_for_img = ctk.CTkLabel(self.app, text="", image=self.ten_ninety_nine_img)
 
         # W-2 Form Section
 
-        self.w_2_img = ctk.CTkImage(light_image=Image.open('w_2_form.png'), size=(1300, 700))
+        self.w_2_img = ctk.CTkImage(light_image=Image.open('images/w_2_form.png'), size=(1300, 700))
         self.w_2_label_for_img = ctk.CTkLabel(self.app, text="", image=self.w_2_img)
 
         # Employee Social Security Number
@@ -703,9 +703,9 @@ class UserInterface:
 
         # Cover And Replacer For Year On Form
 
-        self.blocker = ctk.CTkImage(light_image=Image.open('blocker.png'), size=(150, 85))
+        self.blocker = ctk.CTkImage(light_image=Image.open('images/blocker.png'), size=(150, 85))
         self.blocker_img = ctk.CTkLabel(self.app, text="", image=self.blocker)
-        self.twenty_four = ctk.CTkImage(light_image=Image.open('2024.png'), size=(100, 30))
+        self.twenty_four = ctk.CTkImage(light_image=Image.open('images/2024.png'), size=(100, 30))
         self.twenty_four_img = ctk.CTkLabel(self.app, text="", image=self.twenty_four)
 
 
