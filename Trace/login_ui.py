@@ -6,6 +6,8 @@ import sqlite3
 import bcrypt
 from tkinter import messagebox
 
+import ui
+
 import ctypes
 
 user = ctypes.windll.user32
@@ -22,17 +24,37 @@ user_cursor.execute('''CREATE TABLE IF NOT EXISTS users (
     password TEXT NOT NULL)''')
 
 
-class LoginInterface:
+def login_account(self):
+    l = LoginInterface()
+    username = l.username_input_field_l.get()
+    password = l.password_input_field_l.get()
+    if username != '' and password != '':
+        user_cursor.execute('SELECT password FROM users WHERE username=?', [username])
+        result = user_cursor.fetchone()
+        if result:
+            if bcrypt.checkpw(password.encode('utf-8'), result[0]):
+                self.x = messagebox.showinfo('Success', 'Logged in successfully.')
+                self.app1.destroy()
+                import ui
+            else:
+                messagebox.showerror('Error', 'Invalid password.')
+        else:
+            messagebox.showerror('Error', 'Invalid username.')
+    else:
+        messagebox.showerror('Error', 'Please enter a username and password.')
 
+
+class LoginInterface:
     """
     A graphical user interface for the login/sign up TRACE application.
     """
 
     def __init__(self):
-        self.app = ctk.CTk()
-        self.app.geometry("700x500")
-        self.app.title("TRACE")
-        self.app.resizable(False, False)
+        self.x = ''
+        self.app1 = ctk.CTk()
+        self.app1.geometry("700x500")
+        self.app1.title("TRACE")
+        self.app1.resizable(False, False)
 
         ctk.set_appearance_mode("")
 
@@ -42,7 +64,7 @@ class LoginInterface:
 
         ###############################
 
-        self.frame_space = ctk.CTkCanvas(self.app, width=700, height=500)
+        self.frame_space = ctk.CTkCanvas(self.app1, width=700, height=500)
         self.frame_space.place(x=-2, y=-2)
 
         self.general = ctk.CTkFrame(self.frame_space, width=320, height=360, corner_radius=0, border_width=3)
@@ -124,7 +146,7 @@ class LoginInterface:
 
         LoginInterface.sign_up(self)
 
-        self.app.mainloop()
+        self.app1.mainloop()
 
     def sign_up_account(self):
         username = self.username_input_field_s.get()
@@ -150,7 +172,9 @@ class LoginInterface:
             result = user_cursor.fetchone()
             if result:
                 if bcrypt.checkpw(password.encode('utf-8'), result[0]):
-                    messagebox.showinfo('Success', 'Logged in successfully.')
+                    self.x = messagebox.showinfo('Success', 'Logged in successfully.')
+                    self.app1.destroy()
+                    ui.UserInterface()
                 else:
                     messagebox.showerror('Error', 'Invalid password.')
             else:
@@ -183,8 +207,6 @@ class LoginInterface:
 
         self.login_btn_s.place(x=170, y=300)
 
-
-
     def login(self):
         placements = [self.sign_up_title, self.username_input_field_s,
                       self.password_input_field_s, self.signup_btn_s, self.login_btn_s]
@@ -201,6 +223,3 @@ class LoginInterface:
         self.login_btn_l.place(x=30, y=300)
 
         self.signup_btn_l.place(x=170, y=300)
-
-
-LoginInterface()
