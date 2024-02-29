@@ -56,7 +56,7 @@ class LoginInterface:
         self.app1.title("TRACE")
         self.app1.resizable(False, False)
 
-        ctk.set_appearance_mode("")
+        ctk.set_appearance_mode("Dark")
 
         ###############################
 
