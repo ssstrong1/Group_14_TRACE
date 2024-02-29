@@ -483,7 +483,7 @@ class UserInterface:
 
         # Start Of Input Fields
 
-        self.ten_ninety_nine_img = ctk.CTkImage(light_image=Image.open('images/background3.png'), size=(1300, 700))
+        self.ten_ninety_nine_img = ctk.CTkImage(light_image=Image.open('images/1099_new.png'), size=(1300, 700))
         self.ten_ninety_nine_label_for_img = ctk.CTkLabel(self.app, text="", image=self.ten_ninety_nine_img)
 
         # Start 1099 Input Fields
@@ -1214,57 +1214,57 @@ class UserInterface:
         self.ten_ninety_nine_label_for_img.place(relx=0.5, rely=0.5, anchor="s")
         self.ten_ninety_nine_label_for_img.pack(pady=88)
 
-        self.ten_ninety_nine_payer_name.place(relx=.249, rely=0.156, anchor="e")
-        self.ten_ninety_nine_payer_address.place(relx=.440, rely=0.156, anchor="e")
-        self.ten_ninety_nine_payer_city.place(relx=.249, rely=0.181, anchor="e")
-        self.ten_ninety_nine_payer_state.place(relx=.440, rely=0.181, anchor="e")
-        self.ten_ninety_nine_payer_country.place(relx=.249, rely=0.204, anchor="e")
-        self.ten_ninety_nine_payer_ZIP.place(relx=.440, rely=0.204, anchor="e")
-        self.ten_ninety_nine_payer_phone.place(relx=.249, rely=0.228, anchor="e")
+        self.ten_ninety_nine_payer_name.place(relx=.294, rely=0.156, anchor="e")
+        self.ten_ninety_nine_payer_address.place(relx=.475, rely=0.156, anchor="e")
+        self.ten_ninety_nine_payer_city.place(relx=.294, rely=0.181, anchor="e")
+        self.ten_ninety_nine_payer_state.place(relx=.475, rely=0.181, anchor="e")
+        self.ten_ninety_nine_payer_country.place(relx=.294, rely=0.204, anchor="e")
+        self.ten_ninety_nine_payer_ZIP.place(relx=.475, rely=0.204, anchor="e")
+        self.ten_ninety_nine_payer_phone.place(relx=.294, rely=0.228, anchor="e")
 
-        self.ten_ninety_nine_payer_tin.place(relx=.249, rely=0.286, anchor="e")
-        self.ten_ninety_nine_recipient_tin.place(relx=.440, rely=0.286, anchor="e")
+        self.ten_ninety_nine_payer_tin.place(relx=.294, rely=0.286, anchor="e")
+        self.ten_ninety_nine_recipient_tin.place(relx=.475, rely=0.286, anchor="e")
 
-        self.ten_ninety_nine_recipient_name.place(relx=.431, rely=0.357, anchor="e")
+        self.ten_ninety_nine_recipient_name.place(relx=.466, rely=0.357, anchor="e")
 
-        self.ten_ninety_nine_recipient_address.place(relx=.431, rely=0.411, anchor="e")
+        self.ten_ninety_nine_recipient_address.place(relx=.466, rely=0.411, anchor="e")
 
-        self.ten_ninety_nine_recipient_city.place(relx=.249, rely=0.456, anchor="e")
-        self.ten_ninety_nine_recipient_state.place(relx=.440, rely=0.456, anchor="e")
-        self.ten_ninety_nine_recipient_country.place(relx=0.249, rely=0.478, anchor="e")
-        self.ten_ninety_nine_recipient_ZIP.place(relx=0.440, rely=0.478, anchor="e")
+        self.ten_ninety_nine_recipient_city.place(relx=.294, rely=0.458, anchor="e")
+        self.ten_ninety_nine_recipient_state.place(relx=.475, rely=0.458, anchor="e")
+        self.ten_ninety_nine_recipient_country.place(relx=0.294, rely=0.480, anchor="e")
+        self.ten_ninety_nine_recipient_ZIP.place(relx=0.475, rely=0.480, anchor="e")
 
-        self.ten_ninety_nine_facta_filing.place(relx=0.440, rely=0.531, anchor="e")
+        self.ten_ninety_nine_facta_filing.place(relx=0.453, rely=0.531, anchor="e")
 
-        self.ten_ninety_nine_account_number.place(relx=0.431, rely=0.571, anchor="e")
+        self.ten_ninety_nine_account_number.place(relx=0.475, rely=0.571, anchor="e")
 
-        self.ten_ninety_nine_ordinary_dividends.place(relx=0.611, rely=0.153, anchor="e")
-        self.ten_ninety_nine_qualified_dividends.place(relx=0.611, rely=0.203, anchor="e")
+        self.ten_ninety_nine_ordinary_dividends.place(relx=0.629, rely=0.156, anchor="e")
+        self.ten_ninety_nine_qualified_dividends.place(relx=0.629, rely=0.209, anchor="e")
 
-        self.ten_ninety_nine_capital_gain.place(relx=0.611, rely=0.244, anchor="e")
-        self.ten_ninety_nine_1250_gain.place(relx=0.768, rely=0.244, anchor="e")
-        self.ten_ninety_nine_1202_gain.place(relx=0.611, rely=0.279, anchor="e")
-        self.ten_ninety_nine_collectibles_gain.place(relx=0.768, rely=0.279, anchor="e")
-        self.ten_ninety_nine_897_dividends.place(relx=0.611, rely=0.315, anchor="e")
-        self.ten_ninety_nine_897_gain.place(relx=0.768, rely=0.315, anchor="e")
+        self.ten_ninety_nine_capital_gain.place(relx=0.629, rely=0.247, anchor="e")
+        self.ten_ninety_nine_1250_gain.place(relx=0.776, rely=0.247, anchor="e")
+        self.ten_ninety_nine_1202_gain.place(relx=0.629, rely=0.282, anchor="e")
+        self.ten_ninety_nine_collectibles_gain.place(relx=0.776, rely=0.282, anchor="e")
+        self.ten_ninety_nine_897_dividends.place(relx=0.629, rely=0.317, anchor="e")
+        self.ten_ninety_nine_897_gain.place(relx=0.776, rely=0.317, anchor="e")
 
-        self.ten_ninety_nine_nondividend.place(relx=0.611, rely=0.351, anchor="e")
-        self.ten_ninety_nine_federal_tax_withheld.place(relx=0.768, rely=0.351, anchor="e")
-        self.ten_ninety_nine_199a.place(relx=0.611, rely=0.388, anchor="e")
-        self.ten_ninety_nine_investment_expenses.place(relx=0.768, rely=0.388, anchor="e")
+        self.ten_ninety_nine_nondividend.place(relx=0.629, rely=0.354, anchor="e")
+        self.ten_ninety_nine_federal_tax_withheld.place(relx=0.776, rely=0.354, anchor="e")
+        self.ten_ninety_nine_199a.place(relx=0.629, rely=0.391, anchor="e")
+        self.ten_ninety_nine_investment_expenses.place(relx=0.776, rely=0.391, anchor="e")
 
-        self.ten_ninety_nine_foreign_tax.place(relx=0.611, rely=0.440, anchor="e")
-        self.ten_ninety_nine_foreign_tax_country.place(relx=0.768, rely=0.440, anchor="e")
+        self.ten_ninety_nine_foreign_tax.place(relx=0.629, rely=0.443, anchor="e")
+        self.ten_ninety_nine_foreign_tax_country.place(relx=0.776, rely=0.443, anchor="e")
 
-        self.ten_ninety_nine_cash_liquidation.place(relx=0.611, rely=0.478, anchor="e")
-        self.ten_ninety_nine_noncash_liquidation.place(relx=0.768, rely=0.478, anchor="e")
+        self.ten_ninety_nine_cash_liquidation.place(relx=0.629, rely=0.481, anchor="e")
+        self.ten_ninety_nine_noncash_liquidation.place(relx=0.776, rely=0.481, anchor="e")
 
-        self.ten_ninety_nine_exempt_dividends.place(relx=0.611, rely=0.527, anchor="e")
-        self.ten_ninety_nine_specified_bond_dividends.place(relx=0.768, rely=0.527, anchor="e")
+        self.ten_ninety_nine_exempt_dividends.place(relx=0.629, rely=0.530, anchor="e")
+        self.ten_ninety_nine_specified_bond_dividends.place(relx=0.776, rely=0.530, anchor="e")
 
-        self.ten_ninety_nine_state.place(relx=0.5, rely=0.565, anchor="e")
-        self.ten_ninety_nine_state_id_number.place(relx=0.611, rely=0.565, anchor="e")
-        self.ten_ninety_nine_state_tax_withheld.place(relx=0.768, rely=0.565, anchor="e")
+        self.ten_ninety_nine_state.place(relx=0.531, rely=0.568, anchor="e")
+        self.ten_ninety_nine_state_id_number.place(relx=0.629, rely=0.568, anchor="e")
+        self.ten_ninety_nine_state_tax_withheld.place(relx=0.776, rely=0.568, anchor="e")
 
 
     def new_session(self):
