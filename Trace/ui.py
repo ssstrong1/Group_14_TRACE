@@ -1,4 +1,6 @@
 import customtkinter as ctk
+from tkinter import messagebox
+import sys
 import re
 from tkinter import filedialog
 from tkinter import *
@@ -421,7 +423,7 @@ class UserInterface:
 
         """
 
-        self.app = ctk.CTk()
+        self.app = ctk.CTkToplevel()
         self.app.geometry("1500x1200")
         self.app.title("TRACE")
         self.app.resizable(False, False)
@@ -991,6 +993,7 @@ class UserInterface:
         Button(self.app, text="Calculate").place(relx=.5, rely=0.965, anchor="center")
         Button(self.app, text="Save Session").place(relx=.4, rely=0.965, anchor="center")
         Button(self.app, text="Load Session").place(relx=.6, rely=0.965, anchor="center")
+        self.app.protocol("WM_DELETE_WINDOW", self.exit_program)
 
         self.app.mainloop()
 
@@ -1304,5 +1307,11 @@ class UserInterface:
         filename = filedialog.asksaveasfilename(initialdir="/", title="Save As",
                                                 filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
     def quit(self):
-        self.app.destroy()
+        if messagebox.askyesno("Exit", "Are you sure you want to quit?"):
+            sys.exit()
 
+    def exit_program(self):
+        # Perform your custom tasks here
+        # For example, save data or prompt the user before quitting
+        if messagebox.askyesno("Exit", "Are you sure you want to quit?"):
+            sys.exit()

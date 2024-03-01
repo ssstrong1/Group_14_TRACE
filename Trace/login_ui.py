@@ -173,8 +173,8 @@ class LoginInterface:
             if result:
                 if bcrypt.checkpw(password.encode('utf-8'), result[0]):
                     self.x = messagebox.showinfo('Success', 'Logged in successfully.')
-                    self.app1.destroy()
-                    ui.UserInterface()
+                    self.app1.withdraw()
+                    self.start_form_ui()
                 else:
                     messagebox.showerror('Error', 'Invalid password.')
             else:
@@ -223,3 +223,8 @@ class LoginInterface:
         self.login_btn_l.place(x=30, y=300)
 
         self.signup_btn_l.place(x=170, y=300)
+
+    # Open New Window
+    def start_form_ui(self):
+        ui.UserInterface()
+
