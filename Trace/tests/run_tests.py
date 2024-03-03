@@ -1,4 +1,4 @@
-#run_tests.py
+# run_tests.py
 """
 Runner file for the automated testing suite. Uses pytest-html command to generate a html testing report.
 """
