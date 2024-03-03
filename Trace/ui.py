@@ -863,8 +863,13 @@ class UserInterface:
 
         # Start 1040 Input Fields
 
-        self.ten_forty_img = ctk.CTkImage(light_image=Image.open('images/1040_form.png'), size=(1300, 700))
-        self.ten_forty_label_for_img = ctk.CTkLabel(self.app, text="", image=self.ten_forty_img)
+        self.ten_forty_scrolling_frame = ctk.CTkScrollableFrame(self.app, width=1000, height=690)
+
+        self.ten_forty_img = ctk.CTkImage(light_image=Image.open('images/1040_form.png'), size=(1000, 2000))
+        self.ten_forty_label_for_img = ctk.CTkLabel(self.ten_forty_scrolling_frame, text="", image=self.ten_forty_img)
+
+        self.x = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="First and Initial", width=300, height=40,
+                              text_color="#000000", bg_color="white", fg_color="transparent")
 
         self.ten_forty_filing_single = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0,
                                                        bg_color="white")
@@ -913,7 +918,7 @@ class UserInterface:
                           self.medicare_wages, self.social_wages, self.wages_tips_c, self.ein_entry,
                           self.essn_entry, self.w_2_label_for_img]
 
-        self.ten_forty_placements = [self.ten_forty_label_for_img]
+        self.ten_forty_placements = [self.ten_forty_label_for_img, self.ten_forty_scrolling_frame, self.x]
 
         UserInterface.setup_w_2(self)
         ###############################
@@ -1186,8 +1191,11 @@ class UserInterface:
             i.place_forget()
             i.pack_forget()
 
+        self.ten_forty_scrolling_frame.place(relx=0.5, rely=0.365, anchor="center")
+
         self.ten_forty_label_for_img.place(relx=0.5, rely=0.5, anchor="s")
-        self.ten_forty_label_for_img.pack(pady=88)
+        self.ten_forty_label_for_img.pack(pady=5)
+        self.x.place(relx=0.33, rely=0.156, anchor="e")
 
     def new_session(self):
         """
