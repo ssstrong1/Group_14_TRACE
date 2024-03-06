@@ -2,46 +2,21 @@ import customtkinter as ctk
 from tkinter import *
 import tkinter as tk
 from PIL import ImageTk, Image
-import sqlite3
 import bcrypt
 from tkinter import messagebox
+import create_tables_1
 
 import ui
 
 import ctypes
 
-user = ctypes.windll.user32
-screensize = user.GetSystemMetrics(0), user.GetSystemMetrics(1)
+user_person = ctypes.windll.user32
+screensize = user_person.GetSystemMetrics(0), user_person.GetSystemMetrics(1)
+
 
 font1 = ('Helvetica', 25, 'bold')
 font2 = ('Arial', 17, 'bold')
 
-user_connection = sqlite3.connect('data.db')
-user_cursor = user_connection.cursor()
-
-user_cursor.execute('''CREATE TABLE IF NOT EXISTS users ( 
-    username TEXT NOT NULL, 
-    password TEXT NOT NULL)''')
-
-
-def login_account(self):
-    l = LoginInterface()
-    username = l.username_input_field_l.get()
-    password = l.password_input_field_l.get()
-    if username != '' and password != '':
-        user_cursor.execute('SELECT password FROM users WHERE username=?', [username])
-        result = user_cursor.fetchone()
-        if result:
-            if bcrypt.checkpw(password.encode('utf-8'), result[0]):
-                self.x = messagebox.showinfo('Success', 'Logged in successfully.')
-                self.app1.destroy()
-                import ui
-            else:
-                messagebox.showerror('Error', 'Invalid password.')
-        else:
-            messagebox.showerror('Error', 'Invalid username.')
-    else:
-        messagebox.showerror('Error', 'Please enter a username and password.')
 
 
 class LoginInterface:
@@ -92,7 +67,7 @@ class LoginInterface:
                                                    border_width=0,
                                                    placeholder_text='Password',
                                                    placeholder_text_color='#a3a3a3',
-                                                   width=200, height=1)
+                                                   width=200, height=1, show='*')
 
         self.signup_btn_s = ctk.CTkButton(self.general, command=self.sign_up_account, font=font2, text='Sign up',
                                           fg_color='#004780',
@@ -114,7 +89,7 @@ class LoginInterface:
                                                    border_width=0,
                                                    placeholder_text='Password',
                                                    placeholder_text_color='#a3a3a3',
-                                                   width=200, height=1)
+                                                   width=200, height=1, show='*')
 
         self.signup_btn_l = ctk.CTkButton(self.general, command=self.sign_up, font=font2, text='Sign up',
                                           fg_color='#004780',
@@ -152,14 +127,14 @@ class LoginInterface:
         username = self.username_input_field_s.get()
         password = self.password_input_field_s.get()
         if username != '' and password != '':
-            user_cursor.execute('SELECT username FROM users WHERE username=?', [username])
-            if user_cursor.fetchone() is not None:
+            create_tables_1.user_cursor.execute('SELECT username FROM users WHERE username=?', [username])
+            if create_tables_1.user_cursor.fetchone() is not None:
                 messagebox.showerror('Error', 'Username already exists.')
             else:
                 user_encoded_password = password.encode('utf-8')
                 user_hashed_password = bcrypt.hashpw(user_encoded_password, bcrypt.gensalt())
-                user_cursor.execute('INSERT INTO users VALUES (?, ?)', [username, user_hashed_password])
-                user_connection.commit()
+                create_tables_1.user_cursor.execute('INSERT INTO users VALUES (?, ?)', [username, user_hashed_password])
+                create_tables_1.user_connection.commit()
                 messagebox.showinfo('Success', 'Account has been created.')
         else:
             messagebox.showerror('Error', 'Please enter a username and password.')
@@ -168,8 +143,8 @@ class LoginInterface:
         username = self.username_input_field_l.get()
         password = self.password_input_field_l.get()
         if username != '' and password != '':
-            user_cursor.execute('SELECT password FROM users WHERE username=?', [username])
-            result = user_cursor.fetchone()
+            create_tables_1.user_cursor.execute('SELECT password FROM users WHERE username=?', [username])
+            result = create_tables_1.user_cursor.fetchone()
             if result:
                 if bcrypt.checkpw(password.encode('utf-8'), result[0]):
                     self.x = messagebox.showinfo('Success', 'Logged in successfully.')
@@ -206,6 +181,8 @@ class LoginInterface:
         self.signup_btn_s.place(x=30, y=300)
 
         self.login_btn_s.place(x=170, y=300)
+
+
 
     def login(self):
         placements = [self.sign_up_title, self.username_input_field_s,
