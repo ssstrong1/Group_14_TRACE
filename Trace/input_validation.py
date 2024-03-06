@@ -133,166 +133,207 @@ class FormValidatorW2:
         pass
 
 
-class FormValidator1099:
+class FormValidator1099DIV:
     """
     Class dedicated to validating W-2 Forms.
 
     Raises ValueErrors with specific messages if validation fails.
     """
-    def validate_rent(self, rent: str) -> float:
+    def validate_ordinary_dividends(self, dividends: str) -> float:
         """
-        Validate the Rent from form 1099
+        Validate the Total Ordinary Dividends from form 1099-DIV
 
-        :param rent: Rent from form 1099
-        :return: Validated rent value as float
+        :param dividends: Total Ordinary Dividends from form 1099-DIV
+        :return: Validated dividends value as float
         :raises ValueError: If validation fails, with an appropriate error message.
         """
         pass
 
-    def validate_royalties(self, royalties: str) -> float:
+    def validate_qualified_dividends(self, dividends: str) -> float:
         """
-        Validate the Royalties from form 1099
+        Validate the Qualified Dividends from form 1099-DIV
 
-        :param royalties: Royalties from 1099
-        :return: Validated royalties value as float
+        :param dividends: Qualified Dividends from form 1099-DIV
+        :return: Validate dividends value as float
         :raises ValueError: If validation fails, with an appropriate error message.
         """
         pass
 
-    def validate_other_income(self, income: str) -> float:
+    def validate_capital_gain_distr(self, gains: str) -> float:
         """
-        Validate the Other Income from form 1099
+        Validate the Total Capital Gain Distribution from form 1099-DIV
 
-        :param income: Other Income from form 1099
-        :return: Validated income value as float
+        :param gains: Total Capital Gain Distribution from form 1099-DIV
+        :return: Validated gains value as float
         :raises ValueError: If validation fails, with an appropriate error message.
         """
         pass
 
-    def validate_federal_income_tax_withheld(self, tax: str) -> float:
+    def validate_unrecap_sec_1250_gain(self, gains: str) -> float:
         """
-        Validate the Federal Income Tax Withheld from form 1099
+        Validate the Unrecaptured Sections 1250 Gains from form 1099-DIV
 
-        :param tax: Federal Income Tax from form 1099
+        :param gains: Unrecaptured Sections 1250 Gains from form 1099-DIV
+        :return: Validate gains value as float
+        :raises ValueError: If validation fails, with an appropriate error message
+        """
+        pass
+
+    def validate_section_1202_gain(self, gains: str) -> float:
+        """
+        Validate the Section 1202 Gains from form 1099-DIV
+
+        :param gains: Section 1202 Gains from form 1099-DIV
+        :return: Validated gains value as float
+        :raises ValueError: If validation fails, with an appropriate error message
+        """
+        pass
+
+    def validate_collectibles_gain(self, gains: str) -> float:
+        """
+        Validate the Collectibles (28%) Gain from form 1099-DIV
+
+        :param gains: Collectibles (28%) Gain from form 1099-DIV
+        :return: Validated gains value as string
+        :raises ValueError: If validation fails, with an appropriate error message
+        """
+        pass
+
+    def validate_section_897_ordinary_dividends(self, dividends: str) -> float:
+        """
+        Validate the Section 897 Ordinary Dividends from form 1099-DIV
+
+        :param dividends: Section 897 Ordinary Dividends from form 1099-DIV
+        :return: Validated dividends value as float
+        :raises ValueError: If validation fails, with an appropriate error message
+        """
+        pass
+
+    def validate_section_897_capital_gain(self, gains: str) -> float:
+        """
+        Validate the Section 897 Capital Gain from form 1099-DIV
+
+        :param gains: Section 897 Capital Gain
+        :return: Validated gains value as float
+        :raises ValueError: If validation fails, with an appropriate error message
+        """
+        pass
+
+    def validate_nondividend_distributions(self, distributions: str) -> float:
+        """
+        Validate Nondividend Distributions from form 1099-DIV
+
+        :param distributions: Nondividend Distributions from form 1099-DIV
+        :return: Validated distributions value as float
+        :raises ValueError: If validation fails, with an appropriate error message
+        """
+        pass
+
+    def validate_income_tax_withheld(self, tax: str) -> float:
+        """
+        Validate Federal Income Tax Withheld from form 1099-DIV
+
+        :param tax: Federal Income Tax Withheld from form 1099-DIV
         :return: Validated tax value as float
-        :raises ValueError: If validation fails, with an appropriate error message.
+        :raises ValueError: If validation fails, with an appropriate error message
         """
         pass
 
-    def validate_fishing_boat_proceeds(self, income: str) -> float:
+    def validate_section_199a_dividends(self, dividends: str) -> float:
         """
-        Validate the Fishing Boat Proceeds from form 1099
+        Validate Section 199A Dividends from form 1099-DIV
 
-        :param income: Fishing Boat Proceeds from form 1099
-        :return: Validated income value as float
-        :raises ValueError: If validation fails, with an appropriate error message.
+        :param dividends: Section 199A Dividends from form 1099-DIV
+        :return: Validated dividends value as float
+        :raises ValueError: If validation fails, with an appropriate error message
         """
         pass
 
-    def validate_medical_and_health_care_payments(self, payments: str) -> float:
+    def validate_investment_expenses(self, expenses: str) -> float:
         """
-        Validate the Medical and Health Care Payments from form 1099
+        Validate Investment Expenses from form 1099-DIV
 
-        :param payments: Medical and Health Care Payments from form 1099
-        :return: Validated payments value as float
-        :raises ValueError: If validation fails, with an appropriate error message.
+        :param expenses: Investment Expenses from form 1099-DIV
+        :return: Validated expenses value as float
+        :raises ValueError: If validation fails, with an appropriate error message
         """
         pass
 
-    def validate_substitute_payments(self, payments: str) -> float:
+    def validate_foreign_tax_paid(self, tax: str) -> float:
         """
-        Validate the Substitute Payments from form 1099
+        Validate Foreign Tax Paid from form 1099-DIV
 
-        :param payments: Substitute Payments from form 1099
-        :return: Validated payments value as float
-        :raises ValueError: If validation fails, with an appropriate error message.
+        :param tax: Foreign Tax Paid from form 1099-DIV
+        :return: Validated tax value as float
+        :raises ValueError: If validation fails, with an appropriate error message
         """
         pass
 
-    def validate_crop_insurance(self, proceeds: str) -> float:
+    def validate_foreign_country_or_us_possession(self, country: str) -> str:
         """
-        Validate the Crop Insurance Proceeds from form 1099
+        Validate Foreign Country or US Possession from form 1099-DIV
 
-        :param proceeds: Crop Insurance Proceeds from form 1099
-        :return: Validated proceeds value as float
-        :raises ValueError: If validation fails, with an appropriate error message.
+        :param country: Country or US Possession from form 1099-DIV
+        :return: Validated country value as string
+        :raises ValueError: If validation fails, with an appropriate error message
         """
         pass
 
-    def validate_gross_proceeds_to_attorney(self, proceeds: str) -> float:
+    def validate_cash_liquidation_distributions(self, distributions: str) -> float:
         """
-        Validate the Gross Proceeds Paid to an Attorney from form 1099
+        Validate Cash Liquidation Distributions from form 1099-DIV
 
-        :param proceeds: Gross Proceeds Paid to an Attorney from form 1099
-        :return: Validate proceeds value as float
-        :raises ValueError: If validation fails, with an appropriate error message.
+        :param distributions: Cash Liquidation Distributions from form 1099-DIV
+        :return: Validated distributions value as float
+        :raises ValueError: If validation fails, with an appropriate error message
         """
         pass
 
-    def validate_fish_for_resale(self, payments: str) -> float:
+    def validate_noncash_liquidation_distributions(self, distributions: str) -> float:
         """
-        Validate the Fish Purchased for Resale from form 1099
+        Validate Noncash Liquidation Distributions from form 1099-DIV
 
-        :param payments: Value of Fish Purchased for Resale from form 1099
-        :return: Validated payments value as float
-        :raises ValueError: If validation fails, with an appropriate error message.
+        :param distributions: Noncash Liquidation Distributions from form 1099-DIV
+        :return: Validated distributions value as float
+        :raises ValueError: If validation fails, with an appropriate error message
         """
         pass
 
-    def validate_409a_deferrals(self, deferrals: str) -> float:
+    def validate_exempt_interest_dividends(self, dividends: str) -> float:
         """
-        Validate the Section 409A Deferrals from form 1099
+        Validate Exempt Interest Dividends from form 1099-DIV
 
-        :param deferrals: Value of Section 409A Deferrals from form 1099
-        :return: Validated deferrals value as float
-        :raises ValueError: If validation fails, with an appropriate error message.
+        :param dividends: Exempt Interest Dividends from form 1099-DIV
+        :return: Validate dividends value as float
+        :raises ValueError: If validation fails, with an appropriate error message
         """
         pass
 
-    def validate_excess_golden_parachute(self, payments: str) -> float:
+    def validate_private_activity_bond_interest_dividends(self, dividends: str) -> float:
         """
-        Validate the Excess Golden Parachute Payments from form 1099
+        Validate Specified Private Activity Bond Interest Dividends from form 1099-DIV
 
-        :param payments: Excess Golden Parachute Payments from form 1099
-        :return: Validated payments value as float
-        :raises ValueError: If validation fails, with an appropriate error message.
+        :param dividends: Specified Private Activity Bond Interest Dividends from form 1099-DIV
+        :return: Validate dividends value as float
+        :raises ValueError: If validation fails, with an appropriate error message
         """
         pass
 
-    def validate_deferred_compensation(self, comp: str) -> float:
+    def validate_other_states_tax(self, tax: str) -> float:
         """
-        Validate the Nonqualified Deferred Compensation from form 1099
+        Validate State Tax Withheld
+        FUNCTION USED FOR validate_other_states
 
-        :param comp: Nonqualified Deferred Compensation from form 1099
-        :return: Validated comp value as float
-        :raises ValueError: If validation fails, with an appropriate error message.
+        :param tax: State Tax Withheld
+        :return: Validated tax value as float
+        :raises ValueError: If validation fails, with an appropriate error message
         """
-        pass
-
-    def validate_state_income(self, income: str) -> float:
-        """
-        Validate the State Income from form 1099
-
-        :param income: State Income
-        :return: Validated wages value as a float
-        :raises ValueError: If validation fails, with an appropriate error message.
-        """
-        pass
-
-    def validate_state_income_tax(self, tax: str) -> float:
-        """
-        Validate the State Income Tax from form 1099
-
-        :param tax: State Income Tax from form 1099
-        :return: Validated tax value as a float
-        :raises ValueError: If validation fails, with an appropriate error message.
-        """
-        pass
 
     def validate_other_states(self, other_states):
         """
-        Validate the Income and Income Tax from other states.
-        Uses validate_state_income() and validate_state_income_tax()
+        Validate the Income Tax from other states.
+        Calls validate_other_states_tax for each state in the list
+
         :param other_states: List of other states
         :return: Validate list of other states
         :raises ValueError: Functions called will raise a ValueError with an
