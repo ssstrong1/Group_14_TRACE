@@ -865,60 +865,65 @@ class UserInterface:
 
         self.ten_forty_scrolling_frame = ctk.CTkScrollableFrame(self.app, width=1000, height=690)
 
-        self.ten_forty_img = ctk.CTkImage(light_image=Image.open('images/1040_form.png'), size=(1000, 2000))
-        self.ten_forty_label_for_img = ctk.CTkLabel(self.ten_forty_scrolling_frame, text="", image=self.ten_forty_img)
+        self.ten_forty_img_1 = ctk.CTkImage(light_image=Image.open('images/1040_new_pg1.jpg'), size=(1000, 2000))
+        self.ten_forty_img_2 = ctk.CTkImage(light_image=Image.open('images/1040_new_pg2.jpg'), size=(1000, 1655))
+        self.ten_forty_label_for_pg_1 = ctk.CTkLabel(self.ten_forty_scrolling_frame, text="", image=self.ten_forty_img_1)
+        self.ten_forty_label_for_pg_2 = ctk.CTkLabel(self.ten_forty_scrolling_frame, text="", image=self.ten_forty_img_2)
 
-        self.x = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="First and Initial", width=300, height=40,
-                              text_color="#000000", bg_color="white", fg_color="transparent")
+        self.x = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="First and Initial",
+                              width=300, height=40, text_color="#000000", bg_color="white", fg_color="transparent")
 
-        self.ten_forty_filing_single = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0,
+        self.ten_forty_filing_single = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                                       checkbox_height=22, height=0,
                                                        bg_color="white")
 
         # End Input Fields
 
         self.ten_ninety_nine_placements = [self.ten_ninety_nine_label_for_img, self.ten_ninety_nine_payer_name,
-                                      self.ten_ninety_nine_payer_address,
-                                      self.ten_ninety_nine_payer_city, self.ten_ninety_nine_payer_state,
-                                      self.ten_ninety_nine_payer_country,
-                                      self.ten_ninety_nine_payer_ZIP, self.ten_ninety_nine_payer_phone,
-                                      self.ten_ninety_nine_payer_tin,
-                                      self.ten_ninety_nine_recipient_tin, self.ten_ninety_nine_recipient_name,
-                                      self.ten_ninety_nine_recipient_address,
-                                      self.ten_ninety_nine_recipient_city, self.ten_ninety_nine_recipient_state,
-                                      self.ten_ninety_nine_recipient_country,
-                                      self.ten_ninety_nine_recipient_ZIP, self.ten_ninety_nine_facta_filing,
-                                      self.ten_ninety_nine_account_number,
-                                      self.ten_ninety_nine_ordinary_dividends, self.ten_ninety_nine_qualified_dividends,
-                                      self.ten_ninety_nine_capital_gain,
-                                      self.ten_ninety_nine_1250_gain, self.ten_ninety_nine_1202_gain,
-                                      self.ten_ninety_nine_collectibles_gain,
-                                      self.ten_ninety_nine_897_dividends, self.ten_ninety_nine_897_gain,
-                                      self.ten_ninety_nine_nondividend,
-                                      self.ten_ninety_nine_federal_tax_withheld, self.ten_ninety_nine_199a,
-                                      self.ten_ninety_nine_investment_expenses,
-                                      self.ten_ninety_nine_foreign_tax, self.ten_ninety_nine_foreign_tax_country,
-                                      self.ten_ninety_nine_cash_liquidation,
-                                      self.ten_ninety_nine_noncash_liquidation, self.ten_ninety_nine_exempt_dividends,
-                                      self.ten_ninety_nine_specified_bond_dividends,
-                                      self.ten_ninety_nine_state, self.ten_ninety_nine_state_id_number,
-                                      self.ten_ninety_nine_state_tax_withheld]
+                                           self.ten_ninety_nine_payer_address,
+                                           self.ten_ninety_nine_payer_city, self.ten_ninety_nine_payer_state,
+                                           self.ten_ninety_nine_payer_country,
+                                           self.ten_ninety_nine_payer_ZIP, self.ten_ninety_nine_payer_phone,
+                                           self.ten_ninety_nine_payer_tin,
+                                           self.ten_ninety_nine_recipient_tin, self.ten_ninety_nine_recipient_name,
+                                           self.ten_ninety_nine_recipient_address,
+                                           self.ten_ninety_nine_recipient_city, self.ten_ninety_nine_recipient_state,
+                                           self.ten_ninety_nine_recipient_country,
+                                           self.ten_ninety_nine_recipient_ZIP, self.ten_ninety_nine_facta_filing,
+                                           self.ten_ninety_nine_account_number,
+                                           self.ten_ninety_nine_ordinary_dividends,
+                                           self.ten_ninety_nine_qualified_dividends,
+                                           self.ten_ninety_nine_capital_gain,
+                                           self.ten_ninety_nine_1250_gain, self.ten_ninety_nine_1202_gain,
+                                           self.ten_ninety_nine_collectibles_gain,
+                                           self.ten_ninety_nine_897_dividends, self.ten_ninety_nine_897_gain,
+                                           self.ten_ninety_nine_nondividend,
+                                           self.ten_ninety_nine_federal_tax_withheld, self.ten_ninety_nine_199a,
+                                           self.ten_ninety_nine_investment_expenses,
+                                           self.ten_ninety_nine_foreign_tax, self.ten_ninety_nine_foreign_tax_country,
+                                           self.ten_ninety_nine_cash_liquidation,
+                                           self.ten_ninety_nine_noncash_liquidation,
+                                           self.ten_ninety_nine_exempt_dividends,
+                                           self.ten_ninety_nine_specified_bond_dividends,
+                                           self.ten_ninety_nine_state, self.ten_ninety_nine_state_id_number,
+                                           self.ten_ninety_nine_state_tax_withheld]
 
         self.w_2_placements = [self.twenty_four_img, self.blocker_img, self.employee_zip,
-                          self.employee_address, self.employee_suffix,
-                          self.employee_last_name, self.employee_name_i,
-                          self.cn_entry, self.employer_address, self.employer_zip,
-                          self.employer_name, self.other_field, self.third_party_sp,
-                          self.retirement_p, self.statutory_emp, self.locality_name,
-                          self.state_field, self.employers_state_id, self.state_wage_tips,
-                          self.state_income_tax, self.local_wage_tips, self.local_income_tax,
-                          self.twelve_a, self.twelve_b, self.twelve_c, self.twelve_d,
-                          self.dependent_care_benefits, self.allocated_tips, self.medicare_tax_withheld,
-                          self.social_security_tax_withheld, self.fed_income_tax_withheld,
-                          self.non_qualified_plans, self.nine_box, self.social_security_tips,
-                          self.medicare_wages, self.social_wages, self.wages_tips_c, self.ein_entry,
-                          self.essn_entry, self.w_2_label_for_img]
+                               self.employee_address, self.employee_suffix,
+                               self.employee_last_name, self.employee_name_i,
+                               self.cn_entry, self.employer_address, self.employer_zip,
+                               self.employer_name, self.other_field, self.third_party_sp,
+                               self.retirement_p, self.statutory_emp, self.locality_name,
+                               self.state_field, self.employers_state_id, self.state_wage_tips,
+                               self.state_income_tax, self.local_wage_tips, self.local_income_tax,
+                               self.twelve_a, self.twelve_b, self.twelve_c, self.twelve_d,
+                               self.dependent_care_benefits, self.allocated_tips, self.medicare_tax_withheld,
+                               self.social_security_tax_withheld, self.fed_income_tax_withheld,
+                               self.non_qualified_plans, self.nine_box, self.social_security_tips,
+                               self.medicare_wages, self.social_wages, self.wages_tips_c, self.ein_entry,
+                               self.essn_entry, self.w_2_label_for_img]
 
-        self.ten_forty_placements = [self.ten_forty_label_for_img, self.ten_forty_scrolling_frame, self.x]
+        self.ten_forty_placements = [self.ten_forty_label_for_pg_1, self.ten_forty_scrolling_frame, self.x]
 
         UserInterface.setup_w_2(self)
         ###############################
@@ -1193,8 +1198,10 @@ class UserInterface:
 
         self.ten_forty_scrolling_frame.place(relx=0.5, rely=0.365, anchor="center")
 
-        self.ten_forty_label_for_img.place(relx=0.5, rely=0.5, anchor="s")
-        self.ten_forty_label_for_img.pack(pady=5)
+        self.ten_forty_label_for_pg_1.place(relx=0.5, rely=0.5, anchor="s")
+        self.ten_forty_label_for_pg_1.pack(pady=5)
+        self.ten_forty_label_for_pg_2.place(relx=0.5, rely=0.5, anchor="s")
+        self.ten_forty_label_for_pg_2.pack(pady=5)
         self.x.place(relx=0.33, rely=0.156, anchor="e")
 
     def new_session(self):
