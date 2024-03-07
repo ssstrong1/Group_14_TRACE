@@ -1069,6 +1069,82 @@ class UserInterface:
                                                      width=125, height=32, text_color="#000000", bg_color="white",
                                                      fg_color="transparent")
 
+        self.ten_forty_8814 = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                              checkbox_height=22, height=0, bg_color="white")
+        self.ten_forty_4972 = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                              checkbox_height=22, height=0, bg_color="white")
+        self.ten_forty_other_form_check = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                                          checkbox_height=22, height=0, bg_color="white")
+        self.ten_forty_other_form_no = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Form No.",
+                                                    width=75, height=32, text_color="#000000", bg_color="white", fg_color="transparent")
+        self.ten_forty_other_form_total = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Tax",
+                                                       width=125, height=32, text_color="#000000", bg_color="white",
+                                                       fg_color="transparent")
+        self.ten_forty_schedule_2 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Schedule 2",
+                                                 width=125, height=32, text_color="#000000", bg_color="white",
+                                                 fg_color="transparent")
+        self.ten_forty_add_16_17 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total", width=125,
+                                                height=32, text_color="#000000", bg_color="white", fg_color="transparent")
+        self.ten_forty_child_credit = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Child Credits",
+                                                   width=125, height=32, text_color="#000000", bg_color="white",
+                                                   fg_color="transparent")
+        self.ten_forty_schedule_3 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Schedule 3",
+                                                 width=125, height=32, text_color="#000000", bg_color="white",
+                                                 fg_color="transparent")
+        self.ten_forty_add_19_20 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total",
+                                                width=125, height=32, text_color="#000000", bg_color="white", fg_color="transparent")
+        self.ten_forty_sub_21_18 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="22",
+                                                width=125, height=32, text_color="#000000", bg_color="white",
+                                                fg_color="transparent")
+        self.ten_forty_other_taxes = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Other Taxes",
+                                                  width=125, height=32, text_color="#000000", bg_color="white",
+                                                  fg_color="transparent")
+        self.ten_forty_total_tax = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total Tax",
+                                                width=125, height=32, text_color="#000000", bg_color="white",
+                                                fg_color="transparent")
+
+        self.ten_forty_withheld_w2 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="W-2 Tax",
+                                                  width=125, height=32, text_color="#000000", bg_color="white",
+                                                  fg_color="transparent")
+        self.ten_forty_withheld_1099 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="1099 Tax",
+                                                    width=125, height=32, text_color="#000000", bg_color="white",
+                                                    fg_color="transparent")
+        self.ten_forty_withheld_other = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Other",
+                                                     width=125, height=32, text_color="#000000", bg_color="white",
+                                                     fg_color="transparent")
+        self.ten_forty_withheld_total = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total",
+                                                     width=125, height=32, text_color="#000000", bg_color="white",
+                                                     fg_color="transparent")
+        self.ten_forty_previous_year = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Applied Return",
+                                                    width=125, height=32, text_color="#000000", bg_color="white",
+                                                    fg_color="transparent")
+        self.ten_forty_eic = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="EIC", width=125,
+                                          height=32, text_color="#000000", bg_color="white", fg_color="transparent")
+        self.ten_forty_8812_child_credit = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Child Credits",
+                                                        width=125, height=32, text_color="#000000", bg_color="white",
+                                                        fg_color="transparent")
+        self.ten_forty_8863_opportunity_credit = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Opportunity Credit",
+                                                              width=125, height=32, text_color="#000000", bg_color="white",
+                                                              fg_color="transparent")
+        self.ten_forty_schedule_3_line_15 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Schedule 3",
+                                                         width=125, height=32, text_color="#000000", bg_color="white",
+                                                         fg_color="transparent")
+        self.ten_forty_other_payments = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total Other",
+                                                     width=125, height=32, text_color="#000000", bg_color="white",
+                                                     fg_color="transparent")
+        self.ten_forty_total_payments = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total Payments",
+                                                     width=125, height=32, text_color="#000000", bg_color="white", fg_color="transparent")
+
+        self.ten_forty_overpaid = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total",
+                                               width=125, height=32, text_color="#000000", bg_color="white",
+                                               fg_color="transparent")
+        self.ten_forty_owed = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total Owed",
+                                           width=125, height=32, text_color="#000000", bg_color="white",
+                                           fg_color="transparent")
+        self.ten_forty_penalty = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Penalty",
+                                              width=125, height=32, text_color="#000000", bg_color="white",
+                                              fg_color="transparent")
+
         # End Input Fields
 
         self.ten_ninety_nine_placements = [self.ten_ninety_nine_label_for_img, self.ten_ninety_nine_payer_name,
@@ -1146,8 +1222,16 @@ class UserInterface:
                                      self.ten_forty_schedule_1, self.ten_forty_schedule_1, self.ten_forty_total_income,
                                      self.ten_forty_income_adjustments, self.ten_forty_adjusted_income,
                                      self.ten_forty_deductions, self.ten_forty_business_deductions, self.ten_forty_total_deductions,
-                                     self.ten_forty_taxable_income
-                                     ]
+                                     self.ten_forty_taxable_income, self.ten_forty_8814, self.ten_forty_4972,
+                                     self.ten_forty_other_form_check, self.ten_forty_other_form_no,
+                                     self.ten_forty_other_form_total, self.ten_forty_schedule_2, self.ten_forty_add_16_17,
+                                     self.ten_forty_child_credit, self.ten_forty_schedule_3, self.ten_forty_add_19_20,
+                                     self.ten_forty_sub_21_18, self.ten_forty_other_taxes, self.ten_forty_total_tax,
+                                     self.ten_forty_withheld_w2, self.ten_forty_withheld_1099, self.ten_forty_withheld_other,
+                                     self.ten_forty_withheld_total, self.ten_forty_previous_year, self.ten_forty_eic,
+                                     self.ten_forty_8812_child_credit, self.ten_forty_8863_opportunity_credit,
+                                     self.ten_forty_schedule_3_line_15, self.ten_forty_other_payments, self.ten_forty_total_payments,
+                                     self.ten_forty_overpaid, self.ten_forty_owed, self.ten_forty_penalty]
 
         UserInterface.setup_w_2(self)
         ###############################
@@ -1426,6 +1510,7 @@ class UserInterface:
         self.ten_forty_label_for_pg_1.pack(pady=5)
         self.ten_forty_label_for_pg_2.place(relx=0.5, rely=0.5, anchor="s")
         self.ten_forty_label_for_pg_2.pack(pady=5)
+
         self.ten_forty_first_name.place(relx=0.335, rely=0.058, anchor="e")
         self.ten_forty_last_name.place(relx=0.744, rely=0.058, anchor="e")
         self.ten_forty_spouse_first.place(relx=0.335, rely=0.077, anchor="e")
@@ -1438,20 +1523,25 @@ class UserInterface:
         self.ten_forty_foreign_country.place(relx=0.385, rely=0.133, anchor="e")
         self.ten_forty_foreign_province.place(relx=0.661, rely=0.133, anchor="e")
         self.ten_forty_foreign_post_code.place(relx=0.788, rely=0.133, anchor="e")
+
         self.ten_forty_filing_single.place(relx=0.164, rely=0.144, anchor="e")
         self.ten_forty_filing_jointly.place(relx=0.164, rely=0.153, anchor="e")
         self.ten_forty_filing_separately.place(relx=0.164, rely=0.162, anchor="e")
         self.ten_forty_filing_hoh.place(relx=0.613, rely=0.144, anchor="e")
         self.ten_forty_filing_qss.place(relx=0.613, rely=0.162, anchor="e")
+
         self.ten_forty_digital_assets_yes.place(relx=0.877, rely=0.204, anchor="e")
         self.ten_forty_digital_assets_no.place(relx=0.942, rely=0.204, anchor="e")
+
         self.ten_forty_are_dependent.place(relx=0.309, rely=0.214, anchor="e")
         self.ten_forty_spouse_dependent.place(relx=0.482, rely=0.214, anchor="e")
         self.ten_forty_spouse_separate.place(relx=0.151, rely=0.224, anchor="e")
+
         self.ten_forty_self_1959.place(relx=0.189, rely=0.237, anchor="e")
         self.ten_forty_self_blind.place(relx=0.448, rely=0.237, anchor="e")
         self.ten_forty_spouse_1959.place(relx=0.624, rely=0.237, anchor="e")
         self.ten_forty_spouse_blind.place(relx=0.881, rely=0.237, anchor="e")
+
         self.ten_forty_dependent_first_1.place(relx=0.282, rely=0.266, anchor="e")
         self.ten_forty_dependent_last_1.place(relx=0.431, rely=0.266, anchor="e")
         self.ten_forty_dependent_first_2.place(relx=0.282, rely=0.275, anchor="e")
@@ -1469,6 +1559,7 @@ class UserInterface:
         self.ten_forty_dependent_3_other_credit.place(relx=0.940, rely=0.283, anchor="e")
         self.ten_forty_dependent_4_child_credit.place(relx=0.788, rely=0.293, anchor="e")
         self.ten_forty_dependent_4_other_credit.place(relx=0.940, rely=0.293, anchor="e")
+
         self.ten_forty_total_w2s.place(relx=0.987, rely=0.302, anchor="e")
         self.ten_forty_household_wages.place(relx=0.987, rely=0.3115, anchor="e")
         self.ten_forty_tip_income.place(relx=0.987, rely=0.321, anchor="e")
@@ -1500,7 +1591,37 @@ class UserInterface:
         self.ten_forty_total_deductions.place(relx=0.987, rely=0.517, anchor="e")
         self.ten_forty_taxable_income.place(relx=0.987, rely=0.5265, anchor="e")
 
-        # TODO: add page 2
+        self.ten_forty_8814.place(relx=0.5115, rely=0.565, anchor="e")
+        self.ten_forty_4972.place(relx=0.595, rely=0.565, anchor="e")
+        self.ten_forty_other_form_check.place(relx=0.692, rely=0.565, anchor="e")
+        self.ten_forty_other_form_no.place(relx=0.751, rely=0.565, anchor="e")
+        self.ten_forty_other_form_total.place(relx=0.987, rely=0.565, anchor="e")
+        self.ten_forty_schedule_2.place(relx=0.987, rely=0.5745, anchor="e")
+        self.ten_forty_add_16_17.place(relx=0.987, rely=0.584, anchor="e")
+        self.ten_forty_child_credit.place(relx=0.987, rely=0.5935, anchor="e")
+        self.ten_forty_schedule_3.place(relx=0.987, rely=0.603, anchor="e")
+        self.ten_forty_add_19_20.place(relx=0.987, rely=0.6125, anchor="e")
+        self.ten_forty_sub_21_18.place(relx=0.987, rely=0.622, anchor="e")
+        self.ten_forty_other_taxes.place(relx=0.987, rely=0.6315, anchor="e")
+        self.ten_forty_total_tax.place(relx=0.987, rely=0.641, anchor="e")
+
+        self.ten_forty_withheld_w2.place(relx=0.811, rely=0.660, anchor="e")
+        self.ten_forty_withheld_1099.place(relx=0.811, rely=0.6695, anchor="e")
+        self.ten_forty_withheld_other.place(relx=0.811, rely=0.679, anchor="e")
+        self.ten_forty_withheld_total.place(relx=0.987, rely=0.6885, anchor="e")
+        self.ten_forty_previous_year.place(relx=0.987, rely=0.698, anchor="e")
+        self.ten_forty_eic.place(relx=0.811, rely=0.706, anchor="e")
+        self.ten_forty_8812_child_credit.place(relx=0.811, rely=0.715, anchor="e")
+        self.ten_forty_8863_opportunity_credit.place(relx=0.811, rely=0.725, anchor="e")
+        self.ten_forty_schedule_3_line_15.place(relx=0.811, rely=0.744, anchor="e")
+        self.ten_forty_other_payments.place(relx=0.987, rely=0.754, anchor="e")
+        self.ten_forty_total_payments.place(relx=0.987, rely=0.763, anchor="e")
+
+        self.ten_forty_overpaid.place(relx=0.987, rely=0.773, anchor="e")
+        self.ten_forty_owed.place(relx=0.987, rely=0.829, anchor="e")
+        self.ten_forty_penalty.place(relx=0.811, rely=0.838, anchor="e")
+
+
     def new_session(self):
         """
             Creates a new session for tax calculations.
