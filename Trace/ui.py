@@ -1,7 +1,8 @@
 import customtkinter as ctk
 from tkinter import messagebox
 import sys
-import re
+import os
+import fitz
 from tkinter import filedialog
 from tkinter import *
 import tkinter as tk
@@ -461,12 +462,14 @@ class UserInterface:
         self.app.config(menu=menubar)
 
         # File menu
-        file_menu = Menu(menubar, tearoff=0)
-        file_menu.add_command(label="New", command=self.new_session)
-        file_menu.add_command(label="Save as", command=self.save_as)
-        file_menu.add_command(label="Browse", command=self.browse)
-        file_menu.add_separator()
-        menubar.add_cascade(label="File", menu=file_menu)
+        self.file_menu = Menu(menubar, tearoff=0)
+        self.file_menu.add_command(label="New", command=self.new_session)
+        self.file_menu.add_command(label="Save W-2 As", command=self.save_form_w2_as)
+        self.file_menu.add_command(label="Save 1099 As", command=self.save_form_1099_as)
+        self.file_menu.add_command(label="Browse W-2", command=self.browse_form_w2)
+        self.file_menu.add_command(label="Browse 1099", command=self.browse_form_1099)
+        self.file_menu.add_separator()
+        menubar.add_cascade(label="File", menu=self.file_menu)
 
         # Edit menu
         edit_menu = Menu(menubar, tearoff=0)
@@ -1368,7 +1371,7 @@ class UserInterface:
 
         #  Stat Emp
 
-        self.statutory_emp.place(relx=.691, rely=0.395, anchor="e")
+        self.statutory_emp.place(relx=.583, rely=0.395, anchor="e")
 
         #  retire plan
 
@@ -1376,7 +1379,7 @@ class UserInterface:
 
         #  third party
 
-        self.third_party_sp.place(relx=.583, rely=0.395, anchor="e")
+        self.third_party_sp.place(relx=.691, rely=0.395, anchor="e")
 
         #  Other
 
@@ -1629,36 +1632,6 @@ class UserInterface:
 
         pass
 
-    # Browse
-
-    def browse(self):
-        """
-        Opens a file explorer to select a text file containing tax information.
-        Parses the file and extracts income, deductions, and tax year.
-        Assigns data to self.income_entry, self.deductions_entry, and self.tax_year_entry.
-        """
-
-        file = filedialog.askopenfile(mode='r', defaultextension=".txt")
-        if file is None:
-            return
-        contents = file.read()
-        income = re.sub(r"[^0-9.]", "", contents.split("\n")[0])
-        deductions = re.sub(r"[^0-9.]", "", contents.split("\n")[1])
-        tax_year = re.sub(r"[^0-9.]", "", contents.split("\n")[2])
-        # Assign values to self.income_entry, self.deductions_entry, self.tax_year_entry (create these widgets first)
-        file.close()
-
-    # Save As
-
-    def save_as(self):
-        """
-        Opens a file explorer to save the tax-related data to a text file.
-        """
-
-        # Open file explorer
-        filename = filedialog.asksaveasfilename(initialdir="/", title="Save As",
-                                                filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
-
     def quit(self):
         if messagebox.askyesno("Exit", "Are you sure you want to quit?"):
             sys.exit()
@@ -1668,3 +1641,667 @@ class UserInterface:
         # For example, save data or prompt the user before quitting
         if messagebox.askyesno("Exit", "Are you sure you want to quit?"):
             sys.exit()
+
+#######################################################################################################################
+    # W-2 #
+    # Save-as #
+    def save_form_w2_as(self):
+        """
+        Opens a file explorer to save the tax-related data to a text file.
+        """
+
+        # Opening the file explorer
+        filename = filedialog.asksaveasfilename(initialdir="/", title="Save As",
+                                                filetypes=(("PDF Files", "*.pdf"),))
+        if filename:
+
+            def update_widget_values_w2(input_pdf, output_pdf):
+                # Opening the input PDF
+                pdf = fitz.open(input_pdf)
+                save_as_w2_field_values_mixing = {
+                    'topmostSubform[0].Copy1[0].f2_01[0]': str(self.essn_entry.get()),
+                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_02[0]': str(self.ein_entry.get()),
+                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_03[0]': str(self.employer_name.get()),
+                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_04[0]': str(self.cn_entry.get()),
+                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_05[0]': str(self.employee_name_i.get()),
+                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_06[0]': str(self.employee_last_name.get()),
+                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_07[0]': str(self.employee_suffix.get()),
+                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_08[0]': str(self.employee_address.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_09[0]': str(self.wages_tips_c.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_10[0]': str(self.fed_income_tax_withheld.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_11[0]': str(self.social_wages.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_12[0]': str(self.social_security_tax_withheld.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_13[0]': str(self.medicare_wages.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_14[0]': str(self.medicare_tax_withheld.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_15[0]': str(self.social_security_tips.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_16[0]': str(self.allocated_tips.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_18[0]': str(self.dependent_care_benefits.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_19[0]': str(self.non_qualified_plans.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].Box12_ReadOrder[0].f2_21[0]': str(self.twelve_a.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].Box12_ReadOrder[0].f2_23[0]': str(self.twelve_b.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].Box12_ReadOrder[0].f2_25[0]': str(self.twelve_c.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].Box12_ReadOrder[0].f2_27[0]': str(self.twelve_d.get()),
+                    'topmostSubform[0].Copy1[0].Col_Right[0].f2_28[0]': str(self.other_field.get()),
+                    'topmostSubform[0].Copy1[0].Boxes15_ReadOrder[0].f2_29[0]': str(self.state_field.get()),
+                    'topmostSubform[0].Copy1[0].Boxes15_ReadOrder[0].f2_30[0]': str(self.employers_state_id.get()),
+                    'topmostSubform[0].Copy1[0].Box16_ReadOrder[0].f2_33[0]': str(self.state_wage_tips.get()),
+                    'topmostSubform[0].Copy1[0].Box17_ReadOrder[0].f2_35[0]': str(self.state_income_tax.get()),
+                    'topmostSubform[0].Copy1[0].Box18_ReadOrder[0].f2_37[0]': str(self.local_wage_tips.get()),
+                    'topmostSubform[0].Copy1[0].Box19_ReadOrder[0].f2_39[0]': str(self.local_income_tax.get()),
+                    'topmostSubform[0].Copy1[0].f2_41[0]': str(self.locality_name.get())
+                }
+
+                save_as_w2_field_values_mixing_2 = {
+                    'topmostSubform[0].CopyB[0].f2_01[0]': str(self.essn_entry.get()),
+                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_02[0]': str(self.ein_entry.get()),
+                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_03[0]': str(self.employer_name.get()),
+                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_04[0]': str(self.cn_entry.get()),
+                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_05[0]': str(self.employee_name_i.get()),
+                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_06[0]': str(self.employee_last_name.get()),
+                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_07[0]': str(self.employee_suffix.get()),
+                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_08[0]': str(self.employee_address.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_09[0]': str(self.wages_tips_c.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_10[0]': str(self.fed_income_tax_withheld.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_11[0]': str(self.social_wages.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_12[0]': str(self.social_security_tax_withheld.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_13[0]': str(self.medicare_wages.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_14[0]': str(self.medicare_tax_withheld.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_15[0]': str(self.social_security_tips.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_16[0]': str(self.allocated_tips.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_18[0]': str(self.dependent_care_benefits.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_19[0]': str(self.non_qualified_plans.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].Box12_ReadOrder[0].f2_21[0]': str(self.twelve_a.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].Box12_ReadOrder[0].f2_23[0]': str(self.twelve_b.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].Box12_ReadOrder[0].f2_25[0]': str(self.twelve_c.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].Box12_ReadOrder[0].f2_27[0]': str(self.twelve_d.get()),
+                    'topmostSubform[0].CopyB[0].Col_Right[0].f2_28[0]': str(self.other_field.get()),
+                    'topmostSubform[0].CopyB[0].Boxes15_ReadOrder[0].f2_29[0]': str(self.state_field.get()),
+                    'topmostSubform[0].CopyB[0].Boxes15_ReadOrder[0].f2_30[0]': str(self.employers_state_id.get()),
+                    'topmostSubform[0].CopyB[0].Box16_ReadOrder[0].f2_33[0]': str(self.state_wage_tips.get()),
+                    'topmostSubform[0].CopyB[0].Box17_ReadOrder[0].f2_35[0]': str(self.state_income_tax.get()),
+                    'topmostSubform[0].CopyB[0].Box18_ReadOrder[0].f2_37[0]': str(self.local_wage_tips.get()),
+                    'topmostSubform[0].CopyB[0].Box19_ReadOrder[0].f2_39[0]': str(self.local_income_tax.get()),
+                    'topmostSubform[0].CopyB[0].f2_41[0]': str(self.locality_name.get())
+                }
+
+                save_as_w2_field_values_mixing_3 = {
+                    'topmostSubform[0].CopyC[0].f2_01[0]': str(self.essn_entry.get()),
+                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_02[0]': str(self.ein_entry.get()),
+                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_03[0]': str(self.employer_name.get()),
+                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_04[0]': str(self.cn_entry.get()),
+                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_05[0]': str(self.employee_name_i.get()),
+                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_06[0]': str(self.employee_last_name.get()),
+                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_07[0]': str(self.employee_suffix.get()),
+                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_08[0]': str(self.employee_address.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_09[0]': str(self.wages_tips_c.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_10[0]': str(self.fed_income_tax_withheld.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_11[0]': str(self.social_wages.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_12[0]': str(self.social_security_tax_withheld.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_13[0]': str(self.medicare_wages.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_14[0]': str(self.medicare_tax_withheld.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_15[0]': str(self.social_security_tips.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_16[0]': str(self.allocated_tips.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_18[0]': str(self.dependent_care_benefits.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_19[0]': str(self.non_qualified_plans.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].Box12_ReadOrder[0].f2_21[0]': str(self.twelve_a.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].Box12_ReadOrder[0].f2_23[0]': str(self.twelve_b.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].Box12_ReadOrder[0].f2_25[0]': str(self.twelve_c.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].Box12_ReadOrder[0].f2_27[0]': str(self.twelve_d.get()),
+                    'topmostSubform[0].CopyC[0].Col_Right[0].f2_28[0]': str(self.other_field.get()),
+                    'topmostSubform[0].CopyC[0].Boxes15_ReadOrder[0].f2_29[0]': str(self.state_field.get()),
+                    'topmostSubform[0].CopyC[0].Boxes15_ReadOrder[0].f2_30[0]': str(self.employers_state_id.get()),
+                    'topmostSubform[0].CopyC[0].Box16_ReadOrder[0].f2_33[0]': str(self.state_wage_tips.get()),
+                    'topmostSubform[0].CopyC[0].Box17_ReadOrder[0].f2_35[0]': str(self.state_income_tax.get()),
+                    'topmostSubform[0].CopyC[0].Box18_ReadOrder[0].f2_37[0]': str(self.local_wage_tips.get()),
+                    'topmostSubform[0].CopyC[0].Box19_ReadOrder[0].f2_39[0]': str(self.local_income_tax.get()),
+                    'topmostSubform[0].CopyC[0].f2_41[0]': str(self.locality_name.get())
+                }
+
+                save_as_w2_field_values_mixing_4 = {
+                    'topmostSubform[0].Copy2[0].f2_01[0]': str(self.essn_entry.get()),
+                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_02[0]': str(self.ein_entry.get()),
+                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_03[0]': str(self.employer_name.get()),
+                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_04[0]': str(self.cn_entry.get()),
+                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_05[0]': str(self.employee_name_i.get()),
+                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_06[0]': str(self.employee_last_name.get()),
+                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_07[0]': str(self.employee_suffix.get()),
+                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_08[0]': str(self.employee_address.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_09[0]': str(self.wages_tips_c.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_10[0]': str(self.fed_income_tax_withheld.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_11[0]': str(self.social_wages.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_12[0]': str(self.social_security_tax_withheld.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_13[0]': str(self.medicare_wages.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_14[0]': str(self.medicare_tax_withheld.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_15[0]': str(self.social_security_tips.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_16[0]': str(self.allocated_tips.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_18[0]': str(self.dependent_care_benefits.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_19[0]': str(self.non_qualified_plans.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].Box12_ReadOrder[0].f2_21[0]': str(self.twelve_a.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].Box12_ReadOrder[0].f2_23[0]': str(self.twelve_b.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].Box12_ReadOrder[0].f2_25[0]': str(self.twelve_c.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].Box12_ReadOrder[0].f2_27[0]': str(self.twelve_d.get()),
+                    'topmostSubform[0].Copy2[0].Col_Right[0].f2_28[0]': str(self.other_field.get()),
+                    'topmostSubform[0].Copy2[0].Boxes15_ReadOrder[0].f2_29[0]': str(self.state_field.get()),
+                    'topmostSubform[0].Copy2[0].Boxes15_ReadOrder[0].f2_30[0]': str(self.employers_state_id.get()),
+                    'topmostSubform[0].Copy2[0].Box16_ReadOrder[0].f2_33[0]': str(self.state_wage_tips.get()),
+                    'topmostSubform[0].Copy2[0].Box17_ReadOrder[0].f2_35[0]': str(self.state_income_tax.get()),
+                    'topmostSubform[0].Copy2[0].Box18_ReadOrder[0].f2_37[0]': str(self.local_wage_tips.get()),
+                    'topmostSubform[0].Copy2[0].Box19_ReadOrder[0].f2_39[0]': str(self.local_income_tax.get()),
+                    'topmostSubform[0].Copy2[0].f2_41[0]': str(self.locality_name.get())
+                }
+
+                save_as_w2_field_values_mixing_5 = {
+                    'topmostSubform[0].CopyD[0].f2_01[0]': str(self.essn_entry.get()),
+                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_02[0]': str(self.ein_entry.get()),
+                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_03[0]': str(self.employer_name.get()),
+                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_04[0]': str(self.cn_entry.get()),
+                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_05[0]': str(self.employee_name_i.get()),
+                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_06[0]': str(self.employee_last_name.get()),
+                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_07[0]': str(self.employee_suffix.get()),
+                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_08[0]': str(self.employee_address.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_09[0]': str(self.wages_tips_c.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_10[0]': str(self.fed_income_tax_withheld.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_11[0]': str(self.social_wages.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_12[0]': str(self.social_security_tax_withheld.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_13[0]': str(self.medicare_wages.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_14[0]': str(self.medicare_tax_withheld.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_15[0]': str(self.social_security_tips.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_16[0]': str(self.allocated_tips.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_18[0]': str(self.dependent_care_benefits.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_19[0]': str(self.non_qualified_plans.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].Box12_ReadOrder[0].f2_21[0]': str(self.twelve_a.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].Box12_ReadOrder[0].f2_23[0]': str(self.twelve_b.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].Box12_ReadOrder[0].f2_25[0]': str(self.twelve_c.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].Box12_ReadOrder[0].f2_27[0]': str(self.twelve_d.get()),
+                    'topmostSubform[0].CopyD[0].Col_Right[0].f2_28[0]': str(self.other_field.get()),
+                    'topmostSubform[0].CopyD[0].Boxes15_ReadOrder[0].f2_29[0]': str(self.state_field.get()),
+                    'topmostSubform[0].CopyD[0].Boxes15_ReadOrder[0].f2_30[0]': str(self.employers_state_id.get()),
+                    'topmostSubform[0].CopyD[0].Box16_ReadOrder[0].f2_33[0]': str(self.state_wage_tips.get()),
+                    'topmostSubform[0].CopyD[0].Box17_ReadOrder[0].f2_35[0]': str(self.state_income_tax.get()),
+                    'topmostSubform[0].CopyD[0].Box18_ReadOrder[0].f2_37[0]': str(self.local_wage_tips.get()),
+                    'topmostSubform[0].CopyD[0].Box19_ReadOrder[0].f2_39[0]': str(self.local_income_tax.get()),
+                    'topmostSubform[0].CopyD[0].f2_41[0]': str(self.locality_name.get())
+                }
+
+                # Iteration for each page
+                for each_page in pdf:
+                    widgets = each_page.widgets()
+                    for content in widgets:
+                        for field_name, value in {**save_as_w2_field_values_mixing,
+                                                  **save_as_w2_field_values_mixing_2,
+                                                  **save_as_w2_field_values_mixing_3,
+                                                  **save_as_w2_field_values_mixing_4,
+                                                  **save_as_w2_field_values_mixing_5}.items():
+                            if content.field_name == field_name:
+                                if value == "":
+                                    content.field_value = " "
+                                else:
+                                    content.field_value = value
+                                content.update()
+
+                # Saving the modified PDF
+                pdf.save(output_pdf)
+                pdf.close()
+
+            # Input and output PDF filenames
+            input_pdf_file = "default_w2.pdf"
+            output_pdf_file = os.path.splitext(filename)[0] + ".pdf"
+
+            # Updating of widget values and saving the modified PDF
+            update_widget_values_w2(input_pdf_file, output_pdf_file)
+            print(f"Modified PDF saved as {output_pdf_file}")
+
+    # Browse
+
+    def browse_form_w2(self):
+        """
+           Opens a file explorer to select a pdf file containing tax information.
+           Assigns data accordingly.
+        """
+        filename = filedialog.askopenfilename(initialdir="/", title="Open", filetypes=(("PDF Files", "*.pdf"),))
+        if filename:
+            self.update_input_fields_w2(filename)
+
+    def update_input_fields_w2(self, input_pdf):
+        # Opening the input PDF
+        pdf = fitz.open(input_pdf)
+        browse_w2_field_values_mixing = {
+            'topmostSubform[0].Copy1[0].f2_01[0]': self.essn_entry,
+            'topmostSubform[0].Copy1[0].Col_Left[0].f2_02[0]': self.ein_entry,
+            'topmostSubform[0].Copy1[0].Col_Left[0].f2_03[0]': self.employer_name,
+            'topmostSubform[0].Copy1[0].Col_Left[0].f2_04[0]': self.cn_entry,
+            'topmostSubform[0].Copy1[0].Col_Left[0].f2_05[0]': self.employee_name_i,
+            'topmostSubform[0].Copy1[0].Col_Left[0].f2_06[0]': self.employee_last_name,
+            'topmostSubform[0].Copy1[0].Col_Left[0].f2_07[0]': self.employee_suffix,
+            'topmostSubform[0].Copy1[0].Col_Left[0].f2_08[0]': self.employee_address,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_09[0]': self.wages_tips_c,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_10[0]': self.fed_income_tax_withheld,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_11[0]': self.social_wages,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_12[0]': self.social_security_tax_withheld,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_13[0]': self.medicare_wages,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_14[0]': self.medicare_tax_withheld,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_15[0]': self.social_security_tips,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_16[0]': self.allocated_tips,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_18[0]': self.dependent_care_benefits,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_19[0]': self.non_qualified_plans,
+            'topmostSubform[0].Copy1[0].Col_Right[0].Box12_ReadOrder[0].f2_21[0]': self.twelve_a,
+            'topmostSubform[0].Copy1[0].Col_Right[0].Box12_ReadOrder[0].f2_23[0]': self.twelve_b,
+            'topmostSubform[0].Copy1[0].Col_Right[0].Box12_ReadOrder[0].f2_25[0]': self.twelve_c,
+            'topmostSubform[0].Copy1[0].Col_Right[0].Box12_ReadOrder[0].f2_27[0]': self.twelve_d,
+            'topmostSubform[0].Copy1[0].Col_Right[0].f2_28[0]': self.other_field,
+            'topmostSubform[0].Copy1[0].Boxes15_ReadOrder[0].f2_29[0]': self.state_field,
+            'topmostSubform[0].Copy1[0].Boxes15_ReadOrder[0].f2_30[0]': self.employers_state_id,
+            'topmostSubform[0].Copy1[0].Box16_ReadOrder[0].f2_33[0]': self.state_wage_tips,
+            'topmostSubform[0].Copy1[0].Box17_ReadOrder[0].f2_35[0]': self.state_income_tax,
+            'topmostSubform[0].Copy1[0].Box18_ReadOrder[0].f2_37[0]': self.local_wage_tips,
+            'topmostSubform[0].Copy1[0].Box19_ReadOrder[0].f2_39[0]': self.local_income_tax,
+            'topmostSubform[0].Copy1[0].f2_41[0]': self.locality_name
+        }
+
+        browse_w2_field_values_mixing_2 = {
+            'topmostSubform[0].CopyB[0].f2_01[0]': self.essn_entry,
+            'topmostSubform[0].CopyB[0].Col_Left[0].f2_02[0]': self.ein_entry,
+            'topmostSubform[0].CopyB[0].Col_Left[0].f2_03[0]': self.employer_name,
+            'topmostSubform[0].CopyB[0].Col_Left[0].f2_04[0]': self.cn_entry,
+            'topmostSubform[0].CopyB[0].Col_Left[0].f2_05[0]': self.employee_name_i,
+            'topmostSubform[0].CopyB[0].Col_Left[0].f2_06[0]': self.employee_last_name,
+            'topmostSubform[0].CopyB[0].Col_Left[0].f2_07[0]': self.employee_suffix,
+            'topmostSubform[0].CopyB[0].Col_Left[0].f2_08[0]': self.employee_address,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_09[0]': self.wages_tips_c,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_10[0]': self.fed_income_tax_withheld,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_11[0]': self.social_wages,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_12[0]': self.social_security_tax_withheld,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_13[0]': self.medicare_wages,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_14[0]': self.medicare_tax_withheld,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_15[0]': self.social_security_tips,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_16[0]': self.allocated_tips,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_18[0]': self.dependent_care_benefits,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_19[0]': self.non_qualified_plans,
+            'topmostSubform[0].CopyB[0].Col_Right[0].Box12_ReadOrder[0].f2_21[0]': self.twelve_a,
+            'topmostSubform[0].CopyB[0].Col_Right[0].Box12_ReadOrder[0].f2_23[0]': self.twelve_b,
+            'topmostSubform[0].CopyB[0].Col_Right[0].Box12_ReadOrder[0].f2_25[0]': self.twelve_c,
+            'topmostSubform[0].CopyB[0].Col_Right[0].Box12_ReadOrder[0].f2_27[0]': self.twelve_d,
+            'topmostSubform[0].CopyB[0].Col_Right[0].f2_28[0]': self.other_field,
+            'topmostSubform[0].CopyB[0].Boxes15_ReadOrder[0].f2_29[0]': self.state_field,
+            'topmostSubform[0].CopyB[0].Boxes15_ReadOrder[0].f2_30[0]': self.employers_state_id,
+            'topmostSubform[0].CopyB[0].Box16_ReadOrder[0].f2_33[0]': self.state_wage_tips,
+            'topmostSubform[0].CopyB[0].Box17_ReadOrder[0].f2_35[0]': self.state_income_tax,
+            'topmostSubform[0].CopyB[0].Box18_ReadOrder[0].f2_37[0]': self.local_wage_tips,
+            'topmostSubform[0].CopyB[0].Box19_ReadOrder[0].f2_39[0]': self.local_income_tax,
+            'topmostSubform[0].CopyB[0].f2_41[0]': self.locality_name
+        }
+
+        browse_w2_field_values_mixing_3 = {
+            'topmostSubform[0].CopyC[0].f2_01[0]': self.essn_entry,
+            'topmostSubform[0].CopyC[0].Col_Left[0].f2_02[0]': self.ein_entry,
+            'topmostSubform[0].CopyC[0].Col_Left[0].f2_03[0]': self.employer_name,
+            'topmostSubform[0].CopyC[0].Col_Left[0].f2_04[0]': self.cn_entry,
+            'topmostSubform[0].CopyC[0].Col_Left[0].f2_05[0]': self.employee_name_i,
+            'topmostSubform[0].CopyC[0].Col_Left[0].f2_06[0]': self.employee_last_name,
+            'topmostSubform[0].CopyC[0].Col_Left[0].f2_07[0]': self.employee_suffix,
+            'topmostSubform[0].CopyC[0].Col_Left[0].f2_08[0]': self.employee_address,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_09[0]': self.wages_tips_c,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_10[0]': self.fed_income_tax_withheld,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_11[0]': self.social_wages,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_12[0]': self.social_security_tax_withheld,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_13[0]': self.medicare_wages,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_14[0]': self.medicare_tax_withheld,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_15[0]': self.social_security_tips,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_16[0]': self.allocated_tips,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_18[0]': self.dependent_care_benefits,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_19[0]': self.non_qualified_plans,
+            'topmostSubform[0].CopyC[0].Col_Right[0].Box12_ReadOrder[0].f2_21[0]': self.twelve_a,
+            'topmostSubform[0].CopyC[0].Col_Right[0].Box12_ReadOrder[0].f2_23[0]': self.twelve_b,
+            'topmostSubform[0].CopyC[0].Col_Right[0].Box12_ReadOrder[0].f2_25[0]': self.twelve_c,
+            'topmostSubform[0].CopyC[0].Col_Right[0].Box12_ReadOrder[0].f2_27[0]': self.twelve_d,
+            'topmostSubform[0].CopyC[0].Col_Right[0].f2_28[0]': self.other_field,
+            'topmostSubform[0].CopyC[0].Boxes15_ReadOrder[0].f2_29[0]': self.state_field,
+            'topmostSubform[0].CopyC[0].Boxes15_ReadOrder[0].f2_30[0]': self.employers_state_id,
+            'topmostSubform[0].CopyC[0].Box16_ReadOrder[0].f2_33[0]': self.state_wage_tips,
+            'topmostSubform[0].CopyC[0].Box17_ReadOrder[0].f2_35[0]': self.state_income_tax,
+            'topmostSubform[0].CopyC[0].Box18_ReadOrder[0].f2_37[0]': self.local_wage_tips,
+            'topmostSubform[0].CopyC[0].Box19_ReadOrder[0].f2_39[0]': self.local_income_tax,
+            'topmostSubform[0].CopyC[0].f2_41[0]': self.locality_name
+        }
+
+        browse_w2_field_values_mixing_4 = {
+            'topmostSubform[0].Copy2[0].f2_01[0]': self.essn_entry,
+            'topmostSubform[0].Copy2[0].Col_Left[0].f2_02[0]': self.ein_entry,
+            'topmostSubform[0].Copy2[0].Col_Left[0].f2_03[0]': self.employer_name,
+            'topmostSubform[0].Copy2[0].Col_Left[0].f2_04[0]': self.cn_entry,
+            'topmostSubform[0].Copy2[0].Col_Left[0].f2_05[0]': self.employee_name_i,
+            'topmostSubform[0].Copy2[0].Col_Left[0].f2_06[0]': self.employee_last_name,
+            'topmostSubform[0].Copy2[0].Col_Left[0].f2_07[0]': self.employee_suffix,
+            'topmostSubform[0].Copy2[0].Col_Left[0].f2_08[0]': self.employee_address,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_09[0]': self.wages_tips_c,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_10[0]': self.fed_income_tax_withheld,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_11[0]': self.social_wages,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_12[0]': self.social_security_tax_withheld,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_13[0]': self.medicare_wages,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_14[0]': self.medicare_tax_withheld,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_15[0]': self.social_security_tips,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_16[0]': self.allocated_tips,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_18[0]': self.dependent_care_benefits,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_19[0]': self.non_qualified_plans,
+            'topmostSubform[0].Copy2[0].Col_Right[0].Box12_ReadOrder[0].f2_21[0]': self.twelve_a,
+            'topmostSubform[0].Copy2[0].Col_Right[0].Box12_ReadOrder[0].f2_23[0]': self.twelve_b,
+            'topmostSubform[0].Copy2[0].Col_Right[0].Box12_ReadOrder[0].f2_25[0]': self.twelve_c,
+            'topmostSubform[0].Copy2[0].Col_Right[0].Box12_ReadOrder[0].f2_27[0]': self.twelve_d,
+            'topmostSubform[0].Copy2[0].Col_Right[0].f2_28[0]': self.other_field,
+            'topmostSubform[0].Copy2[0].Boxes15_ReadOrder[0].f2_29[0]': self.state_field,
+            'topmostSubform[0].Copy2[0].Boxes15_ReadOrder[0].f2_30[0]': self.employers_state_id,
+            'topmostSubform[0].Copy2[0].Box16_ReadOrder[0].f2_33[0]': self.state_wage_tips,
+            'topmostSubform[0].Copy2[0].Box17_ReadOrder[0].f2_35[0]': self.state_income_tax,
+            'topmostSubform[0].Copy2[0].Box18_ReadOrder[0].f2_37[0]': self.local_wage_tips,
+            'topmostSubform[0].Copy2[0].Box19_ReadOrder[0].f2_39[0]': self.local_income_tax,
+            'topmostSubform[0].Copy2[0].f2_41[0]': self.locality_name
+        }
+
+        browse_w2_field_values_mixing_5 = {
+            'topmostSubform[0].CopyD[0].f2_01[0]': self.essn_entry,
+            'topmostSubform[0].CopyD[0].Col_Left[0].f2_02[0]': self.ein_entry,
+            'topmostSubform[0].CopyD[0].Col_Left[0].f2_03[0]': self.employer_name,
+            'topmostSubform[0].CopyD[0].Col_Left[0].f2_04[0]': self.cn_entry,
+            'topmostSubform[0].CopyD[0].Col_Left[0].f2_05[0]': self.employee_name_i,
+            'topmostSubform[0].CopyD[0].Col_Left[0].f2_06[0]': self.employee_last_name,
+            'topmostSubform[0].CopyD[0].Col_Left[0].f2_07[0]': self.employee_suffix,
+            'topmostSubform[0].CopyD[0].Col_Left[0].f2_08[0]': self.employee_address,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_09[0]': self.wages_tips_c,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_10[0]': self.fed_income_tax_withheld,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_11[0]': self.social_wages,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_12[0]': self.social_security_tax_withheld,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_13[0]': self.medicare_wages,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_14[0]': self.medicare_tax_withheld,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_15[0]': self.social_security_tips,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_16[0]': self.allocated_tips,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_18[0]': self.dependent_care_benefits,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_19[0]': self.non_qualified_plans,
+            'topmostSubform[0].CopyD[0].Col_Right[0].Box12_ReadOrder[0].f2_21[0]': self.twelve_a,
+            'topmostSubform[0].CopyD[0].Col_Right[0].Box12_ReadOrder[0].f2_23[0]': self.twelve_b,
+            'topmostSubform[0].CopyD[0].Col_Right[0].Box12_ReadOrder[0].f2_25[0]': self.twelve_c,
+            'topmostSubform[0].CopyD[0].Col_Right[0].Box12_ReadOrder[0].f2_27[0]': self.twelve_d,
+            'topmostSubform[0].CopyD[0].Col_Right[0].f2_28[0]': self.other_field,
+            'topmostSubform[0].CopyD[0].Boxes15_ReadOrder[0].f2_29[0]': self.state_field,
+            'topmostSubform[0].CopyD[0].Boxes15_ReadOrder[0].f2_30[0]': self.employers_state_id,
+            'topmostSubform[0].CopyD[0].Box16_ReadOrder[0].f2_33[0]': self.state_wage_tips,
+            'topmostSubform[0].CopyD[0].Box17_ReadOrder[0].f2_35[0]': self.state_income_tax,
+            'topmostSubform[0].CopyD[0].Box18_ReadOrder[0].f2_37[0]': self.local_wage_tips,
+            'topmostSubform[0].CopyD[0].Box19_ReadOrder[0].f2_39[0]': self.local_income_tax,
+            'topmostSubform[0].CopyD[0].f2_41[0]': self.locality_name
+        }
+
+        for each_page in pdf:
+            widgets = each_page.widgets()
+            for content in widgets:
+                for field_name, entry_widget in {**browse_w2_field_values_mixing, **browse_w2_field_values_mixing_2,
+                                                 **browse_w2_field_values_mixing_3,
+                                                 **browse_w2_field_values_mixing_4,
+                                                 **browse_w2_field_values_mixing_5}.items():
+                    if content.field_name == field_name:
+
+                        value = content.field_value.strip()
+                        if value != "":
+                            entry_widget.delete(0, tk.END)  # Clear any existing text
+                            entry_widget.insert(0, value)  # Set the value directly
+
+        pdf.close()
+
+#######################################################################################################################
+
+#######################################################################################################################
+# 1099 #
+# Save-as #
+    def save_form_1099_as(self):
+        """
+        Opens a file explorer to save the tax-related data to a text file.
+        """
+
+        # Opening the file explorer
+        filename = filedialog.asksaveasfilename(initialdir="/", title="Save As",
+                                                filetypes=(("PDF Files", "*.pdf"),))
+        if filename:
+
+            def update_widget_values_1099(input_pdf, output_pdf):
+                # Opening the input PDF
+                pdf = fitz.open(input_pdf)
+                save_as_1099_field_values_mixing = {
+                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_2[0]': str(self.ten_ninety_nine_payer_name.get()),
+                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_3[0]': str(self.ten_ninety_nine_payer_tin.get()),
+                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_4[0]': str(self.ten_ninety_nine_recipient_tin.get()),
+                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_5[0]': str(self.ten_ninety_nine_recipient_name.get()),
+                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_6[0]': str(self.ten_ninety_nine_recipient_address.get()),
+                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city.get()),
+                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_8[0]': str(self.ten_ninety_nine_account_number.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_9[0]': str(self.ten_ninety_nine_ordinary_dividends.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_10[0]': str(self.ten_ninety_nine_qualified_dividends.get()),
+                    'topmostSubform[0].Copy1[0].RightCol[0].f2_11[0]': str(self.ten_ninety_nine_capital_gain.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_13[0]': str(self.ten_ninety_nine_1202_gain.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_15[0]': str(self.ten_ninety_nine_897_dividends.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_17[0]': str(self.ten_ninety_nine_nondividend.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_19[0]': str(self.ten_ninety_nine_199a.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_21[0]': str(self.ten_ninety_nine_foreign_tax.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_23[0]': str(self.ten_ninety_nine_cash_liquidation.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_25[0]': str(self.ten_ninety_nine_exempt_dividends.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': str(self.ten_ninety_nine_state.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': str(self.ten_ninety_nine_state_id_number.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_12[0]': str(self.ten_ninety_nine_1250_gain.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_14[0]': str(self.ten_ninety_nine_collectibles_gain.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_16[0]': str(self.ten_ninety_nine_897_gain.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_18[0]': str(self.ten_ninety_nine_federal_tax_withheld.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_20[0]': str(self.ten_ninety_nine_investment_expenses.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_22[0]': str(self.ten_ninety_nine_foreign_tax_country.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_24[0]': str(self.ten_ninety_nine_noncash_liquidation.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_26[0]': str(self.ten_ninety_nine_specified_bond_dividends.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_31[0]': str(self.ten_ninety_nine_state_tax_withheld.get())
+                }
+
+                save_as_1099_field_values_mixing_2 = {
+                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_2[0]': str(self.ten_ninety_nine_payer_name.get()),
+                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_3[0]': str(self.ten_ninety_nine_payer_tin.get()),
+                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_4[0]': str(self.ten_ninety_nine_recipient_tin.get()),
+                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_5[0]': str(self.ten_ninety_nine_recipient_name.get()),
+                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_6[0]': str(self.ten_ninety_nine_recipient_address.get()),
+                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city.get()),
+                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_8[0]': str(self.ten_ninety_nine_account_number.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_9[0]': str(self.ten_ninety_nine_ordinary_dividends.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_10[0]': str(self.ten_ninety_nine_qualified_dividends.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_11[0]': str(self.ten_ninety_nine_capital_gain.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_13[0]': str(self.ten_ninety_nine_1202_gain.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_15[0]': str(self.ten_ninety_nine_897_dividends.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_17[0]': str(self.ten_ninety_nine_nondividend.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_19[0]': str(self.ten_ninety_nine_199a.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_21[0]': str(self.ten_ninety_nine_foreign_tax.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_23[0]': str(self.ten_ninety_nine_cash_liquidation.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_25[0]': str(self.ten_ninety_nine_exempt_dividends.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': str(self.ten_ninety_nine_state.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': str(self.ten_ninety_nine_state_id_number.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_12[0]': str(self.ten_ninety_nine_1250_gain.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_14[0]': str(self.ten_ninety_nine_collectibles_gain.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_16[0]': str(self.ten_ninety_nine_897_gain.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_18[0]': str(self.ten_ninety_nine_federal_tax_withheld.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_20[0]': str(self.ten_ninety_nine_investment_expenses.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_22[0]': str(self.ten_ninety_nine_foreign_tax_country.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_24[0]': str(self.ten_ninety_nine_noncash_liquidation.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_26[0]': str(self.ten_ninety_nine_specified_bond_dividends.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_31[0]': str(self.ten_ninety_nine_state_tax_withheld.get())
+                }
+
+                save_as_1099_field_values_mixing_3 = {
+                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_2[0]': str(self.ten_ninety_nine_payer_name.get()),
+                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_3[0]': str(self.ten_ninety_nine_payer_tin.get()),
+                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_4[0]': str(self.ten_ninety_nine_recipient_tin.get()),
+                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_5[0]': str(self.ten_ninety_nine_recipient_name.get()),
+                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_6[0]': str(self.ten_ninety_nine_recipient_address.get()),
+                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city.get()),
+                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_8[0]': str(self.ten_ninety_nine_account_number.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_9[0]': str(self.ten_ninety_nine_ordinary_dividends.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_10[0]': str(self.ten_ninety_nine_qualified_dividends.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_11[0]': str(self.ten_ninety_nine_capital_gain.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_13[0]': str(self.ten_ninety_nine_1202_gain.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_15[0]': str(self.ten_ninety_nine_897_dividends.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_17[0]': str(self.ten_ninety_nine_nondividend.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_19[0]': str(self.ten_ninety_nine_199a.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_21[0]': str(self.ten_ninety_nine_foreign_tax.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_23[0]': str(self.ten_ninety_nine_cash_liquidation.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_25[0]': str(self.ten_ninety_nine_exempt_dividends.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': str(self.ten_ninety_nine_state.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': str(self.ten_ninety_nine_state_id_number.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_12[0]': str(self.ten_ninety_nine_1250_gain.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_14[0]': str(self.ten_ninety_nine_collectibles_gain.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_16[0]': str(self.ten_ninety_nine_897_gain.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_18[0]': str(self.ten_ninety_nine_federal_tax_withheld.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_20[0]': str(self.ten_ninety_nine_investment_expenses.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_22[0]': str(self.ten_ninety_nine_foreign_tax_country.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_24[0]': str(self.ten_ninety_nine_noncash_liquidation.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_26[0]': str(self.ten_ninety_nine_specified_bond_dividends.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_31[0]': str(self.ten_ninety_nine_state_tax_withheld.get())
+                }
+
+                # Iteration for each page
+                for each_page in pdf:
+                    widgets = each_page.widgets()
+                    for content in widgets:
+                        for field_name, value in {**save_as_1099_field_values_mixing,
+                                                  **save_as_1099_field_values_mixing_2,
+                                                  **save_as_1099_field_values_mixing_3}.items():
+                            if content.field_name == field_name:
+                                if value == "":
+                                    content.field_value = " "
+                                else:
+                                    content.field_value = value
+                                content.update()
+
+                # Saving the modified PDF
+                pdf.save(output_pdf)
+                pdf.close()
+
+            # Input and output PDF filenames
+            input_pdf_file = "default_1099.pdf"
+            output_pdf_file = os.path.splitext(filename)[0] + ".pdf"
+
+            # Updating of widget values and saving the modified PDF
+            update_widget_values_1099(input_pdf_file, output_pdf_file)
+            print(f"Modified PDF saved as {output_pdf_file}")
+
+    # Browse
+
+    def browse_form_1099(self):
+        """
+           Opens a file explorer to select a pdf file containing tax information.
+           Assigns data accordingly.
+        """
+        filename = filedialog.askopenfilename(initialdir="/", title="Open", filetypes=(("PDF Files", "*.pdf"),))
+        if filename:
+            self.update_input_fields_1099(filename)
+
+    def update_input_fields_1099(self, input_pdf):
+        # Opening the input PDF
+        pdf = fitz.open(input_pdf)
+        browse_1099_field_values_mixing = {
+            'topmostSubform[0].Copy1[0].LeftCol[0].f2_2[0]': self.ten_ninety_nine_payer_name,
+            'topmostSubform[0].Copy1[0].LeftCol[0].f2_3[0]': self.ten_ninety_nine_payer_tin,
+            'topmostSubform[0].Copy1[0].LeftCol[0].f2_4[0]': self.ten_ninety_nine_recipient_tin,
+            'topmostSubform[0].Copy1[0].LeftCol[0].f2_5[0]': self.ten_ninety_nine_recipient_name,
+            'topmostSubform[0].Copy1[0].LeftCol[0].f2_6[0]': self.ten_ninety_nine_recipient_address,
+            'topmostSubform[0].Copy1[0].LeftCol[0].f2_7[0]': self.ten_ninety_nine_recipient_city,
+            'topmostSubform[0].Copy1[0].LeftCol[0].f2_8[0]': self.ten_ninety_nine_account_number,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_9[0]': self.ten_ninety_nine_ordinary_dividends,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_10[0]': self.ten_ninety_nine_qualified_dividends,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_11[0]': self.ten_ninety_nine_capital_gain,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_13[0]': self.ten_ninety_nine_1202_gain,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_15[0]': self.ten_ninety_nine_897_dividends,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_17[0]': self.ten_ninety_nine_nondividend,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_19[0]': self.ten_ninety_nine_199a,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_21[0]': self.ten_ninety_nine_foreign_tax,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_23[0]': self.ten_ninety_nine_cash_liquidation,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_25[0]': self.ten_ninety_nine_exempt_dividends,
+            'topmostSubform[0].Copy1[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': self.ten_ninety_nine_state,
+            'topmostSubform[0].Copy1[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': self.ten_ninety_nine_state_id_number,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_12[0]': self.ten_ninety_nine_1250_gain,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_14[0]': self.ten_ninety_nine_collectibles_gain,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_16[0]': self.ten_ninety_nine_897_gain,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_18[0]': self.ten_ninety_nine_federal_tax_withheld,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_20[0]': self.ten_ninety_nine_investment_expenses,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_22[0]': self.ten_ninety_nine_foreign_tax_country,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_24[0]': self.ten_ninety_nine_noncash_liquidation,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_26[0]': self.ten_ninety_nine_specified_bond_dividends,
+            'topmostSubform[0].Copy1[0].RghtCol[0].f2_31[0]': self.ten_ninety_nine_state_tax_withheld
+        }
+
+        browse_1099_field_values_mixing_2 = {
+            'topmostSubform[0].CopyB[0].LeftCol[0].f2_2[0]': self.ten_ninety_nine_payer_name,
+            'topmostSubform[0].CopyB[0].LeftCol[0].f2_3[0]': self.ten_ninety_nine_payer_tin,
+            'topmostSubform[0].CopyB[0].LeftCol[0].f2_4[0]': self.ten_ninety_nine_recipient_tin,
+            'topmostSubform[0].CopyB[0].LeftCol[0].f2_5[0]': self.ten_ninety_nine_recipient_name,
+            'topmostSubform[0].CopyB[0].LeftCol[0].f2_6[0]': self.ten_ninety_nine_recipient_address,
+            'topmostSubform[0].CopyB[0].LeftCol[0].f2_7[0]': self.ten_ninety_nine_recipient_city,
+            'topmostSubform[0].CopyB[0].LeftCol[0].f2_8[0]': self.ten_ninety_nine_account_number,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_9[0]': self.ten_ninety_nine_ordinary_dividends,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_10[0]': self.ten_ninety_nine_qualified_dividends,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_11[0]': self.ten_ninety_nine_capital_gain,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_13[0]': self.ten_ninety_nine_1202_gain,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_15[0]': self.ten_ninety_nine_897_dividends,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_17[0]': self.ten_ninety_nine_nondividend,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_19[0]': self.ten_ninety_nine_199a,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_21[0]': self.ten_ninety_nine_foreign_tax,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_23[0]': self.ten_ninety_nine_cash_liquidation,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_25[0]': self.ten_ninety_nine_exempt_dividends,
+            'topmostSubform[0].CopyB[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': self.ten_ninety_nine_state,
+            'topmostSubform[0].CopyB[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': self.ten_ninety_nine_state_id_number,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_12[0]': self.ten_ninety_nine_1250_gain,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_14[0]': self.ten_ninety_nine_collectibles_gain,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_16[0]': self.ten_ninety_nine_897_gain,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_18[0]': self.ten_ninety_nine_federal_tax_withheld,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_20[0]': self.ten_ninety_nine_investment_expenses,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_22[0]': self.ten_ninety_nine_foreign_tax_country,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_24[0]': self.ten_ninety_nine_noncash_liquidation,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_26[0]': self.ten_ninety_nine_specified_bond_dividends,
+            'topmostSubform[0].CopyB[0].RghtCol[0].f2_31[0]': self.ten_ninety_nine_state_tax_withheld
+        }
+
+        browse_1099_field_values_mixing_3 = {
+            'topmostSubform[0].Copy2[0].LeftCol[0].f2_2[0]': self.ten_ninety_nine_payer_name,
+            'topmostSubform[0].Copy2[0].LeftCol[0].f2_3[0]': self.ten_ninety_nine_payer_tin,
+            'topmostSubform[0].Copy2[0].LeftCol[0].f2_4[0]': self.ten_ninety_nine_recipient_tin,
+            'topmostSubform[0].Copy2[0].LeftCol[0].f2_5[0]': self.ten_ninety_nine_recipient_name,
+            'topmostSubform[0].Copy2[0].LeftCol[0].f2_6[0]': self.ten_ninety_nine_recipient_address,
+            'topmostSubform[0].Copy2[0].LeftCol[0].f2_7[0]': self.ten_ninety_nine_recipient_city,
+            'topmostSubform[0].Copy2[0].LeftCol[0].f2_8[0]': self.ten_ninety_nine_account_number,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_9[0]': self.ten_ninety_nine_ordinary_dividends,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_10[0]': self.ten_ninety_nine_qualified_dividends,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_11[0]': self.ten_ninety_nine_capital_gain,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_13[0]': self.ten_ninety_nine_1202_gain,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_15[0]': self.ten_ninety_nine_897_dividends,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_17[0]': self.ten_ninety_nine_nondividend,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_19[0]': self.ten_ninety_nine_199a,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_21[0]': self.ten_ninety_nine_foreign_tax,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_23[0]': self.ten_ninety_nine_cash_liquidation,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_25[0]': self.ten_ninety_nine_exempt_dividends,
+            'topmostSubform[0].Copy2[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': self.ten_ninety_nine_state,
+            'topmostSubform[0].Copy2[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': self.ten_ninety_nine_state_id_number,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_12[0]': self.ten_ninety_nine_1250_gain,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_14[0]': self.ten_ninety_nine_collectibles_gain,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_16[0]': self.ten_ninety_nine_897_gain,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_18[0]': self.ten_ninety_nine_federal_tax_withheld,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_20[0]': self.ten_ninety_nine_investment_expenses,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_22[0]': self.ten_ninety_nine_foreign_tax_country,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_24[0]': self.ten_ninety_nine_noncash_liquidation,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_26[0]': self.ten_ninety_nine_specified_bond_dividends,
+            'topmostSubform[0].Copy2[0].RghtCol[0].f2_31[0]': self.ten_ninety_nine_state_tax_withheld
+        }
+
+        for each_page in pdf:
+            widgets = each_page.widgets()
+            for content in widgets:
+                for field_name, entry_widget in {**browse_1099_field_values_mixing, **browse_1099_field_values_mixing_2,
+                                                 **browse_1099_field_values_mixing_3}.items():
+                    if content.field_name == field_name:
+
+                        value = content.field_value.strip()
+                        if value != "":
+                            entry_widget.delete(0, tk.END)  # Clear any existing text
+                            entry_widget.insert(0, value)  # Set the value directly
+
+        pdf.close()
+
+#######################################################################################################################
