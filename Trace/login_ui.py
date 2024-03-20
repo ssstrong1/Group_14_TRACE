@@ -18,7 +18,6 @@ font1 = ('Helvetica', 25, 'bold')
 font2 = ('Arial', 17, 'bold')
 
 
-
 class LoginInterface:
     """
     A graphical user interface for the login/sign up TRACE application.
@@ -124,6 +123,17 @@ class LoginInterface:
         self.app1.mainloop()
 
     def sign_up_account(self):
+        """
+        Signs up a new user account.
+
+        This method retrieves the username and password from input fields. If both fields are non-empty:
+        1. It checks if the username already exists in the database.
+        2. If the username is unique, it encodes the password, hashes it, and inserts the user into the 'users' table.
+        3. A success message is displayed if the account is created; otherwise, an error message is shown.
+
+        Returns:
+            None
+        """
         username = self.username_input_field_s.get()
         password = self.password_input_field_s.get()
         if username != '' and password != '':
@@ -140,6 +150,19 @@ class LoginInterface:
             messagebox.showerror('Error', 'Please enter a username and password.')
 
     def login_account(self):
+        """
+        Validates user login credentials and performs necessary actions.
+
+        This method retrieves the username and password entered by the user from input fields.
+        It then checks if both fields are non-empty. If so, it queries the database to find the
+        hashed password associated with the provided username. If a matching record is found,
+        it verifies the password using bcrypt. If the password is correct, the user is considered
+        logged in, and the appropriate UI transitions are made. Otherwise, error messages are
+        displayed for invalid credentials.
+
+        Returns:
+            None
+        """
         username = self.username_input_field_l.get()
         password = self.password_input_field_l.get()
         if username != '' and password != '':
@@ -158,6 +181,17 @@ class LoginInterface:
             messagebox.showerror('Error', 'Please enter a username and password.')
 
     def sign_up(self):
+        """
+        Displays the sign-up interface by adjusting the placement of various widgets.
+
+        This method hides the login-related widgets (such as login title, username input field, password input field,
+        login button, and signup button) and displays the sign-up title, user icon label, password icon label,
+        username line, password line, username input field (small), password input field (small), signup button (small),
+        and login button (small) at specific coordinates on the screen.
+
+        Returns:
+            None
+        """
         placements = [self.login_title, self.username_input_field_l,
                       self.password_input_field_l, self.login_btn_l, self.signup_btn_l]
 
@@ -182,9 +216,21 @@ class LoginInterface:
 
         self.login_btn_s.place(x=170, y=300)
 
-
-
     def login(self):
+        """
+       Handles the login functionality for the user interface.
+
+       This method performs the following actions:
+       1. Hides the sign-up related widgets (title, input fields, and buttons).
+       2. Places the login title widget at coordinates (x=85, y=50).
+       3. Positions the username input field at coordinates (x=80, y=135).
+       4. Positions the password input field at coordinates (x=80, y=200).
+       5. Places the login button at coordinates (x=30, y=300).
+       6. Places the signup button at coordinates (x=170, y=300).
+
+       Returns:
+           None
+       """
         placements = [self.sign_up_title, self.username_input_field_s,
                       self.password_input_field_s, self.signup_btn_s, self.login_btn_s]
 
@@ -203,5 +249,14 @@ class LoginInterface:
 
     # Open New Window
     def start_form_ui(self):
+        """
+        Opens a new window for the user interface.
+
+        This function initializes a new user interface window using the `ui.UserInterface()` class.
+        It is responsible for creating and displaying the graphical elements of the form.
+
+        Returns:
+            None
+        """
         ui.UserInterface()
 

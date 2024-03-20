@@ -3,6 +3,7 @@ from tkinter import messagebox
 import sys
 import os
 import fitz
+from PyPDF2 import PdfReader
 from tkinter import filedialog
 from tkinter import *
 import tkinter as tk
@@ -466,8 +467,10 @@ class UserInterface:
         self.file_menu.add_command(label="New", command=self.new_session)
         self.file_menu.add_command(label="Save W-2 As", command=self.save_form_w2_as)
         self.file_menu.add_command(label="Save 1099 As", command=self.save_form_1099_as)
+        self.file_menu.add_command(label="Save 1040 As", command=self.save_form_1040_as)
         self.file_menu.add_command(label="Browse W-2", command=self.browse_form_w2)
         self.file_menu.add_command(label="Browse 1099", command=self.browse_form_1099)
+        self.file_menu.add_command(label="Browse 1040", command=self.browse_form_1040)
         self.file_menu.add_separator()
         menubar.add_cascade(label="File", menu=self.file_menu)
 
@@ -483,6 +486,8 @@ class UserInterface:
         help_menu.add_command(label="About")
         help_menu.add_command(label="Quit", command=self.quit)
         menubar.add_cascade(label="Settings", menu=help_menu)
+
+        self.new_decision = "w2"
 
         ###############################
 
@@ -683,12 +688,6 @@ class UserInterface:
                                                  text_color="#000000",
                                                  bg_color="white", fg_color="transparent")
 
-        # 9 box
-
-        self.nine_box = ctk.CTkEntry(master=self.app, placeholder_text="Nine", width=235, height=35,
-                                     text_color="#000000",
-                                     bg_color="#c0c0c0", fg_color="white")
-
         #  Non-Qualified Plans
 
         self.non_qualified_plans = ctk.CTkEntry(master=self.app, placeholder_text="plans", width=269, height=25,
@@ -794,21 +793,6 @@ class UserInterface:
                                             text_color="#000000",
                                             bg_color="white", fg_color="transparent")
 
-        #  Statutory Employee
-
-        self.statutory_emp = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0,
-                                             bg_color="white")
-
-        #  Retirement Plan
-
-        self.retirement_p = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0,
-                                            bg_color="white")
-
-        #  Third Party Sick Pay
-
-        self.third_party_sp = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22, height=0,
-                                              bg_color="white")
-
         #  Other
 
         self.other_field = ctk.CTkEntry(master=self.app, placeholder_text="other", width=269, height=90,
@@ -817,13 +801,9 @@ class UserInterface:
 
         # Employer Name, Address, ZIP
 
-        self.employer_name = ctk.CTkEntry(master=self.app, placeholder_text="Name", width=250, text_color="#000000",
-                                          bg_color="white", fg_color="transparent")
-        self.employer_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=250,
-                                             text_color="#000000",
-                                             bg_color="white", fg_color="transparent")
-        self.employer_zip = ctk.CTkEntry(master=self.app, placeholder_text="ZIP Code", width=250, text_color="#000000",
-                                         bg_color="white", fg_color="transparent")
+        self.employer_name_etc = ctk.CTkEntry(master=self.app, placeholder_text="Name, Address, ZIP", height=115,
+                                              width=653, text_color="#000000",
+                                              bg_color="white", fg_color="transparent")
 
         # Control Number
 
@@ -845,15 +825,11 @@ class UserInterface:
         self.employee_suffix = ctk.CTkEntry(master=self.app, placeholder_text="Suff.", width=43,
                                             text_color="#000000", bg_color="white", fg_color="transparent")
 
-        # Employee Address
+        # Employee Address and Zip
 
-        self.employee_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=230, height=20,
-                                             text_color="#000000", bg_color="white", fg_color="transparent")
-
-        # Employee ZIP
-
-        self.employee_zip = ctk.CTkEntry(master=self.app, placeholder_text="ZIP", width=100, height=20,
-                                         text_color="#000000", bg_color="white", fg_color="transparent")
+        self.employee_address_etc = ctk.CTkEntry(master=self.app, placeholder_text="Address and ZIP", width=387,
+                                                 height=20,
+                                                 text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Cover And Replacer For Year On Form
 
@@ -914,6 +890,12 @@ class UserInterface:
                                                         placeholder_text="Post", width=75,
                                                         height=40, text_color="#000000", bg_color="white",
                                                         fg_color="transparent")
+
+        self.ten_forty_presidential_you = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                                          checkbox_height=25, height=0, bg_color="white")
+        self.ten_forty_presidential_spouse = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                                             checkbox_height=25, height=0, bg_color="white")
+
         self.ten_forty_filing_single = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
                                                        checkbox_height=22, height=0, bg_color="white")
         self.ten_forty_filing_jointly = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
@@ -925,9 +907,9 @@ class UserInterface:
         self.ten_forty_filing_qss = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
                                                     checkbox_height=22, height=0, bg_color="white")
         self.ten_forty_digital_assets_yes = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                        checkbox_height=22, height=0, bg_color="white")
-        self.ten_forty_digital_assets_no = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
                                                             checkbox_height=22, height=0, bg_color="white")
+        self.ten_forty_digital_assets_no = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                                           checkbox_height=22, height=0, bg_color="white")
         self.ten_forty_are_dependent = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
                                                        checkbox_height=22, height=0, bg_color="white")
         self.ten_forty_spouse_dependent = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
@@ -943,132 +925,171 @@ class UserInterface:
         self.ten_forty_spouse_blind = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
                                                       checkbox_height=22, height=0, bg_color="white")
         self.ten_forty_many_dependents = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                            checkbox_height=22, height=0, bg_color="white")
+                                                         checkbox_height=22, height=0, bg_color="white")
         self.ten_forty_dependent_first_1 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="First",
                                                         width=150, height=32,
                                                         text_color="#000000", bg_color="white", fg_color="transparent")
         self.ten_forty_dependent_last_1 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Last",
-                                                        width=150, height=32,
-                                                        text_color="#000000", bg_color="white", fg_color="transparent")
+                                                       width=150, height=32,
+                                                       text_color="#000000", bg_color="white", fg_color="transparent")
         self.ten_forty_dependent_first_2 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="First",
                                                         width=150, height=32,
                                                         text_color="#000000", bg_color="white", fg_color="transparent")
         self.ten_forty_dependent_last_2 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Last",
-                                                        width=150, height=32,
-                                                        text_color="#000000", bg_color="white", fg_color="transparent")
+                                                       width=150, height=32,
+                                                       text_color="#000000", bg_color="white", fg_color="transparent")
         self.ten_forty_dependent_first_3 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="First",
                                                         width=150, height=32,
                                                         text_color="#000000", bg_color="white", fg_color="transparent")
         self.ten_forty_dependent_last_3 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Last",
-                                                        width=150, height=32,
-                                                        text_color="#000000", bg_color="white", fg_color="transparent")
+                                                       width=150, height=32,
+                                                       text_color="#000000", bg_color="white", fg_color="transparent")
         self.ten_forty_dependent_first_4 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="First",
                                                         width=150, height=32,
                                                         text_color="#000000", bg_color="white", fg_color="transparent")
         self.ten_forty_dependent_last_4 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Last",
-                                                        width=150, height=32,
-                                                        text_color="#000000", bg_color="white", fg_color="transparent")
-        self.ten_forty_dependent_1_child_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                       checkbox_height=22, height=0, bg_color="white")
+                                                       width=150, height=32,
+                                                       text_color="#000000", bg_color="white", fg_color="transparent")
+        self.ten_forty_dependent_1_child_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
+                                                                  text="",
+                                                                  checkbox_height=22, height=0, bg_color="white")
         self.ten_forty_dependent_1_other_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0, bg_color="white")
+                                                                  text="", checkbox_height=22, height=0,
+                                                                  bg_color="white")
         self.ten_forty_dependent_2_child_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0, bg_color="white")
+                                                                  text="", checkbox_height=22, height=0,
+                                                                  bg_color="white")
         self.ten_forty_dependent_2_other_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0, bg_color="white")
+                                                                  text="", checkbox_height=22, height=0,
+                                                                  bg_color="white")
         self.ten_forty_dependent_3_child_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0, bg_color="white")
+                                                                  text="", checkbox_height=22, height=0,
+                                                                  bg_color="white")
         self.ten_forty_dependent_3_other_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0, bg_color="white")
+                                                                  text="", checkbox_height=22, height=0,
+                                                                  bg_color="white")
         self.ten_forty_dependent_4_child_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0, bg_color="white")
+                                                                  text="", checkbox_height=22, height=0,
+                                                                  bg_color="white")
         self.ten_forty_dependent_4_other_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0, bg_color="white")
-        self.ten_forty_total_w2s = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="W-2 Total", width=125,
-                                                height=32, text_color="#000000", bg_color="white", fg_color="transparent")
-        self.ten_forty_household_wages = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Household Wage",
+                                                                  text="", checkbox_height=22, height=0,
+                                                                  bg_color="white")
+        self.ten_forty_total_w2s = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="W-2 Total",
+                                                width=125,
+                                                height=32, text_color="#000000", bg_color="white",
+                                                fg_color="transparent")
+        self.ten_forty_household_wages = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                      placeholder_text="Household Wage",
                                                       width=125, height=32, text_color="#000000", bg_color="white",
                                                       fg_color="transparent")
         self.ten_forty_tip_income = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Tips",
                                                  width=125, height=32, text_color="#000000", bg_color="white",
                                                  fg_color="transparent")
-        self.ten_forty_medicaid_waiver = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Medicaid Payments",
+        self.ten_forty_medicaid_waiver = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                      placeholder_text="Medicaid Payments",
                                                       width=125, height=32, text_color="#000000", bg_color="white",
                                                       fg_color="transparent")
-        self.ten_forty_dependent_benefits = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Dependent Payments",
+        self.ten_forty_dependent_benefits = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                         placeholder_text="Dependent Payments",
                                                          width=125, height=32, text_color="#000000", bg_color="white",
                                                          fg_color="transparent")
-        self.ten_forty_adoption_benefits = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Adoption Benefits",
+        self.ten_forty_adoption_benefits = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                        placeholder_text="Adoption Benefits",
                                                         width=125, height=32, text_color="#000000", bg_color="white",
                                                         fg_color="transparent")
         self.ten_forty_8919_wages = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="8919 Wages",
                                                  width=125, height=32, text_color="#000000", bg_color="white",
                                                  fg_color="transparent")
-        self.ten_forty_other_income = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Other Income",
+        self.ten_forty_other_income = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                   placeholder_text="Other Income",
                                                    width=125, height=32, text_color="#000000", bg_color="white",
                                                    fg_color="transparent")
         self.ten_forty_combat_pay = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Combat Pay",
                                                  width=125, height=32, text_color="#000000", bg_color="white",
                                                  fg_color="transparent")
-        self.ten_forty_1_ah_sum = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total", width=125,
-                                            height=32, text_color="#000000", bg_color="white", fg_color="transparent")
-        self.ten_forty_tax_exempt_interest = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Exempt Interest",
+        self.ten_forty_1_ah_sum = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total",
+                                               width=125,
+                                               height=32, text_color="#000000", bg_color="white",
+                                               fg_color="transparent")
+        self.ten_forty_tax_exempt_interest = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                          placeholder_text="Exempt Interest",
                                                           width=125, height=32, text_color="#000000", bg_color="white",
                                                           fg_color="transparent")
-        self.ten_forty_taxable_interest = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Taxable Interest",
+        self.ten_forty_taxable_interest = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                       placeholder_text="Taxable Interest",
                                                        width=125, height=32, text_color="#000000", bg_color="white",
                                                        fg_color="transparent")
-        self.ten_forty_qualified_dividends = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Qualified Dividends",
+        self.ten_forty_qualified_dividends = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                          placeholder_text="Qualified Dividends",
                                                           width=125, height=32, text_color="#000000", bg_color="white",
                                                           fg_color="transparent")
-        self.ten_forty_ordinary_dividends = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Ordinary Dividends",
+        self.ten_forty_ordinary_dividends = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                         placeholder_text="Ordinary Dividends",
                                                          width=125, height=32, text_color="#000000", bg_color="white",
                                                          fg_color="transparent")
-        self.ten_forty_ira_distributions = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="IRA Distributions",
+        self.ten_forty_ira_distributions = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                        placeholder_text="IRA Distributions",
                                                         width=125, height=32, text_color="#000000", bg_color="white",
                                                         fg_color="transparent")
-        self.ten_forty_taxable_ira = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Taxable Amount",
+        self.ten_forty_taxable_ira = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                  placeholder_text="Taxable Amount",
                                                   width=125, height=32, text_color="#000000", bg_color="white",
                                                   fg_color="transparent")
-        self.ten_forty_pensions_annuities = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Pensions",
+        self.ten_forty_pensions_annuities = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                         placeholder_text="Pensions",
                                                          width=125, height=32, text_color="#000000", bg_color="white",
                                                          fg_color="transparent")
-        self.ten_forty_taxable_pensions = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Taxable Amount",
+        self.ten_forty_taxable_pensions = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                       placeholder_text="Taxable Amount",
                                                        width=125, height=32, text_color="#000000", bg_color="white",
                                                        fg_color="transparent")
-        self.ten_forty_social_security = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Social Security",
-                                                       width=125, height=32, text_color="#000000", bg_color="white",
-                                                       fg_color="transparent")
-        self.ten_forty_social_taxable = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Taxable Amount",
+        self.ten_forty_social_security = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                      placeholder_text="Social Security",
+                                                      width=125, height=32, text_color="#000000", bg_color="white",
+                                                      fg_color="transparent")
+        self.ten_forty_social_taxable = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                     placeholder_text="Taxable Amount",
                                                      width=125, height=32, text_color="#000000", bg_color="white",
                                                      fg_color="transparent")
+
         self.ten_forty_lump_sum_method = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
                                                          text="", checkbox_height=22, height=0, bg_color="white")
-        self.ten_forty_capital_gain = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Capital Gain",
-                                                        width=125, height=32, text_color="#000000", bg_color="white",
-                                                        fg_color="transparent")
-        self.ten_forty_schedule_1 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Schedule 1 Income",
-                                                 width=125, height=32, text_color="#000000", bg_color="white",
-                                                 fg_color="transparent")
-        self.ten_forty_total_income = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total Income",
+        self.ten_forty_schedule_d = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
+                                                    text="", checkbox_height=25, height=0, bg_color="white")
+
+        self.ten_forty_capital_gain = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                   placeholder_text="Capital Gain",
                                                    width=125, height=32, text_color="#000000", bg_color="white",
                                                    fg_color="transparent")
-        self.ten_forty_income_adjustments = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Adjustments",
+        self.ten_forty_schedule_1 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                 placeholder_text="Schedule 1 Income",
+                                                 width=125, height=32, text_color="#000000", bg_color="white",
+                                                 fg_color="transparent")
+        self.ten_forty_total_income = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                   placeholder_text="Total Income",
+                                                   width=125, height=32, text_color="#000000", bg_color="white",
+                                                   fg_color="transparent")
+        self.ten_forty_income_adjustments = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                         placeholder_text="Adjustments",
                                                          width=125, height=32, text_color="#000000", bg_color="white",
                                                          fg_color="transparent")
-        self.ten_forty_adjusted_income = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Adjusted Income",
+        self.ten_forty_adjusted_income = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                      placeholder_text="Adjusted Income",
                                                       width=125, height=32, text_color="#000000", bg_color="white",
                                                       fg_color="transparent")
         self.ten_forty_deductions = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Deductions",
                                                  width=125, height=32, text_color="#000000", bg_color="white",
                                                  fg_color="transparent")
-        self.ten_forty_business_deductions = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Business Deductions",
+        self.ten_forty_business_deductions = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                          placeholder_text="Business Deductions",
                                                           width=125, height=32, text_color="#000000", bg_color="white",
                                                           fg_color="transparent")
-        self.ten_forty_total_deductions = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total Deductions",
+        self.ten_forty_total_deductions = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                       placeholder_text="Total Deductions",
                                                        width=125, height=32, text_color="#000000", bg_color="white",
                                                        fg_color="transparent")
-        self.ten_forty_taxable_income = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Taxable Income",
+        self.ten_forty_taxable_income = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                     placeholder_text="Taxable Income",
                                                      width=125, height=32, text_color="#000000", bg_color="white",
                                                      fg_color="transparent")
 
@@ -1078,24 +1099,43 @@ class UserInterface:
                                               checkbox_height=22, height=0, bg_color="white")
         self.ten_forty_other_form_check = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
                                                           checkbox_height=22, height=0, bg_color="white")
+
+        self.ten_forty_8888 = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                              checkbox_height=25, height=0, bg_color="white")
+        self.ten_forty_route_checking = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                                        checkbox_height=25, height=0, bg_color="white")
+        self.ten_forty_route_savings = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                                       checkbox_height=25, height=0, bg_color="white")
+        self.ten_forty_third_party_yes = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                                         checkbox_height=25, height=0, bg_color="white")
+        self.ten_forty_third_party_no = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                                        checkbox_height=25, height=0, bg_color="white")
+        self.ten_forty_self_employed = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
+                                                       checkbox_height=25, height=0, bg_color="white")
+
         self.ten_forty_other_form_no = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Form No.",
-                                                    width=75, height=32, text_color="#000000", bg_color="white", fg_color="transparent")
+                                                    width=75, height=32, text_color="#000000", bg_color="white",
+                                                    fg_color="transparent")
         self.ten_forty_other_form_total = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Tax",
                                                        width=125, height=32, text_color="#000000", bg_color="white",
                                                        fg_color="transparent")
         self.ten_forty_schedule_2 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Schedule 2",
                                                  width=125, height=32, text_color="#000000", bg_color="white",
                                                  fg_color="transparent")
-        self.ten_forty_add_16_17 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total", width=125,
-                                                height=32, text_color="#000000", bg_color="white", fg_color="transparent")
-        self.ten_forty_child_credit = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Child Credits",
+        self.ten_forty_add_16_17 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total",
+                                                width=125,
+                                                height=32, text_color="#000000", bg_color="white",
+                                                fg_color="transparent")
+        self.ten_forty_child_credit = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                   placeholder_text="Child Credits",
                                                    width=125, height=32, text_color="#000000", bg_color="white",
                                                    fg_color="transparent")
         self.ten_forty_schedule_3 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Schedule 3",
                                                  width=125, height=32, text_color="#000000", bg_color="white",
                                                  fg_color="transparent")
         self.ten_forty_add_19_20 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total",
-                                                width=125, height=32, text_color="#000000", bg_color="white", fg_color="transparent")
+                                                width=125, height=32, text_color="#000000", bg_color="white",
+                                                fg_color="transparent")
         self.ten_forty_sub_21_18 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="22",
                                                 width=125, height=32, text_color="#000000", bg_color="white",
                                                 fg_color="transparent")
@@ -1118,25 +1158,33 @@ class UserInterface:
         self.ten_forty_withheld_total = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total",
                                                      width=125, height=32, text_color="#000000", bg_color="white",
                                                      fg_color="transparent")
-        self.ten_forty_previous_year = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Applied Return",
+        self.ten_forty_previous_year = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                    placeholder_text="Applied Return",
                                                     width=125, height=32, text_color="#000000", bg_color="white",
                                                     fg_color="transparent")
         self.ten_forty_eic = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="EIC", width=125,
                                           height=32, text_color="#000000", bg_color="white", fg_color="transparent")
-        self.ten_forty_8812_child_credit = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Child Credits",
+        self.ten_forty_8812_child_credit = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                        placeholder_text="Child Credits",
                                                         width=125, height=32, text_color="#000000", bg_color="white",
                                                         fg_color="transparent")
-        self.ten_forty_8863_opportunity_credit = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Opportunity Credit",
-                                                              width=125, height=32, text_color="#000000", bg_color="white",
+        self.ten_forty_8863_opportunity_credit = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                              placeholder_text="Opportunity Credit",
+                                                              width=125, height=32, text_color="#000000",
+                                                              bg_color="white",
                                                               fg_color="transparent")
-        self.ten_forty_schedule_3_line_15 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Schedule 3",
+        self.ten_forty_schedule_3_line_15 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                         placeholder_text="Schedule 3",
                                                          width=125, height=32, text_color="#000000", bg_color="white",
                                                          fg_color="transparent")
-        self.ten_forty_other_payments = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total Other",
+        self.ten_forty_other_payments = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                     placeholder_text="Total Other",
                                                      width=125, height=32, text_color="#000000", bg_color="white",
                                                      fg_color="transparent")
-        self.ten_forty_total_payments = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total Payments",
-                                                     width=125, height=32, text_color="#000000", bg_color="white", fg_color="transparent")
+        self.ten_forty_total_payments = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
+                                                     placeholder_text="Total Payments",
+                                                     width=125, height=32, text_color="#000000", bg_color="white",
+                                                     fg_color="transparent")
 
         self.ten_forty_overpaid = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Total",
                                                width=125, height=32, text_color="#000000", bg_color="white",
@@ -1147,6 +1195,7 @@ class UserInterface:
         self.ten_forty_penalty = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="Penalty",
                                               width=125, height=32, text_color="#000000", bg_color="white",
                                               fg_color="transparent")
+        self.submit_and_erase = Button(self.app, text="Submit", width=30, command=self.submit_and_clear)
 
         # End Input Fields
 
@@ -1179,18 +1228,17 @@ class UserInterface:
                                            self.ten_ninety_nine_state, self.ten_ninety_nine_state_id_number,
                                            self.ten_ninety_nine_state_tax_withheld]
 
-        self.w_2_placements = [self.twenty_four_img, self.blocker_img, self.employee_zip,
-                               self.employee_address, self.employee_suffix,
+        self.w_2_placements = [self.twenty_four_img, self.blocker_img,
+                               self.employee_address_etc, self.employee_suffix,
                                self.employee_last_name, self.employee_name_i,
-                               self.cn_entry, self.employer_address, self.employer_zip,
-                               self.employer_name, self.other_field, self.third_party_sp,
-                               self.retirement_p, self.statutory_emp, self.locality_name,
+                               self.cn_entry,
+                               self.employer_name_etc, self.other_field, self.locality_name,
                                self.state_field, self.employers_state_id, self.state_wage_tips,
                                self.state_income_tax, self.local_wage_tips, self.local_income_tax,
                                self.twelve_a, self.twelve_b, self.twelve_c, self.twelve_d,
                                self.dependent_care_benefits, self.allocated_tips, self.medicare_tax_withheld,
                                self.social_security_tax_withheld, self.fed_income_tax_withheld,
-                               self.non_qualified_plans, self.nine_box, self.social_security_tips,
+                               self.non_qualified_plans, self.social_security_tips,
                                self.medicare_wages, self.social_wages, self.wages_tips_c, self.ein_entry,
                                self.essn_entry, self.w_2_label_for_img]
 
@@ -1201,39 +1249,64 @@ class UserInterface:
                                      self.ten_forty_home_address, self.ten_forty_apt_no, self.ten_forty_city,
                                      self.ten_forty_state, self.ten_forty_zip, self.ten_forty_foreign_country,
                                      self.ten_forty_foreign_province, self.ten_forty_foreign_post_code,
-                                     self.ten_forty_filing_single, self.ten_forty_filing_jointly, self.ten_forty_filing_separately,
-                                     self.ten_forty_filing_hoh, self.ten_forty_filing_qss, self.ten_forty_digital_assets_yes,
-                                     self.ten_forty_digital_assets_no, self.ten_forty_are_dependent, self.ten_forty_spouse_dependent,
-                                     self.ten_forty_spouse_separate, self.ten_forty_self_1959, self.ten_forty_self_blind,
-                                     self.ten_forty_spouse_1959, self.ten_forty_spouse_blind, self.ten_forty_many_dependents,
-                                     self.ten_forty_dependent_first_1, self.ten_forty_dependent_first_2, self.ten_forty_dependent_first_3,
-                                     self.ten_forty_dependent_first_4, self.ten_forty_dependent_last_1, self.ten_forty_dependent_last_2,
+                                     self.ten_forty_presidential_you, self.ten_forty_presidential_spouse,
+                                     self.ten_forty_filing_single, self.ten_forty_filing_jointly,
+                                     self.ten_forty_filing_separately,
+                                     self.ten_forty_filing_hoh, self.ten_forty_filing_qss,
+                                     self.ten_forty_digital_assets_yes,
+                                     self.ten_forty_digital_assets_no, self.ten_forty_are_dependent,
+                                     self.ten_forty_spouse_dependent,
+                                     self.ten_forty_spouse_separate, self.ten_forty_self_1959,
+                                     self.ten_forty_self_blind,
+                                     self.ten_forty_spouse_1959, self.ten_forty_spouse_blind,
+                                     self.ten_forty_many_dependents,
+                                     self.ten_forty_dependent_first_1, self.ten_forty_dependent_first_2,
+                                     self.ten_forty_dependent_first_3,
+                                     self.ten_forty_dependent_first_4, self.ten_forty_dependent_last_1,
+                                     self.ten_forty_dependent_last_2,
                                      self.ten_forty_dependent_last_3, self.ten_forty_dependent_last_4,
                                      self.ten_forty_dependent_1_child_credit, self.ten_forty_dependent_1_other_credit,
                                      self.ten_forty_dependent_2_child_credit, self.ten_forty_dependent_2_other_credit,
                                      self.ten_forty_dependent_3_child_credit, self.ten_forty_dependent_3_other_credit,
                                      self.ten_forty_dependent_4_child_credit, self.ten_forty_dependent_4_other_credit,
-                                     self.ten_forty_total_w2s, self.ten_forty_household_wages, self.ten_forty_tip_income,
+                                     self.ten_forty_total_w2s, self.ten_forty_household_wages,
+                                     self.ten_forty_tip_income,
                                      self.ten_forty_medicaid_waiver, self.ten_forty_dependent_benefits,
-                                     self.ten_forty_adoption_benefits, self.ten_forty_8919_wages, self.ten_forty_other_income,
-                                     self.ten_forty_combat_pay, self.ten_forty_1_ah_sum, self.ten_forty_tax_exempt_interest,
+                                     self.ten_forty_adoption_benefits, self.ten_forty_8919_wages,
+                                     self.ten_forty_other_income,
+                                     self.ten_forty_combat_pay, self.ten_forty_1_ah_sum,
+                                     self.ten_forty_tax_exempt_interest,
                                      self.ten_forty_taxable_interest, self.ten_forty_qualified_dividends,
-                                     self.ten_forty_ordinary_dividends, self.ten_forty_ira_distributions, self.ten_forty_taxable_ira,
+                                     self.ten_forty_ordinary_dividends, self.ten_forty_ira_distributions,
+                                     self.ten_forty_taxable_ira,
                                      self.ten_forty_pensions_annuities, self.ten_forty_taxable_pensions,
                                      self.ten_forty_social_security, self.ten_forty_social_taxable,
+                                     self.ten_forty_schedule_d,
                                      self.ten_forty_lump_sum_method, self.ten_forty_capital_gain,
                                      self.ten_forty_schedule_1, self.ten_forty_schedule_1, self.ten_forty_total_income,
                                      self.ten_forty_income_adjustments, self.ten_forty_adjusted_income,
-                                     self.ten_forty_deductions, self.ten_forty_business_deductions, self.ten_forty_total_deductions,
+                                     self.ten_forty_deductions, self.ten_forty_business_deductions,
+                                     self.ten_forty_total_deductions,
                                      self.ten_forty_taxable_income, self.ten_forty_8814, self.ten_forty_4972,
-                                     self.ten_forty_other_form_check, self.ten_forty_other_form_no,
-                                     self.ten_forty_other_form_total, self.ten_forty_schedule_2, self.ten_forty_add_16_17,
+                                     self.ten_forty_other_form_check, self.ten_forty_8888,
+
+                                     self.ten_forty_route_checking,
+
+                                     self.ten_forty_route_savings,
+                                     self.ten_forty_third_party_yes,
+                                     self.ten_forty_third_party_no,
+                                     self.ten_forty_self_employed,
+                                     self.ten_forty_other_form_no,
+                                     self.ten_forty_other_form_total, self.ten_forty_schedule_2,
+                                     self.ten_forty_add_16_17,
                                      self.ten_forty_child_credit, self.ten_forty_schedule_3, self.ten_forty_add_19_20,
                                      self.ten_forty_sub_21_18, self.ten_forty_other_taxes, self.ten_forty_total_tax,
-                                     self.ten_forty_withheld_w2, self.ten_forty_withheld_1099, self.ten_forty_withheld_other,
+                                     self.ten_forty_withheld_w2, self.ten_forty_withheld_1099,
+                                     self.ten_forty_withheld_other,
                                      self.ten_forty_withheld_total, self.ten_forty_previous_year, self.ten_forty_eic,
                                      self.ten_forty_8812_child_credit, self.ten_forty_8863_opportunity_credit,
-                                     self.ten_forty_schedule_3_line_15, self.ten_forty_other_payments, self.ten_forty_total_payments,
+                                     self.ten_forty_schedule_3_line_15, self.ten_forty_other_payments,
+                                     self.ten_forty_total_payments,
                                      self.ten_forty_overpaid, self.ten_forty_owed, self.ten_forty_penalty]
 
         UserInterface.setup_w_2(self)
@@ -1253,12 +1326,37 @@ class UserInterface:
         Button(self.app, text="Calculate").place(relx=.5, rely=0.965, anchor="center")
         Button(self.app, text="Save Session").place(relx=.4, rely=0.965, anchor="center")
         Button(self.app, text="Load Session").place(relx=.6, rely=0.965, anchor="center")
+
         self.app.protocol("WM_DELETE_WINDOW", self.exit_program)
 
         self.app.mainloop()
 
+    def submit_and_clear(self):
+        """
+        Submits the current session and clears any relevant data.
+
+        This method is responsible for submitting the current session to the 1040 form. It first initializes a new session
+        using the `new_session()` method. After successful submission, a message box displays a success notification with
+        the message 'Submitted To 1040'.
+
+        Args:
+            self: An instance of the class containing this method.
+
+        Returns:
+            None
+        """
+        self.new_session()
+        messagebox.showinfo('Success', 'Submitted To 1040')
+
     def setup_w_2(self):
+        """
+        Removes certain UI elements from the display.
+        This method hides and forgets the placement of various UI widgets.
+        The list of widgets to be removed is stored in the 'placements' list.
+        """
         # Positioning of Input Fields
+
+        self.new_decision = "w2"
 
         for i in self.ten_ninety_nine_placements:
             i.place_forget()
@@ -1274,6 +1372,8 @@ class UserInterface:
         self.w_2_label_for_img.pack(pady=88)
 
         # Employee SSN
+
+        self.submit_and_erase.place(relx=.8, rely=0.75, anchor="center")
 
         self.essn_entry.place(relx=.46, rely=0.123, anchor="e")
 
@@ -1296,10 +1396,6 @@ class UserInterface:
         # SS Tips
 
         self.social_security_tips.place(relx=.719, rely=0.277, anchor="e")
-
-        # Nine
-
-        self.nine_box.place(relx=.719, rely=0.31, anchor="e")
 
         # NQP
 
@@ -1369,27 +1465,13 @@ class UserInterface:
 
         self.locality_name.place(relx=.902, rely=0.528, anchor="e")
 
-        #  Stat Emp
-
-        self.statutory_emp.place(relx=.583, rely=0.395, anchor="e")
-
-        #  retire plan
-
-        self.retirement_p.place(relx=.6365, rely=0.395, anchor="e")
-
-        #  third party
-
-        self.third_party_sp.place(relx=.691, rely=0.395, anchor="e")
-
         #  Other
 
         self.other_field.place(relx=.719, rely=0.462, anchor="e")
 
         # Employer NAZ
 
-        self.employer_name.place(relx=.285, rely=0.21, anchor="e")
-        self.employer_address.place(relx=.285, rely=0.24, anchor="e")
-        self.employer_zip.place(relx=.285, rely=0.27, anchor="e")
+        self.employer_name_etc.place(relx=.535, rely=0.24, anchor="e")
 
         # CN
 
@@ -1409,11 +1491,7 @@ class UserInterface:
 
         # Employee A
 
-        self.employee_address.place(relx=.433, rely=0.4915, anchor="e")
-
-        # Employee Z
-
-        self.employee_zip.place(relx=.535, rely=0.4915, anchor="e")
+        self.employee_address_etc.place(relx=.535, rely=0.4915, anchor="e")
 
         # Blocker
 
@@ -1428,6 +1506,8 @@ class UserInterface:
         """
 
         self.place_1099_form()
+
+        self.new_decision = "1099"
 
         for i in self.w_2_placements:
             i.place_forget()
@@ -1444,6 +1524,8 @@ class UserInterface:
         """
         self.ten_ninety_nine_label_for_img.place(relx=0.5, rely=0.5, anchor="s")
         self.ten_ninety_nine_label_for_img.pack(pady=88)
+
+        self.submit_and_erase.place(relx=.8, rely=0.75, anchor="center")
 
         self.ten_ninety_nine_payer_name.place(relx=.294, rely=0.156, anchor="e")
         self.ten_ninety_nine_payer_address.place(relx=.475, rely=0.156, anchor="e")
@@ -1498,6 +1580,13 @@ class UserInterface:
         self.ten_ninety_nine_state_tax_withheld.place(relx=0.776, rely=0.568, anchor="e")
 
     def setup_1040(self):
+        """
+        Removes certain UI elements from the display.
+        This method hides and forgets the placement of various UI widgets.
+        The list of widgets to be removed is stored in the 'placements' list.
+        """
+
+        self.new_decision = "1040"
 
         for i in self.ten_ninety_nine_placements:
             i.place_forget()
@@ -1506,7 +1595,7 @@ class UserInterface:
         for i in self.w_2_placements:
             i.place_forget()
             i.pack_forget()
-
+        self.submit_and_erase.place_forget()
         self.ten_forty_scrolling_frame.place(relx=0.5, rely=0.365, anchor="center")
 
         self.ten_forty_label_for_pg_1.place(relx=0.5, rely=0.5, anchor="s")
@@ -1526,6 +1615,9 @@ class UserInterface:
         self.ten_forty_foreign_country.place(relx=0.385, rely=0.133, anchor="e")
         self.ten_forty_foreign_province.place(relx=0.661, rely=0.133, anchor="e")
         self.ten_forty_foreign_post_code.place(relx=0.788, rely=0.133, anchor="e")
+
+        self.ten_forty_presidential_you.place(relx=0.878, rely=0.133, anchor="e")
+        self.ten_forty_presidential_spouse.place(relx=0.943, rely=0.133, anchor="e")
 
         self.ten_forty_filing_single.place(relx=0.164, rely=0.144, anchor="e")
         self.ten_forty_filing_jointly.place(relx=0.164, rely=0.153, anchor="e")
@@ -1583,7 +1675,10 @@ class UserInterface:
         self.ten_forty_taxable_pensions.place(relx=0.987, rely=0.423, anchor="e")
         self.ten_forty_social_security.place(relx=0.539, rely=0.4325, anchor="e")
         self.ten_forty_social_taxable.place(relx=0.987, rely=0.4325, anchor="e")
+
+        self.ten_forty_schedule_d.place(relx=0.82, rely=0.4512, anchor="e")
         self.ten_forty_lump_sum_method.place(relx=0.822, rely=0.442, anchor="e")
+
         self.ten_forty_capital_gain.place(relx=0.987, rely=0.4505, anchor="e")
         self.ten_forty_schedule_1.place(relx=0.987, rely=0.459, anchor="e")
         self.ten_forty_total_income.place(relx=0.987, rely=0.4685, anchor="e")
@@ -1597,6 +1692,14 @@ class UserInterface:
         self.ten_forty_8814.place(relx=0.5115, rely=0.565, anchor="e")
         self.ten_forty_4972.place(relx=0.595, rely=0.565, anchor="e")
         self.ten_forty_other_form_check.place(relx=0.692, rely=0.565, anchor="e")
+
+        self.ten_forty_8888.place(relx=0.815, rely=0.7813, anchor="e")
+        self.ten_forty_route_checking.place(relx=0.652, rely=0.791, anchor="e")
+        self.ten_forty_route_savings.place(relx=0.755, rely=0.791, anchor="e")
+        self.ten_forty_third_party_yes.place(relx=0.71, rely=0.8547, anchor="e")
+        self.ten_forty_third_party_no.place(relx=0.89, rely=0.8547, anchor="e")
+        self.ten_forty_self_employed.place(relx=0.8912, rely=0.9633, anchor="e")
+
         self.ten_forty_other_form_no.place(relx=0.751, rely=0.565, anchor="e")
         self.ten_forty_other_form_total.place(relx=0.987, rely=0.565, anchor="e")
         self.ten_forty_schedule_2.place(relx=0.987, rely=0.5745, anchor="e")
@@ -1624,30 +1727,163 @@ class UserInterface:
         self.ten_forty_owed.place(relx=0.987, rely=0.829, anchor="e")
         self.ten_forty_penalty.place(relx=0.811, rely=0.838, anchor="e")
 
-
     def new_session(self):
         """
-            Creates a new session for tax calculations.
-            """
+        Creates a new session for tax calculations.
+        """
 
-        pass
+        w_2_fields = [self.employee_address_etc, self.employee_suffix,
+                      self.employee_last_name, self.employee_name_i,
+                      self.cn_entry,
+                      self.employer_name_etc, self.other_field, self.locality_name,
+                      self.state_field, self.employers_state_id, self.state_wage_tips,
+                      self.state_income_tax, self.local_wage_tips, self.local_income_tax,
+                      self.twelve_a, self.twelve_b, self.twelve_c, self.twelve_d,
+                      self.dependent_care_benefits, self.allocated_tips, self.medicare_tax_withheld,
+                      self.social_security_tax_withheld, self.fed_income_tax_withheld,
+                      self.non_qualified_plans, self.social_security_tips,
+                      self.medicare_wages, self.social_wages, self.wages_tips_c, self.ein_entry,
+                      self.essn_entry]
+
+        ten_ninety_nine_fields = [self.ten_ninety_nine_payer_name,
+                                  self.ten_ninety_nine_payer_address,
+                                  self.ten_ninety_nine_payer_city, self.ten_ninety_nine_payer_state,
+                                  self.ten_ninety_nine_payer_country,
+                                  self.ten_ninety_nine_payer_ZIP, self.ten_ninety_nine_payer_phone,
+                                  self.ten_ninety_nine_payer_tin,
+                                  self.ten_ninety_nine_recipient_tin, self.ten_ninety_nine_recipient_name,
+                                  self.ten_ninety_nine_recipient_address,
+                                  self.ten_ninety_nine_recipient_city, self.ten_ninety_nine_recipient_state,
+                                  self.ten_ninety_nine_recipient_country,
+                                  self.ten_ninety_nine_recipient_ZIP,
+                                  self.ten_ninety_nine_account_number,
+                                  self.ten_ninety_nine_ordinary_dividends,
+                                  self.ten_ninety_nine_qualified_dividends,
+                                  self.ten_ninety_nine_capital_gain,
+                                  self.ten_ninety_nine_1250_gain, self.ten_ninety_nine_1202_gain,
+                                  self.ten_ninety_nine_collectibles_gain,
+                                  self.ten_ninety_nine_897_dividends, self.ten_ninety_nine_897_gain,
+                                  self.ten_ninety_nine_nondividend,
+                                  self.ten_ninety_nine_federal_tax_withheld, self.ten_ninety_nine_199a,
+                                  self.ten_ninety_nine_investment_expenses,
+                                  self.ten_ninety_nine_foreign_tax, self.ten_ninety_nine_foreign_tax_country,
+                                  self.ten_ninety_nine_cash_liquidation,
+                                  self.ten_ninety_nine_noncash_liquidation,
+                                  self.ten_ninety_nine_exempt_dividends,
+                                  self.ten_ninety_nine_specified_bond_dividends,
+                                  self.ten_ninety_nine_state, self.ten_ninety_nine_state_id_number,
+                                  self.ten_ninety_nine_state_tax_withheld]
+
+        ten_forty_fields = [self.ten_forty_first_name, self.ten_forty_last_name,
+                            self.ten_forty_spouse_first, self.ten_forty_spouse_last,
+                            self.ten_forty_home_address, self.ten_forty_apt_no, self.ten_forty_city,
+                            self.ten_forty_state, self.ten_forty_zip, self.ten_forty_foreign_country,
+                            self.ten_forty_foreign_province, self.ten_forty_foreign_post_code,
+                            self.ten_forty_dependent_first_1, self.ten_forty_dependent_first_2,
+                            self.ten_forty_dependent_first_3,
+                            self.ten_forty_dependent_first_4, self.ten_forty_dependent_last_1,
+                            self.ten_forty_dependent_last_2,
+                            self.ten_forty_dependent_last_3, self.ten_forty_dependent_last_4,
+                            self.ten_forty_total_w2s, self.ten_forty_household_wages,
+                            self.ten_forty_tip_income,
+                            self.ten_forty_medicaid_waiver, self.ten_forty_dependent_benefits,
+                            self.ten_forty_adoption_benefits, self.ten_forty_8919_wages,
+                            self.ten_forty_other_income,
+                            self.ten_forty_combat_pay, self.ten_forty_1_ah_sum,
+                            self.ten_forty_tax_exempt_interest,
+                            self.ten_forty_taxable_interest, self.ten_forty_qualified_dividends,
+                            self.ten_forty_ordinary_dividends, self.ten_forty_ira_distributions,
+                            self.ten_forty_taxable_ira,
+                            self.ten_forty_pensions_annuities, self.ten_forty_taxable_pensions,
+                            self.ten_forty_social_security, self.ten_forty_social_taxable,
+                            self.ten_forty_capital_gain,
+                            self.ten_forty_schedule_1, self.ten_forty_schedule_1, self.ten_forty_total_income,
+                            self.ten_forty_income_adjustments, self.ten_forty_adjusted_income,
+                            self.ten_forty_deductions, self.ten_forty_business_deductions,
+                            self.ten_forty_total_deductions,
+                            self.ten_forty_taxable_income,
+                            self.ten_forty_other_form_no,
+                            self.ten_forty_other_form_total, self.ten_forty_schedule_2,
+                            self.ten_forty_add_16_17,
+                            self.ten_forty_child_credit, self.ten_forty_schedule_3, self.ten_forty_add_19_20,
+                            self.ten_forty_sub_21_18, self.ten_forty_other_taxes, self.ten_forty_total_tax,
+                            self.ten_forty_withheld_w2, self.ten_forty_withheld_1099,
+                            self.ten_forty_withheld_other,
+                            self.ten_forty_withheld_total, self.ten_forty_previous_year, self.ten_forty_eic,
+                            self.ten_forty_8812_child_credit, self.ten_forty_8863_opportunity_credit,
+                            self.ten_forty_schedule_3_line_15, self.ten_forty_other_payments,
+                            self.ten_forty_total_payments,
+                            self.ten_forty_overpaid, self.ten_forty_owed, self.ten_forty_penalty]
+
+        ten_forty_checkboxes = [self.ten_forty_presidential_you, self.ten_forty_presidential_spouse,
+                                self.ten_forty_filing_single, self.ten_forty_filing_jointly,
+                                self.ten_forty_filing_separately,
+                                self.ten_forty_filing_hoh, self.ten_forty_filing_qss,
+                                self.ten_forty_digital_assets_yes,
+                                self.ten_forty_digital_assets_no, self.ten_forty_are_dependent,
+                                self.ten_forty_spouse_dependent,
+                                self.ten_forty_spouse_separate, self.ten_forty_self_1959,
+                                self.ten_forty_self_blind,
+                                self.ten_forty_spouse_1959, self.ten_forty_spouse_blind,
+                                self.ten_forty_many_dependents,
+                                self.ten_forty_dependent_1_child_credit, self.ten_forty_dependent_1_other_credit,
+                                self.ten_forty_dependent_2_child_credit, self.ten_forty_dependent_2_other_credit,
+                                self.ten_forty_dependent_3_child_credit, self.ten_forty_dependent_3_other_credit,
+                                self.ten_forty_dependent_4_child_credit, self.ten_forty_dependent_4_other_credit,
+                                self.ten_forty_lump_sum_method, self.ten_forty_schedule_d,
+                                self.ten_forty_8814, self.ten_forty_4972,
+                                self.ten_forty_other_form_check, self.ten_forty_8888,
+                                self.ten_forty_route_checking,
+                                self.ten_forty_route_savings,
+                                self.ten_forty_third_party_yes,
+                                self.ten_forty_third_party_no,
+                                self.ten_forty_self_employed]
+
+        if self.new_decision == "w2":
+            for i in w_2_fields:
+                i.delete(0, ctk.END)
+        elif self.new_decision == "1099":
+            for j in ten_ninety_nine_fields:
+                j.delete(0, ctk.END)
+        elif self.new_decision == "1040":
+            for h in ten_forty_fields:
+                h.delete(0, ctk.END)
+            for k in ten_forty_checkboxes:
+                k.deselect()
 
     def quit(self):
+        """
+        Displays a confirmation dialog asking the user if they want to quit.
+        If the user confirms, the program exits.
+
+        Returns:
+            None
+        """
         if messagebox.askyesno("Exit", "Are you sure you want to quit?"):
             sys.exit()
 
     def exit_program(self):
-        # Perform your custom tasks here
-        # For example, save data or prompt the user before quitting
+        """
+        Displays a confirmation dialog asking the user if they want to quit.
+        If the user confirms, the program exits.
+
+        Returns:
+            None
+        """
         if messagebox.askyesno("Exit", "Are you sure you want to quit?"):
             sys.exit()
 
-#######################################################################################################################
+    ###################################################################################################################
     # W-2 #
-    # Save-as #
+    # Save-as W2 #
     def save_form_w2_as(self):
         """
-        Opens a file explorer to save the tax-related data to a text file.
+        Opens a file explorer to save the tax-related data to a pdf file.
+
+        Updates the form fields in a given PDF document with values from a dictionary.
+
+        Returns:
+            None
         """
 
         # Opening the file explorer
@@ -1661,12 +1897,12 @@ class UserInterface:
                 save_as_w2_field_values_mixing = {
                     'topmostSubform[0].Copy1[0].f2_01[0]': str(self.essn_entry.get()),
                     'topmostSubform[0].Copy1[0].Col_Left[0].f2_02[0]': str(self.ein_entry.get()),
-                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_03[0]': str(self.employer_name.get()),
+                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_03[0]': str(self.employer_name_etc.get()),
                     'topmostSubform[0].Copy1[0].Col_Left[0].f2_04[0]': str(self.cn_entry.get()),
                     'topmostSubform[0].Copy1[0].Col_Left[0].f2_05[0]': str(self.employee_name_i.get()),
                     'topmostSubform[0].Copy1[0].Col_Left[0].f2_06[0]': str(self.employee_last_name.get()),
                     'topmostSubform[0].Copy1[0].Col_Left[0].f2_07[0]': str(self.employee_suffix.get()),
-                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_08[0]': str(self.employee_address.get()),
+                    'topmostSubform[0].Copy1[0].Col_Left[0].f2_08[0]': str(self.employee_address_etc.get()),
                     'topmostSubform[0].Copy1[0].Col_Right[0].f2_09[0]': str(self.wages_tips_c.get()),
                     'topmostSubform[0].Copy1[0].Col_Right[0].f2_10[0]': str(self.fed_income_tax_withheld.get()),
                     'topmostSubform[0].Copy1[0].Col_Right[0].f2_11[0]': str(self.social_wages.get()),
@@ -1694,12 +1930,12 @@ class UserInterface:
                 save_as_w2_field_values_mixing_2 = {
                     'topmostSubform[0].CopyB[0].f2_01[0]': str(self.essn_entry.get()),
                     'topmostSubform[0].CopyB[0].Col_Left[0].f2_02[0]': str(self.ein_entry.get()),
-                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_03[0]': str(self.employer_name.get()),
+                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_03[0]': str(self.employer_name_etc.get()),
                     'topmostSubform[0].CopyB[0].Col_Left[0].f2_04[0]': str(self.cn_entry.get()),
                     'topmostSubform[0].CopyB[0].Col_Left[0].f2_05[0]': str(self.employee_name_i.get()),
                     'topmostSubform[0].CopyB[0].Col_Left[0].f2_06[0]': str(self.employee_last_name.get()),
                     'topmostSubform[0].CopyB[0].Col_Left[0].f2_07[0]': str(self.employee_suffix.get()),
-                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_08[0]': str(self.employee_address.get()),
+                    'topmostSubform[0].CopyB[0].Col_Left[0].f2_08[0]': str(self.employee_address_etc.get()),
                     'topmostSubform[0].CopyB[0].Col_Right[0].f2_09[0]': str(self.wages_tips_c.get()),
                     'topmostSubform[0].CopyB[0].Col_Right[0].f2_10[0]': str(self.fed_income_tax_withheld.get()),
                     'topmostSubform[0].CopyB[0].Col_Right[0].f2_11[0]': str(self.social_wages.get()),
@@ -1727,12 +1963,12 @@ class UserInterface:
                 save_as_w2_field_values_mixing_3 = {
                     'topmostSubform[0].CopyC[0].f2_01[0]': str(self.essn_entry.get()),
                     'topmostSubform[0].CopyC[0].Col_Left[0].f2_02[0]': str(self.ein_entry.get()),
-                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_03[0]': str(self.employer_name.get()),
+                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_03[0]': str(self.employer_name_etc.get()),
                     'topmostSubform[0].CopyC[0].Col_Left[0].f2_04[0]': str(self.cn_entry.get()),
                     'topmostSubform[0].CopyC[0].Col_Left[0].f2_05[0]': str(self.employee_name_i.get()),
                     'topmostSubform[0].CopyC[0].Col_Left[0].f2_06[0]': str(self.employee_last_name.get()),
                     'topmostSubform[0].CopyC[0].Col_Left[0].f2_07[0]': str(self.employee_suffix.get()),
-                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_08[0]': str(self.employee_address.get()),
+                    'topmostSubform[0].CopyC[0].Col_Left[0].f2_08[0]': str(self.employee_address_etc.get()),
                     'topmostSubform[0].CopyC[0].Col_Right[0].f2_09[0]': str(self.wages_tips_c.get()),
                     'topmostSubform[0].CopyC[0].Col_Right[0].f2_10[0]': str(self.fed_income_tax_withheld.get()),
                     'topmostSubform[0].CopyC[0].Col_Right[0].f2_11[0]': str(self.social_wages.get()),
@@ -1760,12 +1996,12 @@ class UserInterface:
                 save_as_w2_field_values_mixing_4 = {
                     'topmostSubform[0].Copy2[0].f2_01[0]': str(self.essn_entry.get()),
                     'topmostSubform[0].Copy2[0].Col_Left[0].f2_02[0]': str(self.ein_entry.get()),
-                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_03[0]': str(self.employer_name.get()),
+                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_03[0]': str(self.employer_name_etc.get()),
                     'topmostSubform[0].Copy2[0].Col_Left[0].f2_04[0]': str(self.cn_entry.get()),
                     'topmostSubform[0].Copy2[0].Col_Left[0].f2_05[0]': str(self.employee_name_i.get()),
                     'topmostSubform[0].Copy2[0].Col_Left[0].f2_06[0]': str(self.employee_last_name.get()),
                     'topmostSubform[0].Copy2[0].Col_Left[0].f2_07[0]': str(self.employee_suffix.get()),
-                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_08[0]': str(self.employee_address.get()),
+                    'topmostSubform[0].Copy2[0].Col_Left[0].f2_08[0]': str(self.employee_address_etc.get()),
                     'topmostSubform[0].Copy2[0].Col_Right[0].f2_09[0]': str(self.wages_tips_c.get()),
                     'topmostSubform[0].Copy2[0].Col_Right[0].f2_10[0]': str(self.fed_income_tax_withheld.get()),
                     'topmostSubform[0].Copy2[0].Col_Right[0].f2_11[0]': str(self.social_wages.get()),
@@ -1793,12 +2029,12 @@ class UserInterface:
                 save_as_w2_field_values_mixing_5 = {
                     'topmostSubform[0].CopyD[0].f2_01[0]': str(self.essn_entry.get()),
                     'topmostSubform[0].CopyD[0].Col_Left[0].f2_02[0]': str(self.ein_entry.get()),
-                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_03[0]': str(self.employer_name.get()),
+                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_03[0]': str(self.employer_name_etc.get()),
                     'topmostSubform[0].CopyD[0].Col_Left[0].f2_04[0]': str(self.cn_entry.get()),
                     'topmostSubform[0].CopyD[0].Col_Left[0].f2_05[0]': str(self.employee_name_i.get()),
                     'topmostSubform[0].CopyD[0].Col_Left[0].f2_06[0]': str(self.employee_last_name.get()),
                     'topmostSubform[0].CopyD[0].Col_Left[0].f2_07[0]': str(self.employee_suffix.get()),
-                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_08[0]': str(self.employee_address.get()),
+                    'topmostSubform[0].CopyD[0].Col_Left[0].f2_08[0]': str(self.employee_address_etc.get()),
                     'topmostSubform[0].CopyD[0].Col_Right[0].f2_09[0]': str(self.wages_tips_c.get()),
                     'topmostSubform[0].CopyD[0].Col_Right[0].f2_10[0]': str(self.fed_income_tax_withheld.get()),
                     'topmostSubform[0].CopyD[0].Col_Right[0].f2_11[0]': str(self.social_wages.get()),
@@ -1851,7 +2087,7 @@ class UserInterface:
             update_widget_values_w2(input_pdf_file, output_pdf_file)
             print(f"Modified PDF saved as {output_pdf_file}")
 
-    # Browse
+    # Browse W2
 
     def browse_form_w2(self):
         """
@@ -1863,17 +2099,28 @@ class UserInterface:
             self.update_input_fields_w2(filename)
 
     def update_input_fields_w2(self, input_pdf):
+        """
+            Updates entry widgets with field values extracted from a PDF.
+
+            Details:
+                - The code iterates through each page in the PDF.
+                - For each page, it retrieves the widgets (form fields).
+                - It then checks if the field name matches any of the specified entry widgets.
+                - If a match is found and the field value is not empty, it updates the corresponding entry widget:
+                    - Clears the existing text in the widget.
+                    - Inserts the extracted value into the widget.
+        """
         # Opening the input PDF
         pdf = fitz.open(input_pdf)
         browse_w2_field_values_mixing = {
             'topmostSubform[0].Copy1[0].f2_01[0]': self.essn_entry,
             'topmostSubform[0].Copy1[0].Col_Left[0].f2_02[0]': self.ein_entry,
-            'topmostSubform[0].Copy1[0].Col_Left[0].f2_03[0]': self.employer_name,
+            'topmostSubform[0].Copy1[0].Col_Left[0].f2_03[0]': self.employer_name_etc,
             'topmostSubform[0].Copy1[0].Col_Left[0].f2_04[0]': self.cn_entry,
             'topmostSubform[0].Copy1[0].Col_Left[0].f2_05[0]': self.employee_name_i,
             'topmostSubform[0].Copy1[0].Col_Left[0].f2_06[0]': self.employee_last_name,
             'topmostSubform[0].Copy1[0].Col_Left[0].f2_07[0]': self.employee_suffix,
-            'topmostSubform[0].Copy1[0].Col_Left[0].f2_08[0]': self.employee_address,
+            'topmostSubform[0].Copy1[0].Col_Left[0].f2_08[0]': self.employee_address_etc,
             'topmostSubform[0].Copy1[0].Col_Right[0].f2_09[0]': self.wages_tips_c,
             'topmostSubform[0].Copy1[0].Col_Right[0].f2_10[0]': self.fed_income_tax_withheld,
             'topmostSubform[0].Copy1[0].Col_Right[0].f2_11[0]': self.social_wages,
@@ -1901,12 +2148,12 @@ class UserInterface:
         browse_w2_field_values_mixing_2 = {
             'topmostSubform[0].CopyB[0].f2_01[0]': self.essn_entry,
             'topmostSubform[0].CopyB[0].Col_Left[0].f2_02[0]': self.ein_entry,
-            'topmostSubform[0].CopyB[0].Col_Left[0].f2_03[0]': self.employer_name,
+            'topmostSubform[0].CopyB[0].Col_Left[0].f2_03[0]': self.employer_name_etc,
             'topmostSubform[0].CopyB[0].Col_Left[0].f2_04[0]': self.cn_entry,
             'topmostSubform[0].CopyB[0].Col_Left[0].f2_05[0]': self.employee_name_i,
             'topmostSubform[0].CopyB[0].Col_Left[0].f2_06[0]': self.employee_last_name,
             'topmostSubform[0].CopyB[0].Col_Left[0].f2_07[0]': self.employee_suffix,
-            'topmostSubform[0].CopyB[0].Col_Left[0].f2_08[0]': self.employee_address,
+            'topmostSubform[0].CopyB[0].Col_Left[0].f2_08[0]': self.employee_address_etc,
             'topmostSubform[0].CopyB[0].Col_Right[0].f2_09[0]': self.wages_tips_c,
             'topmostSubform[0].CopyB[0].Col_Right[0].f2_10[0]': self.fed_income_tax_withheld,
             'topmostSubform[0].CopyB[0].Col_Right[0].f2_11[0]': self.social_wages,
@@ -1934,12 +2181,12 @@ class UserInterface:
         browse_w2_field_values_mixing_3 = {
             'topmostSubform[0].CopyC[0].f2_01[0]': self.essn_entry,
             'topmostSubform[0].CopyC[0].Col_Left[0].f2_02[0]': self.ein_entry,
-            'topmostSubform[0].CopyC[0].Col_Left[0].f2_03[0]': self.employer_name,
+            'topmostSubform[0].CopyC[0].Col_Left[0].f2_03[0]': self.employer_name_etc,
             'topmostSubform[0].CopyC[0].Col_Left[0].f2_04[0]': self.cn_entry,
             'topmostSubform[0].CopyC[0].Col_Left[0].f2_05[0]': self.employee_name_i,
             'topmostSubform[0].CopyC[0].Col_Left[0].f2_06[0]': self.employee_last_name,
             'topmostSubform[0].CopyC[0].Col_Left[0].f2_07[0]': self.employee_suffix,
-            'topmostSubform[0].CopyC[0].Col_Left[0].f2_08[0]': self.employee_address,
+            'topmostSubform[0].CopyC[0].Col_Left[0].f2_08[0]': self.employee_address_etc,
             'topmostSubform[0].CopyC[0].Col_Right[0].f2_09[0]': self.wages_tips_c,
             'topmostSubform[0].CopyC[0].Col_Right[0].f2_10[0]': self.fed_income_tax_withheld,
             'topmostSubform[0].CopyC[0].Col_Right[0].f2_11[0]': self.social_wages,
@@ -1967,12 +2214,12 @@ class UserInterface:
         browse_w2_field_values_mixing_4 = {
             'topmostSubform[0].Copy2[0].f2_01[0]': self.essn_entry,
             'topmostSubform[0].Copy2[0].Col_Left[0].f2_02[0]': self.ein_entry,
-            'topmostSubform[0].Copy2[0].Col_Left[0].f2_03[0]': self.employer_name,
+            'topmostSubform[0].Copy2[0].Col_Left[0].f2_03[0]': self.employer_name_etc,
             'topmostSubform[0].Copy2[0].Col_Left[0].f2_04[0]': self.cn_entry,
             'topmostSubform[0].Copy2[0].Col_Left[0].f2_05[0]': self.employee_name_i,
             'topmostSubform[0].Copy2[0].Col_Left[0].f2_06[0]': self.employee_last_name,
             'topmostSubform[0].Copy2[0].Col_Left[0].f2_07[0]': self.employee_suffix,
-            'topmostSubform[0].Copy2[0].Col_Left[0].f2_08[0]': self.employee_address,
+            'topmostSubform[0].Copy2[0].Col_Left[0].f2_08[0]': self.employee_address_etc,
             'topmostSubform[0].Copy2[0].Col_Right[0].f2_09[0]': self.wages_tips_c,
             'topmostSubform[0].Copy2[0].Col_Right[0].f2_10[0]': self.fed_income_tax_withheld,
             'topmostSubform[0].Copy2[0].Col_Right[0].f2_11[0]': self.social_wages,
@@ -2000,12 +2247,12 @@ class UserInterface:
         browse_w2_field_values_mixing_5 = {
             'topmostSubform[0].CopyD[0].f2_01[0]': self.essn_entry,
             'topmostSubform[0].CopyD[0].Col_Left[0].f2_02[0]': self.ein_entry,
-            'topmostSubform[0].CopyD[0].Col_Left[0].f2_03[0]': self.employer_name,
+            'topmostSubform[0].CopyD[0].Col_Left[0].f2_03[0]': self.employer_name_etc,
             'topmostSubform[0].CopyD[0].Col_Left[0].f2_04[0]': self.cn_entry,
             'topmostSubform[0].CopyD[0].Col_Left[0].f2_05[0]': self.employee_name_i,
             'topmostSubform[0].CopyD[0].Col_Left[0].f2_06[0]': self.employee_last_name,
             'topmostSubform[0].CopyD[0].Col_Left[0].f2_07[0]': self.employee_suffix,
-            'topmostSubform[0].CopyD[0].Col_Left[0].f2_08[0]': self.employee_address,
+            'topmostSubform[0].CopyD[0].Col_Left[0].f2_08[0]': self.employee_address_etc,
             'topmostSubform[0].CopyD[0].Col_Right[0].f2_09[0]': self.wages_tips_c,
             'topmostSubform[0].CopyD[0].Col_Right[0].f2_10[0]': self.fed_income_tax_withheld,
             'topmostSubform[0].CopyD[0].Col_Right[0].f2_11[0]': self.social_wages,
@@ -2041,19 +2288,24 @@ class UserInterface:
 
                         value = content.field_value.strip()
                         if value != "":
-                            entry_widget.delete(0, tk.END)  # Clear any existing text
-                            entry_widget.insert(0, value)  # Set the value directly
+                            entry_widget.delete(0, tk.END)  # Clear text
+                            entry_widget.insert(0, value)  # Set value
 
         pdf.close()
 
-#######################################################################################################################
+    ###################################################################################################################
 
-#######################################################################################################################
-# 1099 #
-# Save-as #
+    ###################################################################################################################
+    # 1099 #
+    # Save-as 1099 #
     def save_form_1099_as(self):
         """
-        Opens a file explorer to save the tax-related data to a text file.
+        Opens a file explorer to save the tax-related data to a pdf file.
+
+        Updates the form fields in a given PDF document with values from a dictionary.
+
+        Returns:
+            None
         """
 
         # Opening the file explorer
@@ -2062,6 +2314,15 @@ class UserInterface:
         if filename:
 
             def update_widget_values_1099(input_pdf, output_pdf):
+                """
+                    Updates entry widgets with field values extracted from a PDF.
+
+                    Details:
+                        - The code iterates through each page in the PDF.
+                        - For each page, it retrieves the widgets (form fields).
+                        - It then checks if the field name matches any of the specified entry widgets.
+                        - If a match is found and the field value is not empty, it updates the corresponding entry widget
+                """
                 # Opening the input PDF
                 pdf = fitz.open(input_pdf)
                 save_as_1099_field_values_mixing = {
@@ -2073,25 +2334,41 @@ class UserInterface:
                     'topmostSubform[0].Copy1[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city.get()),
                     'topmostSubform[0].Copy1[0].LeftCol[0].f2_8[0]': str(self.ten_ninety_nine_account_number.get()),
                     'topmostSubform[0].Copy1[0].RghtCol[0].f2_9[0]': str(self.ten_ninety_nine_ordinary_dividends.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_10[0]': str(self.ten_ninety_nine_qualified_dividends.get()),
-                    'topmostSubform[0].Copy1[0].RightCol[0].f2_11[0]': str(self.ten_ninety_nine_capital_gain.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_13[0]': str(self.ten_ninety_nine_1202_gain.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_15[0]': str(self.ten_ninety_nine_897_dividends.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_17[0]': str(self.ten_ninety_nine_nondividend.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_19[0]': str(self.ten_ninety_nine_199a.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_21[0]': str(self.ten_ninety_nine_foreign_tax.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_23[0]': str(self.ten_ninety_nine_cash_liquidation.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_25[0]': str(self.ten_ninety_nine_exempt_dividends.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': str(self.ten_ninety_nine_state.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': str(self.ten_ninety_nine_state_id_number.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_10[0]': str(
+                        self.ten_ninety_nine_qualified_dividends.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box2a_ReadOrder[0].f2_11[0]':
+                        str(self.ten_ninety_nine_capital_gain.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box2c_ReadOrder[0].f2_13[0]':
+                        str(self.ten_ninety_nine_1202_gain.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box2e_ReadOrder[0].f2_15[0]':
+                        str(self.ten_ninety_nine_897_dividends.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box3_ReadOrder[0].f2_17[0]':
+                        str(self.ten_ninety_nine_nondividend.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box5_ReadOrder[0].f2_19[0]':
+                        str(self.ten_ninety_nine_199a.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box7_ReadOrder[0].f2_21[0]':
+                        str(self.ten_ninety_nine_foreign_tax.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box9_ReadOrder[0].f2_23[0]':
+                        str(self.ten_ninety_nine_cash_liquidation.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box12_ReadOrder[0].f2_25[0]':
+                        str(self.ten_ninety_nine_exempt_dividends.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': str(
+                        self.ten_ninety_nine_state.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': str(
+                        self.ten_ninety_nine_state_id_number.get()),
                     'topmostSubform[0].Copy1[0].RghtCol[0].f2_12[0]': str(self.ten_ninety_nine_1250_gain.get()),
                     'topmostSubform[0].Copy1[0].RghtCol[0].f2_14[0]': str(self.ten_ninety_nine_collectibles_gain.get()),
                     'topmostSubform[0].Copy1[0].RghtCol[0].f2_16[0]': str(self.ten_ninety_nine_897_gain.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_18[0]': str(self.ten_ninety_nine_federal_tax_withheld.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_20[0]': str(self.ten_ninety_nine_investment_expenses.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_22[0]': str(self.ten_ninety_nine_foreign_tax_country.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_24[0]': str(self.ten_ninety_nine_noncash_liquidation.get()),
-                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_26[0]': str(self.ten_ninety_nine_specified_bond_dividends.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_18[0]': str(
+                        self.ten_ninety_nine_federal_tax_withheld.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_20[0]': str(
+                        self.ten_ninety_nine_investment_expenses.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_22[0]': str(
+                        self.ten_ninety_nine_foreign_tax_country.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_24[0]': str(
+                        self.ten_ninety_nine_noncash_liquidation.get()),
+                    'topmostSubform[0].Copy1[0].RghtCol[0].f2_26[0]': str(
+                        self.ten_ninety_nine_specified_bond_dividends.get()),
                     'topmostSubform[0].Copy1[0].RghtCol[0].f2_31[0]': str(self.ten_ninety_nine_state_tax_withheld.get())
                 }
 
@@ -2104,25 +2381,41 @@ class UserInterface:
                     'topmostSubform[0].CopyB[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city.get()),
                     'topmostSubform[0].CopyB[0].LeftCol[0].f2_8[0]': str(self.ten_ninety_nine_account_number.get()),
                     'topmostSubform[0].CopyB[0].RghtCol[0].f2_9[0]': str(self.ten_ninety_nine_ordinary_dividends.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_10[0]': str(self.ten_ninety_nine_qualified_dividends.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_11[0]': str(self.ten_ninety_nine_capital_gain.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_13[0]': str(self.ten_ninety_nine_1202_gain.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_15[0]': str(self.ten_ninety_nine_897_dividends.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_17[0]': str(self.ten_ninety_nine_nondividend.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_19[0]': str(self.ten_ninety_nine_199a.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_21[0]': str(self.ten_ninety_nine_foreign_tax.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_23[0]': str(self.ten_ninety_nine_cash_liquidation.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_25[0]': str(self.ten_ninety_nine_exempt_dividends.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': str(self.ten_ninety_nine_state.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': str(self.ten_ninety_nine_state_id_number.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_10[0]': str(
+                        self.ten_ninety_nine_qualified_dividends.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box2a_ReadOrder[0].f2_11[0]':
+                        str(self.ten_ninety_nine_capital_gain.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box2c_ReadOrder[0].f2_13[0]':
+                        str(self.ten_ninety_nine_1202_gain.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box2e_ReadOrder[0].f2_15[0]':
+                        str(self.ten_ninety_nine_897_dividends.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box3_ReadOrder[0].f2_17[0]':
+                        str(self.ten_ninety_nine_nondividend.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box5_ReadOrder[0].f2_19[0]':
+                        str(self.ten_ninety_nine_199a.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box7_ReadOrder[0].f2_21[0]':
+                        str(self.ten_ninety_nine_foreign_tax.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box9_ReadOrder[0].f2_23[0]':
+                        str(self.ten_ninety_nine_cash_liquidation.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box12_ReadOrder[0].f2_25[0]':
+                        str(self.ten_ninety_nine_exempt_dividends.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': str(
+                        self.ten_ninety_nine_state.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': str(
+                        self.ten_ninety_nine_state_id_number.get()),
                     'topmostSubform[0].CopyB[0].RghtCol[0].f2_12[0]': str(self.ten_ninety_nine_1250_gain.get()),
                     'topmostSubform[0].CopyB[0].RghtCol[0].f2_14[0]': str(self.ten_ninety_nine_collectibles_gain.get()),
                     'topmostSubform[0].CopyB[0].RghtCol[0].f2_16[0]': str(self.ten_ninety_nine_897_gain.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_18[0]': str(self.ten_ninety_nine_federal_tax_withheld.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_20[0]': str(self.ten_ninety_nine_investment_expenses.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_22[0]': str(self.ten_ninety_nine_foreign_tax_country.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_24[0]': str(self.ten_ninety_nine_noncash_liquidation.get()),
-                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_26[0]': str(self.ten_ninety_nine_specified_bond_dividends.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_18[0]': str(
+                        self.ten_ninety_nine_federal_tax_withheld.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_20[0]': str(
+                        self.ten_ninety_nine_investment_expenses.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_22[0]': str(
+                        self.ten_ninety_nine_foreign_tax_country.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_24[0]': str(
+                        self.ten_ninety_nine_noncash_liquidation.get()),
+                    'topmostSubform[0].CopyB[0].RghtCol[0].f2_26[0]': str(
+                        self.ten_ninety_nine_specified_bond_dividends.get()),
                     'topmostSubform[0].CopyB[0].RghtCol[0].f2_31[0]': str(self.ten_ninety_nine_state_tax_withheld.get())
                 }
 
@@ -2135,25 +2428,41 @@ class UserInterface:
                     'topmostSubform[0].Copy2[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city.get()),
                     'topmostSubform[0].Copy2[0].LeftCol[0].f2_8[0]': str(self.ten_ninety_nine_account_number.get()),
                     'topmostSubform[0].Copy2[0].RghtCol[0].f2_9[0]': str(self.ten_ninety_nine_ordinary_dividends.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_10[0]': str(self.ten_ninety_nine_qualified_dividends.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_11[0]': str(self.ten_ninety_nine_capital_gain.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_13[0]': str(self.ten_ninety_nine_1202_gain.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_15[0]': str(self.ten_ninety_nine_897_dividends.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_17[0]': str(self.ten_ninety_nine_nondividend.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_19[0]': str(self.ten_ninety_nine_199a.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_21[0]': str(self.ten_ninety_nine_foreign_tax.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_23[0]': str(self.ten_ninety_nine_cash_liquidation.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_25[0]': str(self.ten_ninety_nine_exempt_dividends.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': str(self.ten_ninety_nine_state.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': str(self.ten_ninety_nine_state_id_number.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_10[0]': str(
+                        self.ten_ninety_nine_qualified_dividends.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box2a_ReadOrder[0].f2_11[0]':
+                        str(self.ten_ninety_nine_capital_gain.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box2c_ReadOrder[0].f2_13[0]':
+                        str(self.ten_ninety_nine_1202_gain.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box2e_ReadOrder[0].f2_15[0]':
+                        str(self.ten_ninety_nine_897_dividends.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box3_ReadOrder[0].f2_17[0]':
+                        str(self.ten_ninety_nine_nondividend.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box5_ReadOrder[0].f2_19[0]':
+                        str(self.ten_ninety_nine_199a.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box7_ReadOrder[0].f2_21[0]':
+                        str(self.ten_ninety_nine_foreign_tax.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box9_ReadOrder[0].f2_23[0]':
+                        str(self.ten_ninety_nine_cash_liquidation.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box12_ReadOrder[0].f2_25[0]':
+                        str(self.ten_ninety_nine_exempt_dividends.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box14_ReadOrder[0].f2_27[0]': str(
+                        self.ten_ninety_nine_state.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].Box15_ReadOrder[0].f2_29[0]': str(
+                        self.ten_ninety_nine_state_id_number.get()),
                     'topmostSubform[0].Copy2[0].RghtCol[0].f2_12[0]': str(self.ten_ninety_nine_1250_gain.get()),
                     'topmostSubform[0].Copy2[0].RghtCol[0].f2_14[0]': str(self.ten_ninety_nine_collectibles_gain.get()),
                     'topmostSubform[0].Copy2[0].RghtCol[0].f2_16[0]': str(self.ten_ninety_nine_897_gain.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_18[0]': str(self.ten_ninety_nine_federal_tax_withheld.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_20[0]': str(self.ten_ninety_nine_investment_expenses.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_22[0]': str(self.ten_ninety_nine_foreign_tax_country.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_24[0]': str(self.ten_ninety_nine_noncash_liquidation.get()),
-                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_26[0]': str(self.ten_ninety_nine_specified_bond_dividends.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_18[0]': str(
+                        self.ten_ninety_nine_federal_tax_withheld.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_20[0]': str(
+                        self.ten_ninety_nine_investment_expenses.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_22[0]': str(
+                        self.ten_ninety_nine_foreign_tax_country.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_24[0]': str(
+                        self.ten_ninety_nine_noncash_liquidation.get()),
+                    'topmostSubform[0].Copy2[0].RghtCol[0].f2_26[0]': str(
+                        self.ten_ninety_nine_specified_bond_dividends.get()),
                     'topmostSubform[0].Copy2[0].RghtCol[0].f2_31[0]': str(self.ten_ninety_nine_state_tax_withheld.get())
                 }
 
@@ -2183,7 +2492,7 @@ class UserInterface:
             update_widget_values_1099(input_pdf_file, output_pdf_file)
             print(f"Modified PDF saved as {output_pdf_file}")
 
-    # Browse
+    # Browse 1099
 
     def browse_form_1099(self):
         """
@@ -2195,6 +2504,15 @@ class UserInterface:
             self.update_input_fields_1099(filename)
 
     def update_input_fields_1099(self, input_pdf):
+        """
+            Updates entry widgets with field values extracted from a PDF.
+
+            Details:
+                - The code iterates through each page in the PDF.
+                - For each page, it retrieves the widgets (form fields).
+                - It then checks if the field name matches any of the specified entry widgets.
+                - If a match is found and the field value is not empty, it updates the corresponding entry widget
+        """
         # Opening the input PDF
         pdf = fitz.open(input_pdf)
         browse_1099_field_values_mixing = {
@@ -2299,9 +2617,392 @@ class UserInterface:
 
                         value = content.field_value.strip()
                         if value != "":
-                            entry_widget.delete(0, tk.END)  # Clear any existing text
-                            entry_widget.insert(0, value)  # Set the value directly
+                            entry_widget.delete(0, tk.END)  # Clear text
+                            entry_widget.insert(0, value)  # Set value
 
+        pdf.close()
+
+    ###################################################################################################################
+
+    ###################################################################################################################
+
+    ###################################################################################################################
+    # 1040 #
+    # Save-as 1040 #
+    def save_form_1040_as(self):
+        """
+        Opens a file explorer to save the tax-related data to a pdf file.
+        """
+
+        # Opening the file explorer
+        filename = filedialog.asksaveasfilename(initialdir="/", title="Save As",
+                                                filetypes=(("PDF Files", "*.pdf"),))
+        if filename:
+
+            def update_widget_values_1040(input_pdf, output_pdf):
+                """
+                    Updates entry widgets with field values extracted from a PDF.
+
+                    Details:
+                        - The code iterates through each page in the PDF.
+                        - For each page, it retrieves the widgets (form fields).
+                        - It then checks if the field name matches any of the specified entry widgets.
+                        - If a match is found and the field value is not empty, it updates the corresponding entry widget
+                """
+                # Opening the input PDF
+                pdf = fitz.open(input_pdf)
+                save_as_1040_field_values_mixing = {
+                    'topmostSubform[0].Page1[0].f1_04[0]': str(self.ten_forty_first_name.get()),
+                    'topmostSubform[0].Page1[0].f1_05[0]': str(self.ten_forty_last_name.get()),
+                    'topmostSubform[0].Page1[0].f1_07[0]': str(self.ten_forty_spouse_first.get()),
+                    'topmostSubform[0].Page1[0].f1_08[0]': str(self.ten_forty_spouse_last.get()),
+                    'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_10[0]': str(self.ten_forty_home_address.get()),
+                    'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_11[0]': str(self.ten_forty_apt_no.get()),
+                    'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_12[0]': str(self.ten_forty_city.get()),
+                    'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_13[0]': str(self.ten_forty_state.get()),
+                    'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_14[0]': str(self.ten_forty_zip.get()),
+                    'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_15[0]': str(
+                        self.ten_forty_foreign_country.get()),
+                    'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_16[0]': str(
+                        self.ten_forty_foreign_province.get()),
+                    'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_17[0]': str(
+                        self.ten_forty_foreign_post_code.get()),
+                    'topmostSubform[0].Page1[0].Table_Dependents[0].Row1[0].f1_19[0]': str(
+                        self.ten_forty_dependent_first_1.get()),
+                    'topmostSubform[0].Page1[0].Table_Dependents[0].Row2[0].f1_22[0]': str(
+                        self.ten_forty_dependent_first_2.get()),
+                    'topmostSubform[0].Page1[0].Table_Dependents[0].Row3[0].f1_25[0]': str(
+                        self.ten_forty_dependent_first_3.get()),
+                    'topmostSubform[0].Page1[0].Table_Dependents[0].Row4[0].f1_28[0]': str(
+                        self.ten_forty_dependent_first_4.get()),
+                    'topmostSubform[0].Page1[0].f1_31[0]': str(self.ten_forty_total_w2s.get()),
+                    'topmostSubform[0].Page1[0].f1_32[0]': str(self.ten_forty_household_wages.get()),
+                    'topmostSubform[0].Page1[0].f1_33[0]': str(self.ten_forty_tip_income.get()),
+                    'topmostSubform[0].Page1[0].f1_34[0]': str(self.ten_forty_medicaid_waiver.get()),
+                    'topmostSubform[0].Page1[0].f1_35[0]': str(self.ten_forty_dependent_benefits.get()),
+                    'topmostSubform[0].Page1[0].f1_36[0]': str(self.ten_forty_adoption_benefits.get()),
+                    'topmostSubform[0].Page1[0].f1_37[0]': str(self.ten_forty_8919_wages.get()),
+                    'topmostSubform[0].Page1[0].f1_38[0]': str(self.ten_forty_other_income.get()),
+                    'topmostSubform[0].Page1[0].f1_39[0]': str(self.ten_forty_combat_pay.get()),
+                    'topmostSubform[0].Page1[0].f1_40[0]': str(self.ten_forty_1_ah_sum.get()),
+                    'topmostSubform[0].Page1[0].f1_41[0]': str(self.ten_forty_tax_exempt_interest.get()),
+                    'topmostSubform[0].Page1[0].f1_42[0]': str(self.ten_forty_taxable_interest.get()),
+                    'topmostSubform[0].Page1[0].f1_43[0]': str(self.ten_forty_qualified_dividends.get()),
+                    'topmostSubform[0].Page1[0].f1_44[0]': str(self.ten_forty_ordinary_dividends.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_45[0]': str(
+                        self.ten_forty_ira_distributions.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_46[0]': str(self.ten_forty_taxable_ira.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_47[0]': str(
+                        self.ten_forty_pensions_annuities.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_48[0]': str(
+                        self.ten_forty_taxable_pensions.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_49[0]': str(
+                        self.ten_forty_social_security.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_50[0]': str(
+                        self.ten_forty_social_taxable.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_51[0]': str(
+                        self.ten_forty_capital_gain.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_52[0]': str(self.ten_forty_schedule_1.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_53[0]': str(
+                        self.ten_forty_total_income.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_54[0]': str(
+                        self.ten_forty_income_adjustments.get()),
+                    'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_55[0]': str(
+                        self.ten_forty_adjusted_income.get()),
+                    'topmostSubform[0].Page1[0].f1_56[0]': str(self.ten_forty_deductions.get()),
+                    'topmostSubform[0].Page1[0].f1_57[0]': str(self.ten_forty_business_deductions.get()),
+                    'topmostSubform[0].Page1[0].f1_58[0]': str(self.ten_forty_total_deductions.get()),
+                    'topmostSubform[0].Page1[0].f1_59[0]': str(self.ten_forty_taxable_income.get())
+                }
+
+                save_as_1040_field_values_mixing_2 = {
+                    'topmostSubform[0].Page2[0].f2_01[0]': str(self.ten_forty_other_form_no.get()),
+                    'topmostSubform[0].Page2[0].f2_02[0]': str(self.ten_forty_other_form_total.get()),
+                    'topmostSubform[0].Page2[0].f2_03[0]': str(self.ten_forty_schedule_2.get()),
+                    'topmostSubform[0].Page2[0].f2_04[0]': str(self.ten_forty_add_16_17.get()),
+                    'topmostSubform[0].Page2[0].f2_05[0]': str(self.ten_forty_child_credit.get()),
+                    'topmostSubform[0].Page2[0].f2_06[0]': str(self.ten_forty_schedule_3.get()),
+                    'topmostSubform[0].Page2[0].f2_07[0]': str(self.ten_forty_add_19_20.get()),
+                    'topmostSubform[0].Page2[0].f2_08[0]': str(self.ten_forty_sub_21_18.get()),
+                    'topmostSubform[0].Page2[0].f2_09[0]': str(self.ten_forty_other_taxes.get()),
+                    'topmostSubform[0].Page2[0].f2_10[0]': str(self.ten_forty_total_tax.get()),
+                    'topmostSubform[0].Page2[0].f2_11[0]': str(self.ten_forty_withheld_w2.get()),
+                    'topmostSubform[0].Page2[0].f2_12[0]': str(self.ten_forty_withheld_1099.get()),
+                    'topmostSubform[0].Page2[0].f2_13[0]': str(self.ten_forty_withheld_other.get()),
+                    'topmostSubform[0].Page2[0].f2_14[0]': str(self.ten_forty_withheld_total.get()),
+                    'topmostSubform[0].Page2[0].f2_15[0]': str(self.ten_forty_previous_year.get()),
+                    'topmostSubform[0].Page2[0].f2_16[0]': str(self.ten_forty_eic.get()),
+                    'topmostSubform[0].Page2[0].f2_17[0]': str(self.ten_forty_8812_child_credit.get()),
+                    'topmostSubform[0].Page2[0].f2_18[0]': str(self.ten_forty_8863_opportunity_credit.get()),
+                    'topmostSubform[0].Page2[0].f2_20[0]': str(self.ten_forty_schedule_3_line_15.get()),
+                    'topmostSubform[0].Page2[0].f2_21[0]': str(self.ten_forty_other_payments.get()),
+                    'topmostSubform[0].Page2[0].f2_22[0]': str(self.ten_forty_total_payments.get()),
+                    'topmostSubform[0].Page2[0].f2_23[0]': str(self.ten_forty_overpaid.get()),
+                    'topmostSubform[0].Page2[0].f2_28[0]': str(self.ten_forty_owed.get()),
+                    'topmostSubform[0].Page2[0].f2_29[0]': str(self.ten_forty_penalty.get())
+                }
+
+                ten_forty_checkboxes = {'topmostSubform[0].Page1[0].c1_1[0]': self.ten_forty_presidential_you,
+                                        'topmostSubform[0].Page1[0].c1_2[0]': self.ten_forty_presidential_spouse,
+                                        'topmostSubform[0].Page1[0].c1_3[0]': self.ten_forty_filing_single,
+                                        'topmostSubform[0].Page1[0].c1_3[1]': self.ten_forty_filing_hoh,
+                                        'topmostSubform[0].Page1[0].c1_3[2]': self.ten_forty_filing_jointly,
+                                        'topmostSubform[0].Page1[0].c1_3[3]': self.ten_forty_filing_separately,
+                                        'topmostSubform[0].Page1[0].c1_3[4]': self.ten_forty_filing_qss,
+                                        'topmostSubform[0].Page1[0].c1_4[0]': self.ten_forty_digital_assets_yes,
+                                        'topmostSubform[0].Page1[0].c1_4[1]': self.ten_forty_digital_assets_no,
+                                        'topmostSubform[0].Page1[0].c1_5[0]': self.ten_forty_are_dependent,
+                                        'topmostSubform[0].Page1[0].c1_6[0]': self.ten_forty_spouse_dependent,
+                                        'topmostSubform[0].Page1[0].c1_7[0]': self.ten_forty_spouse_separate,
+                                        'topmostSubform[0].Page1[0].c1_8[0]': self.ten_forty_self_1959,
+                                        'topmostSubform[0].Page1[0].c1_9[0]': self.ten_forty_self_blind,
+                                        'topmostSubform[0].Page1[0].c1_10[0]': self.ten_forty_spouse_1959,
+                                        'topmostSubform[0].Page1[0].c1_11[0]': self.ten_forty_spouse_blind,
+                                        'topmostSubform[0].Page1[0].c1_12[0]': self.ten_forty_many_dependents,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row1[0].c1_13[0]': self.ten_forty_dependent_1_child_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row1[0].c1_14[0]': self.ten_forty_dependent_1_other_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row2[0].c1_15[0]': self.ten_forty_dependent_2_child_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row2[0].c1_16[0]': self.ten_forty_dependent_2_other_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row3[0].c1_17[0]': self.ten_forty_dependent_3_child_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row3[0].c1_18[0]': self.ten_forty_dependent_3_other_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row4[0].c1_19[0]': self.ten_forty_dependent_4_child_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row4[0].c1_20[0]': self.ten_forty_dependent_4_other_credit,
+                                        'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].c1_21[0]': self.ten_forty_lump_sum_method,
+                                        'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].c1_22[0]': self.ten_forty_schedule_d,
+                                        'topmostSubform[0].Page2[0].c2_1[0]': self.ten_forty_8814,
+                                        'topmostSubform[0].Page2[0].c2_2[0]': self.ten_forty_4972,
+                                        'topmostSubform[0].Page2[0].c2_3[0]': self.ten_forty_other_form_check,
+                                        'topmostSubform[0].Page2[0].c2_4[0]': self.ten_forty_8888,
+                                        'topmostSubform[0].Page2[0].c2_5[0]': self.ten_forty_route_checking,
+                                        'topmostSubform[0].Page2[0].c2_5[1]': self.ten_forty_route_savings,
+                                        'topmostSubform[0].Page2[0].c2_6[0]': self.ten_forty_third_party_yes,
+                                        'topmostSubform[0].Page2[0].c2_6[1]': self.ten_forty_third_party_no,
+                                        'topmostSubform[0].Page2[0].c2_7[0]': self.ten_forty_self_employed}
+
+                # Iteration for each page
+                for each_page in pdf:
+                    widgets = each_page.widgets()
+                    for content in widgets:
+                        for field_name, value in ten_forty_checkboxes.items():
+                            if content.field_name == field_name:
+                                if value == "":
+                                    content.field_value = " "
+                                if value.get() == 1:
+                                    content.field_value = True
+                                else:
+                                    content.field_value = value
+                                content.update()
+
+                # Saving the modified PDF
+                pdf.save(output_pdf)
+
+                # Iteration for each page
+                for each_page in pdf:
+                    widgets = each_page.widgets()
+                    for content in widgets:
+                        for field_name, value in {**save_as_1040_field_values_mixing,
+                                                  **save_as_1040_field_values_mixing_2}.items():
+                            if content.field_name == field_name:
+                                if value == "":
+                                    content.field_value = " "
+                                else:
+                                    content.field_value = value
+                                content.update()
+
+                # Saving the modified PDF
+                pdf.save(output_pdf)
+                pdf.close()
+
+            # Input and output PDF filenames
+            input_pdf_file = "default_f1040.pdf"
+            output_pdf_file = os.path.splitext(filename)[0] + ".pdf"
+
+            # Updating of widget values and saving the modified PDF
+            update_widget_values_1040(input_pdf_file, output_pdf_file)
+            print(f"Modified PDF saved as {output_pdf_file}")
+
+    # Browse 1040
+
+    def browse_form_1040(self):
+        """
+           Opens a file explorer to select a pdf file containing tax information.
+           Assigns data accordingly.
+        """
+        filename = filedialog.askopenfilename(initialdir="/", title="Open", filetypes=(("PDF Files", "*.pdf"),))
+        if filename:
+            self.update_input_fields_1040(filename)
+
+    def update_input_fields_1040(self, input_pdf):
+        """
+            Updates entry widgets with field values extracted from a PDF.
+
+            Details:
+                - The code iterates through each page in the PDF.
+                - For each page, it retrieves the widgets (form fields).
+                - It then checks if the field name matches any of the specified entry widgets.
+                - If a match is found and the field value is not empty, it updates the corresponding entry widget
+        """
+        # Opening the input PDF
+        pdf = fitz.open(input_pdf)
+        browse_1040_field_values_mixing = {
+            'topmostSubform[0].Page1[0].f1_04[0]': self.ten_forty_first_name,
+            'topmostSubform[0].Page1[0].f1_05[0]': self.ten_forty_last_name,
+            'topmostSubform[0].Page1[0].f1_07[0]': self.ten_forty_spouse_first,
+            'topmostSubform[0].Page1[0].f1_08[0]': self.ten_forty_spouse_last,
+            'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_10[0]': self.ten_forty_home_address,
+            'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_11[0]': self.ten_forty_apt_no,
+            'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_12[0]': self.ten_forty_city,
+            'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_13[0]': self.ten_forty_state,
+            'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_14[0]': self.ten_forty_zip,
+            'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_15[0]': self.ten_forty_foreign_country,
+            'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_16[0]': self.ten_forty_foreign_province,
+            'topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_17[0]': self.ten_forty_foreign_post_code,
+            'topmostSubform[0].Page1[0].Table_Dependents[0].Row1[0].f1_19[0]': self.ten_forty_dependent_first_1,
+            'topmostSubform[0].Page1[0].Table_Dependents[0].Row2[0].f1_22[0]': self.ten_forty_dependent_first_2,
+            'topmostSubform[0].Page1[0].Table_Dependents[0].Row3[0].f1_25[0]': self.ten_forty_dependent_first_3,
+            'topmostSubform[0].Page1[0].Table_Dependents[0].Row4[0].f1_28[0]': self.ten_forty_dependent_first_4,
+            'topmostSubform[0].Page1[0].f1_31[0]': self.ten_forty_total_w2s,
+            'topmostSubform[0].Page1[0].f1_32[0]': self.ten_forty_household_wages,
+            'topmostSubform[0].Page1[0].f1_33[0]': self.ten_forty_tip_income,
+            'topmostSubform[0].Page1[0].f1_34[0]': self.ten_forty_medicaid_waiver,
+            'topmostSubform[0].Page1[0].f1_35[0]': self.ten_forty_dependent_benefits,
+            'topmostSubform[0].Page1[0].f1_36[0]': self.ten_forty_adoption_benefits,
+            'topmostSubform[0].Page1[0].f1_37[0]': self.ten_forty_8919_wages,
+            'topmostSubform[0].Page1[0].f1_38[0]': self.ten_forty_other_income,
+            'topmostSubform[0].Page1[0].f1_39[0]': self.ten_forty_combat_pay,
+            'topmostSubform[0].Page1[0].f1_40[0]': self.ten_forty_1_ah_sum,
+            'topmostSubform[0].Page1[0].f1_41[0]': self.ten_forty_tax_exempt_interest,
+            'topmostSubform[0].Page1[0].f1_42[0]': self.ten_forty_taxable_interest,
+            'topmostSubform[0].Page1[0].f1_43[0]': self.ten_forty_qualified_dividends,
+            'topmostSubform[0].Page1[0].f1_44[0]': self.ten_forty_ordinary_dividends,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_45[0]': self.ten_forty_ira_distributions,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_46[0]': self.ten_forty_taxable_ira,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_47[0]': self.ten_forty_pensions_annuities,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_48[0]': self.ten_forty_taxable_pensions,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_49[0]': self.ten_forty_social_security,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_50[0]': self.ten_forty_social_taxable,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_51[0]': self.ten_forty_capital_gain,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_52[0]': self.ten_forty_schedule_1,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_53[0]': self.ten_forty_total_income,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_54[0]': self.ten_forty_income_adjustments,
+            'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].f1_55[0]': self.ten_forty_adjusted_income,
+            'topmostSubform[0].Page1[0].f1_56[0]': self.ten_forty_deductions,
+            'topmostSubform[0].Page1[0].f1_57[0]': self.ten_forty_business_deductions,
+            'topmostSubform[0].Page1[0].f1_58[0]': self.ten_forty_total_deductions,
+            'topmostSubform[0].Page1[0].f1_59[0]': self.ten_forty_taxable_income
+        }
+
+        browse_1040_field_values_mixing_2 = {
+            'topmostSubform[0].Page2[0].f2_01[0]': self.ten_forty_other_form_no,
+            'topmostSubform[0].Page2[0].f2_02[0]': self.ten_forty_other_form_total,
+            'topmostSubform[0].Page2[0].f2_03[0]': self.ten_forty_schedule_2,
+            'topmostSubform[0].Page2[0].f2_04[0]': self.ten_forty_add_16_17,
+            'topmostSubform[0].Page2[0].f2_05[0]': self.ten_forty_child_credit,
+            'topmostSubform[0].Page2[0].f2_06[0]': self.ten_forty_schedule_3,
+            'topmostSubform[0].Page2[0].f2_07[0]': self.ten_forty_add_19_20,
+            'topmostSubform[0].Page2[0].f2_08[0]': self.ten_forty_sub_21_18,
+            'topmostSubform[0].Page2[0].f2_09[0]': self.ten_forty_other_taxes,
+            'topmostSubform[0].Page2[0].f2_10[0]': self.ten_forty_total_tax,
+            'topmostSubform[0].Page2[0].f2_11[0]': self.ten_forty_withheld_w2,
+            'topmostSubform[0].Page2[0].f2_12[0]': self.ten_forty_withheld_1099,
+            'topmostSubform[0].Page2[0].f2_13[0]': self.ten_forty_withheld_other,
+            'topmostSubform[0].Page2[0].f2_14[0]': self.ten_forty_withheld_total,
+            'topmostSubform[0].Page2[0].f2_15[0]': self.ten_forty_previous_year,
+            'topmostSubform[0].Page2[0].f2_16[0]': self.ten_forty_eic,
+            'topmostSubform[0].Page2[0].f2_17[0]': self.ten_forty_8812_child_credit,
+            'topmostSubform[0].Page2[0].f2_18[0]': self.ten_forty_8863_opportunity_credit,
+            'topmostSubform[0].Page2[0].f2_20[0]': self.ten_forty_schedule_3_line_15,
+            'topmostSubform[0].Page2[0].f2_21[0]': self.ten_forty_other_payments,
+            'topmostSubform[0].Page2[0].f2_22[0]': self.ten_forty_total_payments,
+            'topmostSubform[0].Page2[0].f2_23[0]': self.ten_forty_overpaid,
+            'topmostSubform[0].Page2[0].f2_28[0]': self.ten_forty_owed,
+            'topmostSubform[0].Page2[0].f2_29[0]': self.ten_forty_penalty
+        }
+
+        ten_forty_checkboxes = {'c1_1[0]': self.ten_forty_presidential_you,
+                                'c1_2[0]': self.ten_forty_presidential_spouse, 'c1_3[0]': self.ten_forty_filing_single,
+                                'c1_3[1]': self.ten_forty_filing_hoh,
+                                'c1_3[2]': self.ten_forty_filing_jointly, 'c1_3[3]': self.ten_forty_filing_separately,
+                                'c1_3[4]': self.ten_forty_filing_qss, 'c1_4[0]': self.ten_forty_digital_assets_yes,
+                                'c1_4[1]': self.ten_forty_digital_assets_no, 'c1_5[0]': self.ten_forty_are_dependent,
+                                'c1_6[0]': self.ten_forty_spouse_dependent, 'c1_7[0]': self.ten_forty_spouse_separate,
+                                'c1_8[0]': self.ten_forty_self_1959, 'c1_9[0]': self.ten_forty_self_blind,
+                                'c1_10[0]': self.ten_forty_spouse_1959, 'c1_11[0]': self.ten_forty_spouse_blind,
+                                'Dependents_ReadOrder[0]': self.ten_forty_many_dependents,
+                                'c1_13[0]': self.ten_forty_dependent_1_child_credit,
+                                'c1_14[0]': self.ten_forty_dependent_1_other_credit,
+                                'c1_15[0]': self.ten_forty_dependent_2_child_credit,
+                                'c1_16[0]': self.ten_forty_dependent_2_other_credit,
+                                'c1_17[0]': self.ten_forty_dependent_3_child_credit,
+                                'c1_18[0]': self.ten_forty_dependent_3_other_credit,
+                                'c1_19[0]': self.ten_forty_dependent_4_child_credit,
+                                'c1_20[0]': self.ten_forty_dependent_4_other_credit,
+                                'c1_21[0]': self.ten_forty_lump_sum_method, 'c1_22[0]': self.ten_forty_schedule_d,
+                                'c2_1[0]': self.ten_forty_8814,
+                                'c2_2[0]': self.ten_forty_4972, 'c2_3[0]': self.ten_forty_other_form_check,
+                                'c2_4[0]': self.ten_forty_8888,
+                                'c2_5[0]': self.ten_forty_route_checking,
+                                'c2_5[1]': self.ten_forty_route_savings,
+                                'c2_6[0]': self.ten_forty_third_party_yes,
+                                'c2_6[1]': self.ten_forty_third_party_no,
+                                'c2_7[0]': self.ten_forty_self_employed}
+
+        def extract_checkbox_values(pdf):
+            """
+                Extracts checkbox values from a PDF form.
+
+                Args:
+                    pdf (str): Path to the input PDF file.
+
+                Returns:
+                    dict: A dictionary containing checkbox field names as keys and boolean values
+                          indicating whether the checkbox is checked (True) or not (False).
+            """
+            pdf_reader = PdfReader(pdf)
+            pdf_fields = pdf_reader.get_fields()
+
+            # dictionary creation
+            checkbox_values = {}
+
+            # Extract checkbox values
+            for field_name, field_value in pdf_fields.items():
+                if field_value.get("/FT") == "/Btn":
+                    # retrieving the field name
+                    clean_field_name = field_name.lstrip("/")
+                    # Checking if the checkbox is checked
+                    is_checked = field_value.get("/V") == "/1"
+                    is_checked2 = field_value.get("/V") == "/2"
+                    is_checked3 = field_value.get("/V") == "/3"
+                    is_checked4 = field_value.get("/V") == "/4"
+                    is_checked5 = field_value.get("/V") == "/5"
+                    checkbox_values[
+                        clean_field_name] = is_checked or is_checked2 or is_checked3 or is_checked4 or is_checked5
+
+            return checkbox_values
+
+        checkbox_values = extract_checkbox_values(input_pdf)
+
+        for checkbox_name, entry_widget in ten_forty_checkboxes.items():
+            if checkbox_name in checkbox_values:
+                if checkbox_values[checkbox_name]:
+                    # select entry widget
+                    entry_widget.select()
+
+                else:
+                    # deselect entry widget
+                    entry_widget.deselect()
+
+        for each_page in pdf:
+            widgets = each_page.widgets()
+            for content in widgets:
+                for field_name, entry_widget in {**browse_1040_field_values_mixing,
+                                                 **browse_1040_field_values_mixing_2}.items():
+                    if content.field_name == field_name:
+
+                        value = content.field_value.strip()
+                        if value != "":
+                            entry_widget.delete(0, tk.END)  # Clear text
+                            entry_widget.insert(0, value)  # Set value
         pdf.close()
 
 #######################################################################################################################
