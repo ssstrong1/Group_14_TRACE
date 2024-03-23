@@ -8,8 +8,6 @@ dict_w2 = {"WAGES_TIPS_OTHER_COMP": 0000, "FEDERAL_INCOME_TAX_WITHHELD": 0000,
            "SOCIAL_SECURITY_WAGES": 0000, "SOCIAL_SECURITY_TAX_WITHHELD": 0000,
            "MEDICARE_WAGES_AND_TIPS": 0000, "MEDICARE_TAX_WITHHELD": 0000,
            "DEPENDANT_CARE_BENEFITS": 0000,
-           "STATE_WAGES_TIPS_ETC": 0000, "STATE_INCOME_TAX": 0000,
-           "LOCAL_WAGES_TIPS_ETC": 0000, "LOCAL_INCOME_TAX": 0000,
            "STATES":
            [{"STATE": "STATE01", "STATE_INCOME": 0000, "STATE_TAX_WITHHELD": 0000},
             {"STATE": "STATE02", "STATE_INCOME": 0000, "STATE_TAX_WITHHELD": 0000}]}
@@ -131,17 +129,24 @@ class Form1040:
 
         # Loop through list of forms
         for form in self.forms_w2:
-            break
-        pass
+            total_income += form["WAGES_TIPS_OTHER_COMP"]
+            total_withheld += form["FEDERAL_INCOME_TAX_WITHHELD"]
+
+        # Assign total values to appropriate locations
+        self.income_w2 = total_income
+        self.tax_withheld_w2 = total_withheld
 
     def total_forms_1099(self):
         """Total income and taxes from Form(s) 1099"""
-        total_income = 00.00
-        total_withheld = 00.00
+        self.ordinary_dividends += self.form_1099_div["ORDINARY_DIVIDENDS"]
+        self.qualified_dividends += self.form_1099_div["QUALIFIED_DIVIDENDS"]
 
-        total_income += self.form_1099_other_income
-        total_withheld += self.form_1099_other_taxes
-        pass
+        # Total tax withheld from all states
+        for state in self.form_1099_div["STATES"]:
+            self.tax_withheld_1099 += state["STATE_TAX_WITHHELD"]
+
+        # Add tax from other 1099 forms
+        self.tax_withheld_1099 += self.form_1099_other_taxes
 
     def set_filing_status(self, filing_status):
         """
@@ -155,7 +160,16 @@ class Form1040:
         :param filing_status: string value representing the user's filing status
         :return: N/A
         """
-        pass
+        if filing_status == "Single":
+            self.filing_status = 0
+        elif filing_status == "Married Filing Jointly":
+            self.filing_status = 1
+        elif filing_status == "Married Filing Separately":
+            self.filing_status = 2
+        elif filing_status == "Head of Household":
+            self.filing_status = 3
+        elif filing_status == "Qualifying Surviving Spouse":
+            self.filing_status = 4
 
     def set_has_digital_assets(self, has_digital_assets):
         """
@@ -475,6 +489,8 @@ class Form1040:
 
     def calc_standard_deduction(self):
         """
+        SEE IRS 1040 INSTRUCTIONS PAGE 34 FOR MORE INFORMATION
+
         Determine the user's standard deduction value
         Required fields:
             Filing Status
@@ -487,7 +503,100 @@ class Form1040:
 
         :return: N/A
         """
-        pass
+        if self.is_dependent or self.spouse_is_dependent == True:   # If the user or their spouse can be claimed
+            checks = 0
+            if self.user_age >= 65:
+                checks += 1
+            if self.user_is_blind:
+                checks += 1
+            if self.spouse_age >= 65:
+                checks += 1
+            if self.spouse_is_blind:
+                checks += 1
+
+            if self.total_income <= 850:    # If the users earned income is less than $850
+                total = 1250
+            else:   # If the users earned income is greater than $850
+                total = self.total_income + 400
+                if self.filing_status == 0 or self.filing_status == 2:  # If filing status is single or married filing separately
+                    if total < 13850:
+                        pass    # Do nothing
+                    else:
+                        total = 13850
+                elif self.filing_status == 1:   # If filing status is married filing jointly
+                    if total < 27700:
+                        pass    # Do nothing
+                    else:
+                        total = 27700
+                else:   # If filing status is head of household
+                    if total < 20800:
+                        pass    # Do nothing
+                    else:
+                        total = 20800
+
+            if self.user_age < 65 and not self.user_is_blind and self.spouse_age < 65 and not self.spouse_is_blind: # If the user and spouse are under 65 and not blind
+                self.standard_deduction = total
+            else:   # If the user or spouse are over 65 or blind
+                if self.filing_status == 0 or self.filing_status == 3:  # If filing status is single of head of house
+                    self.standard_deduction = 1850 * checks + total
+                else:
+                    self.standard_deduction = 1500 * checks + total
+        else:   # If the user AND their spouse cannot be claimed as dependents
+            checks = 0
+            if self.user_age >= 65:
+                checks += 1
+            if self.user_is_blind:
+                checks += 1
+            if self.spouse_age >= 65:
+                checks += 1
+            if self.spouse_is_blind:
+                checks += 1
+
+            if checks > 0:    # For seniors or the blind
+                if self.filing_status == 0:  # If filing status is single
+                    if checks == 1:
+                        self.standard_deduction = 15700
+                    else:
+                        self.standard_deduction = 17550
+                elif self.filing_status == 1:  # If filing status is married filing jointly
+                    if checks == 1:
+                        self.standard_deduction = 29200
+                    elif checks == 2:
+                        self.standard_deduction = 30700
+                    elif checks == 3:
+                        self.standard_deduction = 32200
+                    else:
+                        self.standard_deduction = 33700
+                elif self.filing_status == 2:  # If filing status is married filing separately
+                    if checks == 1:
+                        self.standard_deduction = 15350
+                    elif checks == 2:
+                        self.standard_deduction = 16850
+                    elif checks == 3:
+                        self.standard_deduction = 18350
+                    else:
+                        self.standard_deduction = 19850
+                elif self.filing_status == 3:  # If filing status is head of household
+                    if checks == 1:
+                        self.standard_deduction = 22650
+                    else:
+                        self.standard_deduction = 24500
+                else:  # If filing status is qualifying surviving spouse
+                    if checks == 1:
+                        self.standard_deduction = 29200
+                    else:
+                        self.standard_deduction = 30700
+            else:   # For anyone under 65 AND NOT blind
+                if self.filing_status == 0:         # Single
+                    self.standard_deduction = 13850
+                elif self.filing_status == 1:       # Married Filing Jointly
+                    self.standard_deduction = 27700
+                elif self.filing_status == 2:       # Married Filing Separately
+                    self.standard_deduction = 13850
+                elif self.filing_status == 3:       # Head of Household
+                    self.standard_deduction = 20800
+                else:                               # Qualifying Surviving Spouse
+                    self.standard_deduction = 27700
 
     def set_qualified_business_income_deduction(self, dollars):
         """
