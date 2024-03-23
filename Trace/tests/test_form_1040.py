@@ -15,6 +15,7 @@ def setup_form_w2():
     """
     pass
 
+
 @pytest.fixture
 def setup_form_1099_div():
     """
@@ -22,6 +23,7 @@ def setup_form_1099_div():
     :return: Form 1099-DIV test data
     """
     pass
+
 
 @pytest.fixture
 def setup_form_1040(setup_form_w2, setup_form_1099_div):
