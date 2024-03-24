@@ -8,6 +8,9 @@ from tkinter import filedialog
 from tkinter import *
 import tkinter as tk
 from PIL import ImageTk, Image
+import create_tables_1
+
+y = create_tables_1
 
 import ctypes
 
@@ -488,6 +491,11 @@ class UserInterface:
         menubar.add_cascade(label="Settings", menu=help_menu)
 
         self.new_decision = "w2"
+
+
+
+        self.cursor = y.user_cursor
+        self.user_connect = y.user_connection
 
         ###############################
 
@@ -1228,19 +1236,16 @@ class UserInterface:
                                            self.ten_ninety_nine_state, self.ten_ninety_nine_state_id_number,
                                            self.ten_ninety_nine_state_tax_withheld]
 
-        self.w_2_placements = [self.twenty_four_img, self.blocker_img,
-                               self.employee_address_etc, self.employee_suffix,
-                               self.employee_last_name, self.employee_name_i,
-                               self.cn_entry,
-                               self.employer_name_etc, self.other_field, self.locality_name,
-                               self.state_field, self.employers_state_id, self.state_wage_tips,
-                               self.state_income_tax, self.local_wage_tips, self.local_income_tax,
-                               self.twelve_a, self.twelve_b, self.twelve_c, self.twelve_d,
-                               self.dependent_care_benefits, self.allocated_tips, self.medicare_tax_withheld,
-                               self.social_security_tax_withheld, self.fed_income_tax_withheld,
-                               self.non_qualified_plans, self.social_security_tips,
-                               self.medicare_wages, self.social_wages, self.wages_tips_c, self.ein_entry,
-                               self.essn_entry, self.w_2_label_for_img]
+        self.w_2_placements = [self.twenty_four_img, self.blocker_img, self.essn_entry, self.ein_entry,
+                               self.employer_name_etc, self.cn_entry, self.employee_name_i, self.employee_last_name,
+                               self.employee_suffix, self.employee_address_etc,
+                               self.state_field, self.employers_state_id, self.state_wage_tips, self.state_income_tax,
+                               self.local_wage_tips, self.local_income_tax, self.locality_name, self.wages_tips_c,
+                               self.social_wages, self.medicare_wages, self.social_security_tips,
+                               self.non_qualified_plans, self.other_field, self.fed_income_tax_withheld,
+                               self.social_security_tax_withheld, self.medicare_tax_withheld, self.allocated_tips,
+                               self.dependent_care_benefits, self.twelve_a, self.twelve_b, self.twelve_c, self.twelve_d,
+                               self.w_2_label_for_img]
 
         self.ten_forty_placements = [self.ten_forty_label_for_pg_1, self.ten_forty_label_for_pg_2,
                                      self.ten_forty_scrolling_frame,
@@ -1324,10 +1329,74 @@ class UserInterface:
         # Buttons
 
         Button(self.app, text="Calculate").place(relx=.5, rely=0.965, anchor="center")
-        Button(self.app, text="Save Session").place(relx=.4, rely=0.965, anchor="center")
-        Button(self.app, text="Load Session").place(relx=.6, rely=0.965, anchor="center")
+        Button(self.app, text="Save Session", command=self.save_session).place(relx=.4, rely=0.965, anchor="center")
+        Button(self.app, text="Load Session", command=self.load_session).place(relx=.6, rely=0.965, anchor="center")
 
         self.app.protocol("WM_DELETE_WINDOW", self.exit_program)
+
+        self.w_2_fields_save_load = self.w_2_placements.copy()
+        self.w_2_fields_save_load.pop(self.w_2_placements.index(self.w_2_label_for_img))
+        self.w_2_fields_save_load.pop(self.w_2_placements.index(self.blocker_img))
+        self.w_2_fields_save_load.pop(self.w_2_placements.index(self.twenty_four_img))
+
+        self.ten_ninety_nine_fields_save_load = self.ten_ninety_nine_placements.copy()
+        self.ten_ninety_nine_fields_save_load.pop(self.ten_ninety_nine_placements.index(self.ten_ninety_nine_label_for_img))
+
+        self.ten_forty_fields_save_load = self.ten_forty_placements.copy()
+        # Create a list of indexes to remove
+        indexes_to_remove = [
+            self.ten_forty_placements.index(self.ten_forty_self_employed),
+            self.ten_forty_placements.index(self.ten_forty_third_party_no),
+            self.ten_forty_placements.index(self.ten_forty_third_party_yes),
+            self.ten_forty_placements.index(self.ten_forty_route_savings),
+            self.ten_forty_placements.index(self.ten_forty_route_checking),
+            self.ten_forty_placements.index(self.ten_forty_8888),
+            self.ten_forty_placements.index(self.ten_forty_other_form_check),
+            self.ten_forty_placements.index(self.ten_forty_4972),
+            self.ten_forty_placements.index(self.ten_forty_8814),
+            self.ten_forty_placements.index(self.ten_forty_lump_sum_method),
+            self.ten_forty_placements.index(self.ten_forty_schedule_d),
+            self.ten_forty_placements.index(self.ten_forty_dependent_4_other_credit),
+            self.ten_forty_placements.index(self.ten_forty_dependent_4_child_credit),
+            self.ten_forty_placements.index(self.ten_forty_dependent_3_other_credit),
+            self.ten_forty_placements.index(self.ten_forty_dependent_3_child_credit),
+            self.ten_forty_placements.index(self.ten_forty_dependent_2_other_credit),
+            self.ten_forty_placements.index(self.ten_forty_dependent_2_child_credit),
+            self.ten_forty_placements.index(self.ten_forty_dependent_1_other_credit),
+            self.ten_forty_placements.index(self.ten_forty_dependent_1_child_credit),
+            self.ten_forty_placements.index(self.ten_forty_dependent_last_4),
+            self.ten_forty_placements.index(self.ten_forty_dependent_last_3),
+            self.ten_forty_placements.index(self.ten_forty_dependent_last_2),
+            self.ten_forty_placements.index(self.ten_forty_dependent_last_1),
+            self.ten_forty_placements.index(self.ten_forty_many_dependents),
+            self.ten_forty_placements.index(self.ten_forty_spouse_blind),
+            self.ten_forty_placements.index(self.ten_forty_spouse_1959),
+            self.ten_forty_placements.index(self.ten_forty_self_blind),
+            self.ten_forty_placements.index(self.ten_forty_self_1959),
+            self.ten_forty_placements.index(self.ten_forty_spouse_separate),
+            self.ten_forty_placements.index(self.ten_forty_spouse_dependent),
+            self.ten_forty_placements.index(self.ten_forty_are_dependent),
+            self.ten_forty_placements.index(self.ten_forty_digital_assets_no),
+            self.ten_forty_placements.index(self.ten_forty_digital_assets_yes),
+            self.ten_forty_placements.index(self.ten_forty_filing_qss),
+            self.ten_forty_placements.index(self.ten_forty_filing_hoh),
+            self.ten_forty_placements.index(self.ten_forty_filing_separately),
+            self.ten_forty_placements.index(self.ten_forty_filing_jointly),
+            self.ten_forty_placements.index(self.ten_forty_filing_single),
+            self.ten_forty_placements.index(self.ten_forty_presidential_spouse),
+            self.ten_forty_placements.index(self.ten_forty_presidential_you),
+            self.ten_forty_placements.index(self.ten_forty_scrolling_frame),
+            self.ten_forty_placements.index(self.ten_forty_label_for_pg_2),
+            self.ten_forty_placements.index(self.ten_forty_label_for_pg_1)
+
+        ]
+
+        # Remove the elements at the specified indexes from self.ten_forty_fields_save_load
+        for index in sorted(indexes_to_remove, reverse=True):
+            self.ten_forty_fields_save_load.pop(index)
+
+        # Combine all three lists into one list
+        self.all_fields = self.w_2_fields_save_load + self.ten_forty_fields_save_load
 
         self.app.mainloop()
 
@@ -3005,4 +3074,34 @@ class UserInterface:
                             entry_widget.insert(0, value)  # Set value
         pdf.close()
 
-#######################################################################################################################
+    #######################################################################################################################
+    def save_session(self):
+
+        # Insert data into the database
+        self.cursor.execute('INSERT INTO jk VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '
+                            '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '
+                            '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '
+                            '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '
+                            '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '
+                            '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                            [field.get() for field in self.all_fields])
+        self.user_connect.commit()
+
+        print("Data saved to database.")
+        messagebox.showinfo('Success', 'Saved Session')
+
+        pass
+
+    def load_session(self):
+
+        # Print all data in the database (for demonstration purposes)
+        self.cursor.execute("SELECT * FROM jk")
+        all_data = self.cursor.fetchall()
+        for i, row in enumerate(all_data):
+            for j, field in enumerate(self.all_fields):
+                field.delete(0, "end")  # Clear the existing content
+                field.insert(0, row[j])  # Insert the value from the database
+
+        print("Data loaded from the database.")
+        messagebox.showinfo('Success', 'Loaded Session')
+        pass
