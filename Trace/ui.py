@@ -508,23 +508,8 @@ class UserInterface:
 
         # Payer name, street address, city/town, state/province, country, zip/postal, phone no.
 
-        self.ten_ninety_nine_payer_name = ctk.CTkEntry(master=self.app, placeholder_text="Name", width=250,
+        self.ten_ninety_nine_payer_info = ctk.CTkEntry(master=self.app, placeholder_text="Payer Name, Address, Phone", width=525, height=125,
                                                        text_color="#000000", bg_color="white", fg_color="transparent")
-        self.ten_ninety_nine_payer_address = ctk.CTkEntry(master=self.app, placeholder_text="Address", width=250,
-                                                          text_color="#000000", bg_color="white",
-                                                          fg_color="transparent")
-        self.ten_ninety_nine_payer_city = ctk.CTkEntry(master=self.app, placeholder_text="City or Town", width=250,
-                                                       text_color="#000000", bg_color="white", fg_color="transparent")
-        self.ten_ninety_nine_payer_state = ctk.CTkEntry(master=self.app, placeholder_text="State or Province",
-                                                        width=250, text_color="#000000", bg_color="white",
-                                                        fg_color="transparent")
-        self.ten_ninety_nine_payer_country = ctk.CTkEntry(master=self.app, placeholder_text="Country", width=250,
-                                                          text_color="#000000", bg_color="white",
-                                                          fg_color="transparent")
-        self.ten_ninety_nine_payer_ZIP = ctk.CTkEntry(master=self.app, placeholder_text="ZIP or Postal Code", width=250,
-                                                      text_color="#000000", bg_color="white", fg_color="transparent")
-        self.ten_ninety_nine_payer_phone = ctk.CTkEntry(master=self.app, placeholder_text="Phone #", width=250,
-                                                        text_color="#000000", bg_color="white", fg_color="transparent")
 
         # Payer TIN
 
@@ -551,18 +536,10 @@ class UserInterface:
 
         # Recipient Location Info
 
-        self.ten_ninety_nine_recipient_city = ctk.CTkEntry(master=self.app, placeholder_text="City or Town", width=250,
-                                                           text_color="#000000", bg_color="white",
-                                                           fg_color="transparent")
-        self.ten_ninety_nine_recipient_state = ctk.CTkEntry(master=self.app, placeholder_text="State or Province",
-                                                            width=250, text_color="#000000", bg_color="white",
-                                                            fg_color="transparent")
-        self.ten_ninety_nine_recipient_country = ctk.CTkEntry(master=self.app, placeholder_text="Country", width=250,
-                                                              text_color="#000000", bg_color="white",
-                                                              fg_color="transparent")
-        self.ten_ninety_nine_recipient_ZIP = ctk.CTkEntry(master=self.app, placeholder_text="ZIP or Postal Code",
-                                                          width=250, text_color="#000000", bg_color="white",
-                                                          fg_color="transparent")
+        self.ten_ninety_nine_recipient_city_etc = ctk.CTkEntry(master=self.app,
+                                                               placeholder_text="City, State, Country, ZIP", width=525,
+                                                               height=45, text_color="#000000", bg_color="white",
+                                                               fg_color="transparent")
 
         # Total Ordinary Dividends
 
@@ -1204,20 +1181,15 @@ class UserInterface:
                                               width=125, height=32, text_color="#000000", bg_color="white",
                                               fg_color="transparent")
         self.submit_and_erase = Button(self.app, text="Submit", width=30, command=self.submit_and_clear)
+        self.erase_fields = Button(self.app, text="Clear", width=30, command=self.new_session)
 
         # End Input Fields
 
-        self.ten_ninety_nine_placements = [self.ten_ninety_nine_label_for_img, self.ten_ninety_nine_payer_name,
-                                           self.ten_ninety_nine_payer_address,
-                                           self.ten_ninety_nine_payer_city, self.ten_ninety_nine_payer_state,
-                                           self.ten_ninety_nine_payer_country,
-                                           self.ten_ninety_nine_payer_ZIP, self.ten_ninety_nine_payer_phone,
+        self.ten_ninety_nine_placements = [self.ten_ninety_nine_label_for_img, self.ten_ninety_nine_payer_info,
                                            self.ten_ninety_nine_payer_tin,
                                            self.ten_ninety_nine_recipient_tin, self.ten_ninety_nine_recipient_name,
                                            self.ten_ninety_nine_recipient_address,
-                                           self.ten_ninety_nine_recipient_city, self.ten_ninety_nine_recipient_state,
-                                           self.ten_ninety_nine_recipient_country,
-                                           self.ten_ninety_nine_recipient_ZIP, self.ten_ninety_nine_facta_filing,
+                                           self.ten_ninety_nine_recipient_city_etc, self.ten_ninety_nine_facta_filing,
                                            self.ten_ninety_nine_account_number,
                                            self.ten_ninety_nine_ordinary_dividends,
                                            self.ten_ninety_nine_qualified_dividends,
@@ -1443,6 +1415,7 @@ class UserInterface:
         # Employee SSN
 
         self.submit_and_erase.place(relx=.8, rely=0.75, anchor="center")
+        self.erase_fields.place(relx=.8, rely=.79, anchor="center")
 
         self.essn_entry.place(relx=.46, rely=0.123, anchor="e")
 
@@ -1596,13 +1569,7 @@ class UserInterface:
 
         self.submit_and_erase.place(relx=.8, rely=0.75, anchor="center")
 
-        self.ten_ninety_nine_payer_name.place(relx=.294, rely=0.156, anchor="e")
-        self.ten_ninety_nine_payer_address.place(relx=.475, rely=0.156, anchor="e")
-        self.ten_ninety_nine_payer_city.place(relx=.294, rely=0.181, anchor="e")
-        self.ten_ninety_nine_payer_state.place(relx=.475, rely=0.181, anchor="e")
-        self.ten_ninety_nine_payer_country.place(relx=.294, rely=0.204, anchor="e")
-        self.ten_ninety_nine_payer_ZIP.place(relx=.475, rely=0.204, anchor="e")
-        self.ten_ninety_nine_payer_phone.place(relx=.294, rely=0.228, anchor="e")
+        self.ten_ninety_nine_payer_info.place(relx=.480, rely=0.205, anchor="e")
 
         self.ten_ninety_nine_payer_tin.place(relx=.294, rely=0.286, anchor="e")
         self.ten_ninety_nine_recipient_tin.place(relx=.475, rely=0.286, anchor="e")
@@ -1611,10 +1578,7 @@ class UserInterface:
 
         self.ten_ninety_nine_recipient_address.place(relx=.466, rely=0.411, anchor="e")
 
-        self.ten_ninety_nine_recipient_city.place(relx=.294, rely=0.458, anchor="e")
-        self.ten_ninety_nine_recipient_state.place(relx=.475, rely=0.458, anchor="e")
-        self.ten_ninety_nine_recipient_country.place(relx=0.294, rely=0.480, anchor="e")
-        self.ten_ninety_nine_recipient_ZIP.place(relx=0.475, rely=0.480, anchor="e")
+        self.ten_ninety_nine_recipient_city_etc.place(relx=.478, rely=0.471, anchor="e")
 
         self.ten_ninety_nine_facta_filing.place(relx=0.453, rely=0.531, anchor="e")
 
@@ -1814,17 +1778,13 @@ class UserInterface:
                       self.medicare_wages, self.social_wages, self.wages_tips_c, self.ein_entry,
                       self.essn_entry]
 
-        ten_ninety_nine_fields = [self.ten_ninety_nine_payer_name,
-                                  self.ten_ninety_nine_payer_address,
-                                  self.ten_ninety_nine_payer_city, self.ten_ninety_nine_payer_state,
-                                  self.ten_ninety_nine_payer_country,
-                                  self.ten_ninety_nine_payer_ZIP, self.ten_ninety_nine_payer_phone,
+        ten_ninety_nine_fields = [self.ten_ninety_nine_payer_info,
                                   self.ten_ninety_nine_payer_tin,
                                   self.ten_ninety_nine_recipient_tin, self.ten_ninety_nine_recipient_name,
                                   self.ten_ninety_nine_recipient_address,
-                                  self.ten_ninety_nine_recipient_city, self.ten_ninety_nine_recipient_state,
-                                  self.ten_ninety_nine_recipient_country,
-                                  self.ten_ninety_nine_recipient_ZIP,
+                                  self.ten_ninety_nine_recipient_city_etc, self.DELETE_1,
+                                  self.DELETE_2,
+                                  self.DELETE_3,
                                   self.ten_ninety_nine_account_number,
                                   self.ten_ninety_nine_ordinary_dividends,
                                   self.ten_ninety_nine_qualified_dividends,
@@ -2395,12 +2355,12 @@ class UserInterface:
                 # Opening the input PDF
                 pdf = fitz.open(input_pdf)
                 save_as_1099_field_values_mixing = {
-                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_2[0]': str(self.ten_ninety_nine_payer_name.get()),
+                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_2[0]': str(self.ten_ninety_nine_payer_info.get()),
                     'topmostSubform[0].Copy1[0].LeftCol[0].f2_3[0]': str(self.ten_ninety_nine_payer_tin.get()),
                     'topmostSubform[0].Copy1[0].LeftCol[0].f2_4[0]': str(self.ten_ninety_nine_recipient_tin.get()),
                     'topmostSubform[0].Copy1[0].LeftCol[0].f2_5[0]': str(self.ten_ninety_nine_recipient_name.get()),
                     'topmostSubform[0].Copy1[0].LeftCol[0].f2_6[0]': str(self.ten_ninety_nine_recipient_address.get()),
-                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city.get()),
+                    'topmostSubform[0].Copy1[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city_etc.get()),
                     'topmostSubform[0].Copy1[0].LeftCol[0].f2_8[0]': str(self.ten_ninety_nine_account_number.get()),
                     'topmostSubform[0].Copy1[0].RghtCol[0].f2_9[0]': str(self.ten_ninety_nine_ordinary_dividends.get()),
                     'topmostSubform[0].Copy1[0].RghtCol[0].f2_10[0]': str(
@@ -2442,12 +2402,12 @@ class UserInterface:
                 }
 
                 save_as_1099_field_values_mixing_2 = {
-                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_2[0]': str(self.ten_ninety_nine_payer_name.get()),
+                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_2[0]': str(self.ten_ninety_nine_payer_info.get()),
                     'topmostSubform[0].CopyB[0].LeftCol[0].f2_3[0]': str(self.ten_ninety_nine_payer_tin.get()),
                     'topmostSubform[0].CopyB[0].LeftCol[0].f2_4[0]': str(self.ten_ninety_nine_recipient_tin.get()),
                     'topmostSubform[0].CopyB[0].LeftCol[0].f2_5[0]': str(self.ten_ninety_nine_recipient_name.get()),
                     'topmostSubform[0].CopyB[0].LeftCol[0].f2_6[0]': str(self.ten_ninety_nine_recipient_address.get()),
-                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city.get()),
+                    'topmostSubform[0].CopyB[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city_etc.get()),
                     'topmostSubform[0].CopyB[0].LeftCol[0].f2_8[0]': str(self.ten_ninety_nine_account_number.get()),
                     'topmostSubform[0].CopyB[0].RghtCol[0].f2_9[0]': str(self.ten_ninety_nine_ordinary_dividends.get()),
                     'topmostSubform[0].CopyB[0].RghtCol[0].f2_10[0]': str(
@@ -2489,12 +2449,12 @@ class UserInterface:
                 }
 
                 save_as_1099_field_values_mixing_3 = {
-                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_2[0]': str(self.ten_ninety_nine_payer_name.get()),
+                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_2[0]': str(self.ten_ninety_nine_payer_info.get()),
                     'topmostSubform[0].Copy2[0].LeftCol[0].f2_3[0]': str(self.ten_ninety_nine_payer_tin.get()),
                     'topmostSubform[0].Copy2[0].LeftCol[0].f2_4[0]': str(self.ten_ninety_nine_recipient_tin.get()),
                     'topmostSubform[0].Copy2[0].LeftCol[0].f2_5[0]': str(self.ten_ninety_nine_recipient_name.get()),
                     'topmostSubform[0].Copy2[0].LeftCol[0].f2_6[0]': str(self.ten_ninety_nine_recipient_address.get()),
-                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city.get()),
+                    'topmostSubform[0].Copy2[0].LeftCol[0].f2_7[0]': str(self.ten_ninety_nine_recipient_city_etc.get()),
                     'topmostSubform[0].Copy2[0].LeftCol[0].f2_8[0]': str(self.ten_ninety_nine_account_number.get()),
                     'topmostSubform[0].Copy2[0].RghtCol[0].f2_9[0]': str(self.ten_ninety_nine_ordinary_dividends.get()),
                     'topmostSubform[0].Copy2[0].RghtCol[0].f2_10[0]': str(
@@ -2585,12 +2545,12 @@ class UserInterface:
         # Opening the input PDF
         pdf = fitz.open(input_pdf)
         browse_1099_field_values_mixing = {
-            'topmostSubform[0].Copy1[0].LeftCol[0].f2_2[0]': self.ten_ninety_nine_payer_name,
+            'topmostSubform[0].Copy1[0].LeftCol[0].f2_2[0]': self.ten_ninety_nine_payer_info,
             'topmostSubform[0].Copy1[0].LeftCol[0].f2_3[0]': self.ten_ninety_nine_payer_tin,
             'topmostSubform[0].Copy1[0].LeftCol[0].f2_4[0]': self.ten_ninety_nine_recipient_tin,
             'topmostSubform[0].Copy1[0].LeftCol[0].f2_5[0]': self.ten_ninety_nine_recipient_name,
             'topmostSubform[0].Copy1[0].LeftCol[0].f2_6[0]': self.ten_ninety_nine_recipient_address,
-            'topmostSubform[0].Copy1[0].LeftCol[0].f2_7[0]': self.ten_ninety_nine_recipient_city,
+            'topmostSubform[0].Copy1[0].LeftCol[0].f2_7[0]': self.ten_ninety_nine_recipient_city_etc,
             'topmostSubform[0].Copy1[0].LeftCol[0].f2_8[0]': self.ten_ninety_nine_account_number,
             'topmostSubform[0].Copy1[0].RghtCol[0].f2_9[0]': self.ten_ninety_nine_ordinary_dividends,
             'topmostSubform[0].Copy1[0].RghtCol[0].f2_10[0]': self.ten_ninety_nine_qualified_dividends,
@@ -2616,12 +2576,12 @@ class UserInterface:
         }
 
         browse_1099_field_values_mixing_2 = {
-            'topmostSubform[0].CopyB[0].LeftCol[0].f2_2[0]': self.ten_ninety_nine_payer_name,
+            'topmostSubform[0].CopyB[0].LeftCol[0].f2_2[0]': self.ten_ninety_nine_payer_info,
             'topmostSubform[0].CopyB[0].LeftCol[0].f2_3[0]': self.ten_ninety_nine_payer_tin,
             'topmostSubform[0].CopyB[0].LeftCol[0].f2_4[0]': self.ten_ninety_nine_recipient_tin,
             'topmostSubform[0].CopyB[0].LeftCol[0].f2_5[0]': self.ten_ninety_nine_recipient_name,
             'topmostSubform[0].CopyB[0].LeftCol[0].f2_6[0]': self.ten_ninety_nine_recipient_address,
-            'topmostSubform[0].CopyB[0].LeftCol[0].f2_7[0]': self.ten_ninety_nine_recipient_city,
+            'topmostSubform[0].CopyB[0].LeftCol[0].f2_7[0]': self.ten_ninety_nine_recipient_city_etc,
             'topmostSubform[0].CopyB[0].LeftCol[0].f2_8[0]': self.ten_ninety_nine_account_number,
             'topmostSubform[0].CopyB[0].RghtCol[0].f2_9[0]': self.ten_ninety_nine_ordinary_dividends,
             'topmostSubform[0].CopyB[0].RghtCol[0].f2_10[0]': self.ten_ninety_nine_qualified_dividends,
@@ -2647,12 +2607,12 @@ class UserInterface:
         }
 
         browse_1099_field_values_mixing_3 = {
-            'topmostSubform[0].Copy2[0].LeftCol[0].f2_2[0]': self.ten_ninety_nine_payer_name,
+            'topmostSubform[0].Copy2[0].LeftCol[0].f2_2[0]': self.ten_ninety_nine_payer_info,
             'topmostSubform[0].Copy2[0].LeftCol[0].f2_3[0]': self.ten_ninety_nine_payer_tin,
             'topmostSubform[0].Copy2[0].LeftCol[0].f2_4[0]': self.ten_ninety_nine_recipient_tin,
             'topmostSubform[0].Copy2[0].LeftCol[0].f2_5[0]': self.ten_ninety_nine_recipient_name,
             'topmostSubform[0].Copy2[0].LeftCol[0].f2_6[0]': self.ten_ninety_nine_recipient_address,
-            'topmostSubform[0].Copy2[0].LeftCol[0].f2_7[0]': self.ten_ninety_nine_recipient_city,
+            'topmostSubform[0].Copy2[0].LeftCol[0].f2_7[0]': self.ten_ninety_nine_recipient_city_etc,
             'topmostSubform[0].Copy2[0].LeftCol[0].f2_8[0]': self.ten_ninety_nine_account_number,
             'topmostSubform[0].Copy2[0].RghtCol[0].f2_9[0]': self.ten_ninety_nine_ordinary_dividends,
             'topmostSubform[0].Copy2[0].RghtCol[0].f2_10[0]': self.ten_ninety_nine_qualified_dividends,
