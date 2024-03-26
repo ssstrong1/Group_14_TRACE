@@ -1181,7 +1181,6 @@ class UserInterface:
                                               width=125, height=32, text_color="#000000", bg_color="white",
                                               fg_color="transparent")
         self.submit_and_erase = Button(self.app, text="Submit", width=30, command=self.submit_and_clear)
-        self.erase_fields = Button(self.app, text="Clear", width=30, command=self.new_session)
 
         # End Input Fields
 
@@ -1415,7 +1414,6 @@ class UserInterface:
         # Employee SSN
 
         self.submit_and_erase.place(relx=.8, rely=0.75, anchor="center")
-        self.erase_fields.place(relx=.8, rely=.79, anchor="center")
 
         self.essn_entry.place(relx=.46, rely=0.123, anchor="e")
 
@@ -1782,9 +1780,7 @@ class UserInterface:
                                   self.ten_ninety_nine_payer_tin,
                                   self.ten_ninety_nine_recipient_tin, self.ten_ninety_nine_recipient_name,
                                   self.ten_ninety_nine_recipient_address,
-                                  self.ten_ninety_nine_recipient_city_etc, self.DELETE_1,
-                                  self.DELETE_2,
-                                  self.DELETE_3,
+                                  self.ten_ninety_nine_recipient_city_etc,
                                   self.ten_ninety_nine_account_number,
                                   self.ten_ninety_nine_ordinary_dividends,
                                   self.ten_ninety_nine_qualified_dividends,
