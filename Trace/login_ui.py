@@ -143,7 +143,7 @@ class LoginInterface:
             else:
                 user_encoded_password = password.encode('utf-8')
                 user_hashed_password = bcrypt.hashpw(user_encoded_password, bcrypt.gensalt())
-                create_tables_1.user_cursor.execute('INSERT INTO users VALUES (?, ?)', [username, user_hashed_password])
+                create_tables_1.user_cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', [username, user_hashed_password])
                 create_tables_1.user_connection.commit()
                 messagebox.showinfo('Success', 'Account has been created.')
         else:
