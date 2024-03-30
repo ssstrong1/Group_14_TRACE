@@ -33,7 +33,6 @@ class Form1040:
     """
     Class for Form 1040, handles tax return calculations
 
-
     """
     filing_status = 0
     has_digital_assets = False

@@ -269,12 +269,12 @@ class FormValidator1099DIV:
         """
         pass
 
-    def validate_foreign_country_or_us_possession(self, country: str) -> str:
+    def validate_foreign_country_or_us_possession(self, country: str) -> float:
         """
         Validate Foreign Country or US Possession from form 1099-DIV
 
         :param country: Country or US Possession from form 1099-DIV
-        :return: Validated country value as string
+        :return: Validated country value as float
         :raises ValueError: If validation fails, with an appropriate error message
         """
         pass
