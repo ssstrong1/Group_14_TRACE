@@ -228,7 +228,7 @@ class FormValidatorW2:
 
 class FormValidator1099DIV:
     """
-    Class dedicated to validating W-2 Forms.
+    Class dedicated to validating 1099 Forms.
 
     Raises ValueErrors with specific messages if validation fails.
     """
@@ -590,3 +590,12 @@ class FormValidator1099DIV:
                 state["STATE_TAX_WITHHELD"] = self.validate_other_states_tax(state["STATE_TAX_WITHHELD"])
             except ValueError:
                 raise ValueError("Invalid input, must enter a positive number.")
+
+
+class FormValidator1040:
+    """
+    Class dedicated to validating 1040 Forms.
+
+    Raises ValueErrors with specific messages if validation fails.
+    """
+    
