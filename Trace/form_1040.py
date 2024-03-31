@@ -1,4 +1,5 @@
 # form_1040.py
+
 """
 Contains class for Form 1040
 Class handles calculations for tax returns
@@ -33,7 +34,12 @@ class Form1040:
     """
     Class for Form 1040, handles tax return calculations
 
+
     """
+
+
+
+
     filing_status = 0
     has_digital_assets = False
     is_dependent = False
@@ -114,6 +120,18 @@ class Form1040:
         :param other_income_1099: income from other 1099 forms
         :param other_tax_1099: taxes withheld from other 1099 forms
         """
+
+        # Example
+
+        import all_user_info
+        example_a = all_user_info.ten_forty_total_w2s
+        example_b = all_user_info.ten_forty_household_wages
+        example_c = example_a + example_b
+        all_user_info.example_c = example_c
+
+
+        ##########################################
+
         if forms_w2 is None:
             forms_w2 = list()
         if form_1099_div is None:

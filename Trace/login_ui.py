@@ -5,8 +5,9 @@ from PIL import ImageTk, Image
 import bcrypt
 from tkinter import messagebox
 import create_tables_1
+import user_login_info
 
-import ui
+
 
 import ctypes
 
@@ -172,6 +173,8 @@ class LoginInterface:
                 if bcrypt.checkpw(password.encode('utf-8'), result[0]):
                     self.x = messagebox.showinfo('Success', 'Logged in successfully.')
                     self.app1.withdraw()
+                    user_login_info.username = username
+                    user_login_info.password = password
                     self.start_form_ui()
                 else:
                     messagebox.showerror('Error', 'Invalid password.')
@@ -249,6 +252,7 @@ class LoginInterface:
 
     # Open New Window
     def start_form_ui(self):
+        import ui
         """
         Opens a new window for the user interface.
 

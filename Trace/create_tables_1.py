@@ -1,7 +1,7 @@
 import sqlite3
 
 # connect to or creates sqlite db
-user_connection = sqlite3.connect('new_data.db')
+user_connection = sqlite3.connect('final_data.db')
 
 # cursor obj to execute queries
 user_cursor = user_connection.cursor()
