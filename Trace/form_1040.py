@@ -64,7 +64,7 @@ class Form1040:
     use_lump_sum = False  # 6c
     capital_gain_or_loss = 00.00  # 7
     income_schedule_1 = 00.00  # 8
-    total_income = 00.00    # 9, Total of lines 1z, 2b-6b, 7, and 8
+    total_income = 00.00  # 9, Total of lines 1z, 2b-6b, 7, and 8
     adjustments = 00.00  # 10
     adjusted_gross_income = 00.00  # 11, subtract line 10 from line 9
     standard_deduction = 00.00  # 12
@@ -91,8 +91,8 @@ class Form1040:
     additional_child_tax_credit = 00.00  # 28
     american_opportunity_credit = 00.00  # 29
     amount_schedule_3_line_15 = 00.00  # 30
-    total_other_payments = 00.00  # 31, add lines 27 to 31
-    total_payments = 00.00  # 32, add lines 25d, 26, and 32
+    total_other_payments = 00.00  # 32, add lines 27 to 31
+    total_payments = 00.00  # 33, add lines 25d, 26, and 32
     # REFUND / ADDITIONAL OWED
     # If line 33 is more than line 24
     overpaid = 00.00  # 34, subtract line 24 from 33
@@ -260,6 +260,7 @@ class Form1040:
         """
         self.dependents = dependents
 
+    # INCOME
     def set_income_w2(self, dollars):
         """
         Mutator for income_w2
@@ -502,7 +503,7 @@ class Form1040:
 
         :return: N/A
         """
-        if self.is_dependent or self.spouse_is_dependent == True:   # If the user or their spouse can be claimed
+        if self.is_dependent or self.spouse_is_dependent == True:  # If the user or their spouse can be claimed
             checks = 0
             if self.user_age >= 65:
                 checks += 1
@@ -513,34 +514,34 @@ class Form1040:
             if self.spouse_is_blind:
                 checks += 1
 
-            if self.total_income <= 850:    # If the users earned income is less than $850
+            if self.total_income <= 850:  # If the users earned income is less than $850
                 total = 1250
-            else:   # If the users earned income is greater than $850
+            else:  # If the users earned income is greater than $850
                 total = self.total_income + 400
                 if self.filing_status == 0 or self.filing_status == 2:  # If filing status is single or married filing separately
                     if total < 13850:
-                        pass    # Do nothing
+                        pass  # Do nothing
                     else:
                         total = 13850
-                elif self.filing_status == 1:   # If filing status is married filing jointly
+                elif self.filing_status == 1:  # If filing status is married filing jointly
                     if total < 27700:
-                        pass    # Do nothing
+                        pass  # Do nothing
                     else:
                         total = 27700
-                else:   # If filing status is head of household
+                else:  # If filing status is head of household
                     if total < 20800:
-                        pass    # Do nothing
+                        pass  # Do nothing
                     else:
                         total = 20800
 
-            if self.user_age < 65 and not self.user_is_blind and self.spouse_age < 65 and not self.spouse_is_blind: # If the user and spouse are under 65 and not blind
+            if self.user_age < 65 and not self.user_is_blind and self.spouse_age < 65 and not self.spouse_is_blind:  # If the user and spouse are under 65 and not blind
                 self.standard_deduction = total
-            else:   # If the user or spouse are over 65 or blind
+            else:  # If the user or spouse are over 65 or blind
                 if self.filing_status == 0 or self.filing_status == 3:  # If filing status is single of head of house
                     self.standard_deduction = 1850 * checks + total
                 else:
                     self.standard_deduction = 1500 * checks + total
-        else:   # If the user AND their spouse cannot be claimed as dependents
+        else:  # If the user AND their spouse cannot be claimed as dependents
             checks = 0
             if self.user_age >= 65:
                 checks += 1
@@ -551,7 +552,7 @@ class Form1040:
             if self.spouse_is_blind:
                 checks += 1
 
-            if checks > 0:    # For seniors or the blind
+            if checks > 0:  # For seniors or the blind
                 if self.filing_status == 0:  # If filing status is single
                     if checks == 1:
                         self.standard_deduction = 15700
@@ -585,16 +586,16 @@ class Form1040:
                         self.standard_deduction = 29200
                     else:
                         self.standard_deduction = 30700
-            else:   # For anyone under 65 AND NOT blind
-                if self.filing_status == 0:         # Single
+            else:  # For anyone under 65 AND NOT blind
+                if self.filing_status == 0:  # Single
                     self.standard_deduction = 13850
-                elif self.filing_status == 1:       # Married Filing Jointly
+                elif self.filing_status == 1:  # Married Filing Jointly
                     self.standard_deduction = 27700
-                elif self.filing_status == 2:       # Married Filing Separately
+                elif self.filing_status == 2:  # Married Filing Separately
                     self.standard_deduction = 13850
-                elif self.filing_status == 3:       # Head of Household
+                elif self.filing_status == 3:  # Head of Household
                     self.standard_deduction = 20800
-                else:                               # Qualifying Surviving Spouse
+                else:  # Qualifying Surviving Spouse
                     self.standard_deduction = 27700
 
     def set_qualified_business_income_deduction(self, dollars):
@@ -627,6 +628,201 @@ class Form1040:
         if self.taxable_income <= 0:
             self.taxable_income = 0
 
+    # TAXES AND CREDITS
+    def set_tax(self, dollars):
+        """
+        Mutator for tax
 
+        :param dollars: taxes from various forms
+        :return: N/A
+        """
+        self.tax = dollars
 
+    def set_amount_schedule_2(self, dollars):
+        """
+        Mutator for amount_schedule_2
+
+        :param dollars: value from schedule 2 line 3
+        :return: N/A
+        """
+        self.amount_schedule_2 = dollars
+
+    def calc_total_16_17(self):
+        """
+        Calculate total of lines 16 and 17 for line 18 value
+
+        :return: N/A
+        """
+        self.total_16_17 = self.tax + self.amount_schedule_2
+
+    def set_child_tax_credit(self, dollars):
+        """
+        Mutator for child_tax_credit
+
+        :param dollars: value of child tax credits in dollars
+        :return: N/A
+        """
+        self.child_tax_credit = dollars
+
+    def set_amount_schedule_3_line_8(self, dollars):
+        """
+        Mutator for amount_schedule_3_line_8
+
+        :param dollars: value of line 20 in dollars
+        :return: N/A
+        """
+        self.amount_schedule_3_line_8 = dollars
+
+    def calc_total_19_20(self):
+        """
+        Calculate the total of lines 19 and 20 for line 21
+
+        :return: N/A
+        """
+        self.total_19_20 = self.child_tax_credit + self.amount_schedule_3_line_8
+
+    def calc_sub_21_18(self):
+        """
+        Calculate difference between lines 21 and 18 for line 22
+        If zero or less, set to zero
+
+        :return: N/A
+        """
+        self.subtract_21_from_18 = self.total_16_17 - self.total_19_20
+        if self.subtract_21_from_18 <= 0:
+            self.subtract_21_from_18 = 0
+
+    def set_other_taxes(self, dollars):
+        """
+        Mutator for other_taxes
+
+        :param dollars: Value of other taxes in dollars
+        :return: N/A
+        """
+        self.other_taxes = dollars
+
+    def calc_total_tax(self):
+        """
+        Calculate total taxes by adding the totals from lines 22 and 23
+
+        :return: N/A
+        """
+        self.total_tax = self.subtract_21_from_18 + self.other_taxes
+
+    # PAYMENTS
+    def set_tax_withheld_w2(self, dollars):
+        """
+        Mutator for tax_withheld_w2
+
+        :param dollars: value of taxes withheld in dollars
+        :return: N/A
+        """
+        self.tax_withheld_w2 = dollars
+
+    def set_tax_withheld_1099(self, dollars):
+        """
+        Mutator for tax_withheld_1099
+
+        :param dollars: value of taxes withheld in dollars
+        :return: N/A
+        """
+        self.tax_withheld_1099 = dollars
+
+    def set_tax_withheld_other(self, dollars):
+        """
+        Mutator for tax_withheld_other
+
+        :param dollars: value of taxes withheld in dollars
+        :return: N/A
+        """
+        self.tax_withheld_other = dollars
+
+    def calc_total_withheld(self):
+        """
+        Calculate total taxes withheld
+
+        :return: N/A
+        """
+        self.total_withheld = self.tax_withheld_w2 + self.tax_withheld_1099 + self.tax_withheld_other
+
+    def set_estimate_tax_payments(self, dollars):
+        """
+        Mutator for estimate_tax_payments
+
+        :param dollars: value of estimate in dollars
+        :return: N/A
+        """
+        self.estimate_tax_payments = dollars
+
+    def set_earned_income_credit(self, dollars):
+        """
+        Mutator for earned_income_credit
+
+        :param dollars: value of earned income credit in dollars
+        :return: N/A
+        """
+        self.earned_income_credit = dollars
+
+    def set_additional_child_tax_credit(self, dollars):
+        """
+        Mutator for additional_child_tax_credit
+
+        :param dollars: value of additional child tax credit in dollars
+        :return: N/A
+        """
+        self.additional_child_tax_credit = dollars
+
+    def set_american_opportunity_credit(self, dollars):
+        """
+        Mutator for american_opportunity_credit
+
+        :param dollars: value of american opportunity credit in dollars
+        :return: N/A
+        """
+        self.american_opportunity_credit = dollars
+
+    def set_amount_schedule_3_line_15(self, dollars):
+        """
+        Mutator for amount_schedule_3_line_15
+
+        :param dollars: value of line 31 in dollars
+        :return: N/A
+        """
+        self.amount_schedule_3_line_15 = dollars
+
+    def calc_total_other_payments(self):
+        """
+        Calculate total_other_payments by adding up lines 27 to 30
+
+        :return: N/A
+        """
+        self.total_other_payments = (self.earned_income_credit + self.additional_child_tax_credit +
+                                     self.american_opportunity_credit + self.amount_schedule_3_line_15)
+
+    def calc_total_payments(self):
+        """
+        Calculate total_payments using values from lines 25d, 26, and 32
+
+        :return: N/A
+        """
+        self.total_payments = self.total_other_payments + self.total_withheld + self.estimate_tax_payments
+
+    # REFUND/AMOUNT OWED
+    def calc_refund(self):
+        """
+        Determine if the user receives a refund or owes additional taxes
+        Calculate the value of the refund or amount owed
+
+        :return: N/A
+        """
+        # If total_payments is greater than total_tax, the user receives a refund
+        if self.total_payments > self.total_tax:
+            self.overpaid = self.total_payments - self.total_tax
+        # If total_payments is less than total_tax, the user owes additional taxes
+        elif self.total_payments < self.total_tax:
+            self.amount_owed = self.total_tax - self.total_payments
+        # If they are equal, the user neither owes money nor receives a refund
+        else:
+            self.overpaid = 0
+            self.amount_owed = 0
 
