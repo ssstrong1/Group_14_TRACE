@@ -487,7 +487,7 @@ class UserInterface:
 
         # Help menu
         help_menu = Menu(menubar, tearoff=0)
-        help_menu.add_command(label="About")
+        help_menu.add_command(label="About", command=self.view_about)
         help_menu.add_command(label="Quit", command=self.quit)
         menubar.add_cascade(label="Settings", menu=help_menu)
 
@@ -602,9 +602,7 @@ class UserInterface:
         self.ten_ninety_nine_noncash_liquidation = ctk.CTkEntry(master=self.app, placeholder_text="Noncash Liquidation",
                                                                 width=200, text_color="#000000", bg_color="white",
                                                                 fg_color="transparent")
-        # FACTA Filing Requirement [checkbox]
-        self.ten_ninety_nine_facta_filing = ctk.CTkCheckBox(master=self.app, width=0, text="", checkbox_height=22,
-                                                            height=0, bg_color="white")
+
         # Exempt-Interest Dividends
         self.ten_ninety_nine_exempt_dividends = ctk.CTkEntry(master=self.app, placeholder_text="Interest-Exempt",
                                                              width=200, text_color="#000000", bg_color="white",
@@ -1190,7 +1188,7 @@ class UserInterface:
                                            self.ten_ninety_nine_payer_tin,
                                            self.ten_ninety_nine_recipient_tin, self.ten_ninety_nine_recipient_name,
                                            self.ten_ninety_nine_recipient_address,
-                                           self.ten_ninety_nine_recipient_city_etc, self.ten_ninety_nine_facta_filing,
+                                           self.ten_ninety_nine_recipient_city_etc,
                                            self.ten_ninety_nine_account_number,
                                            self.ten_ninety_nine_ordinary_dividends,
                                            self.ten_ninety_nine_qualified_dividends,
@@ -1322,8 +1320,6 @@ class UserInterface:
         self.w_2_fields_save_load.pop(self.w_2_placements.index(self.twenty_four_img))
 
         self.ten_ninety_nine_fields_save_load = self.ten_ninety_nine_placements.copy()
-        self.ten_ninety_nine_fields_save_load.pop(
-            self.ten_ninety_nine_placements.index(self.ten_ninety_nine_facta_filing))
         self.ten_ninety_nine_fields_save_load.pop(
             self.ten_ninety_nine_placements.index(self.ten_ninety_nine_label_for_img))
 
@@ -1564,7 +1560,6 @@ class UserInterface:
 
         self.ten_ninety_nine_recipient_city_etc.place(relx=.478, rely=0.471, anchor="e")
 
-        self.ten_ninety_nine_facta_filing.place(relx=0.453, rely=0.531, anchor="e")
 
         self.ten_ninety_nine_account_number.place(relx=0.475, rely=0.571, anchor="e")
 
@@ -3243,3 +3238,46 @@ class UserInterface:
 
             print("Data loaded from the database.")
             messagebox.showinfo('Success', 'Loaded Session')
+
+    def view_about(self):
+        about_page = ctk.CTkToplevel()
+        about_page.geometry("1000x1000")
+        self.app.title("TRACE")
+        self.app.resizable(False, False)
+
+        about_canvas = tk.Canvas(about_page, width=1000, height=1000, bg="#222222")
+
+        about_canvas.place(relx=.5, rely=.5, anchor="center")
+        about_info = """ 
+        The TRACE program is a form-based tax calculation software to help
+        calculate your potential tax liability or refund.
+        It provides fillable forms for the W2 1099. This information can be sent
+        directly to an editable 1040 form, which is then used to calculate
+        the potential return.
+        This program was created using 2024 filing forms.
+        Add more information.
+        """
+        help_info = """
+        To open a saved or downloaded PDF, click on the Browse button for the
+        corresponding form under the File tab.
+        To export your filled form as a PDF, click on the Export button for the form
+        under the File tab.
+        To send your numbers from your filled or imported W2 or 1099 form to your
+        1040, click the Submit button.
+        To switch which form you are filling out, select the corresponding form
+        under the Form tab.
+        In order to save or load your TRACE session, you must reenter your
+        User ID and Password in the fields at the bottom of the screen before
+        clicking the Save Session or Load Session buttons.
+        After saving or loading your session at least once, autosave will
+        be enabled and save your work every [interval].
+        """
+        creator_info = """
+        Programmed by Dylan Arone, Alexi McNabb, and Stephen Strong,
+        with help from Sydney Southerland and guidance from Cindy Luttrell
+        """
+        about_canvas.create_text(500, 200, text="About", fill="white", font=("Arial", 40))
+        about_canvas.create_text(490, 330, text=about_info, fill="white", font=("Arial", 16), justify="center")
+        about_canvas.create_text(500, 450, text="Help", fill="white", font=("Arial", 40))
+        about_canvas.create_text(490, 650, text=help_info, fill="white", font=("Arial", 16), justify="center")
+        about_canvas.create_text(490, 850, text=creator_info, fill="white", justify="center")
