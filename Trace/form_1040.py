@@ -1384,3 +1384,26 @@ class Form1040:
         """
         self.forms_w2.append(form)
         self.total_forms_w2()
+
+    def calc_all(self):
+        """
+        Run or rerun all calculation functions
+
+        :return: N/A
+        """
+        self.total_forms_w2()
+        self.total_forms_1099()
+        self.total_lines_1a_to_1h()
+        self.calc_total_income()
+        self.calc_adjusted_gross_income()
+        self.calc_standard_deduction()
+        self.calc_total_deductions()
+        self.calc_taxable_income()
+        self.calc_total_16_17()
+        self.calc_total_19_20()
+        self.calc_sub_21_18()
+        self.calc_total_tax()
+        self.calc_total_withheld()
+        self.calc_total_other_payments()
+        self.calc_total_payments()
+        self.calc_refund()
