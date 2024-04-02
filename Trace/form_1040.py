@@ -49,7 +49,7 @@ class Form1040:
     income_w2 = 00.00  # 1a
     household_employee_wages = 00.00  # 1b
     tip_income = 00.00  # 1c
-    medicaid_wavier_payments = 00.00  # 1d
+    medicaid_waiver_payments = 00.00  # 1d
     dependent_care_benefits = 00.00  # 1e
     employer_adoption_benefits = 00.00  # 1f
     wages_form_8919 = 00.00  # 1g
@@ -137,15 +137,28 @@ class Form1040:
 
     def total_forms_1099(self):
         """Total income and taxes from Form(s) 1099"""
-        self.ordinary_dividends += self.form_1099_div["ORDINARY_DIVIDENDS"]
-        self.qualified_dividends += self.form_1099_div["QUALIFIED_DIVIDENDS"]
+        tax_withheld_1099 = 0.00
+        self.ordinary_dividends = self.form_1099_div["ORDINARY_DIVIDENDS"]
+        self.qualified_dividends = self.form_1099_div["QUALIFIED_DIVIDENDS"]
 
         # Total tax withheld from all states
         for state in self.form_1099_div["STATES"]:
-            self.tax_withheld_1099 += state["STATE_TAX_WITHHELD"]
+            tax_withheld_1099 += state["STATE_TAX_WITHHELD"]
 
         # Add tax from other 1099 forms
-        self.tax_withheld_1099 += self.form_1099_other_taxes
+        tax_withheld_1099 += self.form_1099_other_taxes
+
+        self.tax_withheld_1099 = tax_withheld_1099
+
+    def set_form_1099_div(self, form):
+        """
+        Mutator for form_1099_div
+
+        :return: N/A
+        """
+        self.form_1099_div = form
+        # Run/Rerun calculation
+        self.total_forms_1099()
 
     def set_filing_status(self, filing_status):
         """
@@ -295,7 +308,7 @@ class Form1040:
         :param dollars: Medicaid waiver payments not reported on Form W-2
         :return: N/A
         """
-        self.medicaid_wavier_payments = dollars
+        self.medicaid_waiver_payments = dollars
 
     def set_dependent_care_benefits(self, dollars):
         """
@@ -340,7 +353,7 @@ class Form1040:
         :return: N/A
         """
         self.total_1a_to_1h = (self.income_w2 + self.household_employee_wages + self.tip_income +
-                               self.medicaid_wavier_payments + self.dependent_care_benefits +
+                               self.medicaid_waiver_payments + self.dependent_care_benefits +
                                self.employer_adoption_benefits + self.wages_form_8919 + self.other_income)
 
     def set_tax_exempt_interest(self, dollars):
@@ -826,3 +839,548 @@ class Form1040:
             self.overpaid = 0
             self.amount_owed = 0
 
+    # ACCESSORS
+    def get_filing_status(self):
+        """
+        Accessor for filing_status
+        0 == Single
+        1 == Married Filing Jointly
+        2 == Married Filing Separately
+        3 == Head of Household
+        4 == Qualifying Surviving Spouse
+
+        :return: String Value for Filing Status
+        """
+        if self.filing_status == 0:
+            status = "Single"
+        elif self.filing_status == 1:
+            status = "Married Filing Jointly"
+        elif self.filing_status == 2:
+            status = "Married Filing Separately"
+        elif self.filing_status == 3:
+            status = "Head of Household"
+        elif self.filing_status == 4:
+            status = "Qualifying Surviving Spouse"
+
+        return status
+
+    def get_has_digital_assets(self):
+        """
+        Accessor for has_digital_assets
+
+        :return: Boolean value
+        """
+        return self.has_digital_assets
+
+    def get_is_dependent(self):
+        """
+        Accessor for is_dependent
+
+        :return: Boolean value
+        """
+        return self.is_dependent
+
+    def get_spouse_is_dependent(self):
+        """
+        Accessor for spouse_is_dependent
+
+        :return: Boolean value
+        """
+        return self.spouse_is_dependent
+
+    def get_spouse_itemizes_separately(self):
+        """
+        Accessor for spouse_itemizes_separately
+
+        :return: Boolean value
+        """
+        return self.spouse_itemizes_separately
+
+    def get_is_dual_status_alien(self):
+        """
+        Accessor for is_dual_status_alien
+
+        :return: Boolean value
+        """
+        return self.is_dual_status_alien
+
+    def get_user_age(self):
+        """
+        Accessor for user_age
+
+        :return: Integer for user_age
+        """
+        return self.user_age
+
+    def get_user_is_blind(self):
+        """
+        Accessor for user_is_blind
+
+        :return: Boolean value
+        """
+        return self.user_is_blind
+
+    def get_spouse_age(self):
+        """
+        Accessor for spouse_age
+
+        :return: Integer for spouse_age
+        """
+        return self.spouse_age
+
+    def get_spouse_is_blind(self):
+        """
+        Accessor for spouse_is_blind
+
+        :return: Boolean value
+        """
+        return self.spouse_is_blind
+
+    def get_dependents(self):
+        """
+        Accessor for dependents
+
+        :return: List of dependents
+        """
+        return self.dependents
+
+    def get_income_w2(self):
+        """
+        Accessor for income_w2
+
+        :return: Float value
+        """
+        return self.income_w2
+
+    def get_household_employee_wages(self):
+        """
+        Accessor for household_employee_wages
+
+        :return: Float value
+        """
+        return self.household_employee_wages
+
+    def get_tip_income(self):
+        """
+        Accessor for tip_income
+
+        :return: Float value
+        """
+
+    def get_medicaid_waiver_payments(self):
+        """
+        Accessor for medicaid_waiver_payments
+
+        :return: Float value
+        """
+        return self.medicaid_waiver_payments
+
+    def get_dependent_care_benefits(self):
+        """
+        Accessor for dependent_care_benefits
+
+        :return: Float value
+        """
+        return self.dependent_care_benefits
+
+    def get_employer_adoption_benefits(self):
+        """
+        Accessor for employer_adoption_benefits
+
+        :return: Float value
+        """
+        return self.employer_adoption_benefits
+
+    def get_wages_form_8919(self):
+        """
+        Accessor for wages_form_8919
+
+        :return: Float value
+        """
+        return self.wages_form_8919
+
+    def get_other_income(self):
+        """
+        Accessor for other_income
+
+        :return: Float value
+        """
+        return self.other_income
+
+    def get_combat_pay(self):
+        """
+        Accessor for combat_pay
+
+        :return: Float value
+        """
+        return self.combat_pay
+
+    def get_total_1a_to_1h(self):
+        """
+        Accessor for total_1a_to_1h
+
+        :return: Float value
+        """
+        return self.total_1a_to_1h
+
+    def get_tax_exempt_interest(self):
+        """
+        Accessor for tax_exempt_interest
+
+        :return: Float value
+        """
+        return self.tax_exempt_interest
+
+    def get_taxable_interest(self):
+        """
+        Accessor for taxable_interest
+
+        :return: Float value
+        """
+        return self.taxable_interest
+
+    def get_qualified_dividends(self):
+        """
+        Accessor for qualified_dividends
+
+        :return: Float value
+        """
+        return self.qualified_dividends
+
+    def get_ordinary_dividends(self):
+        """
+        Accessor for ordinary_dividends
+
+        :return: Float value
+        """
+        return self.ordinary_dividends
+
+    def get_ira_distributions(self):
+        """
+        Accessor for ira_distributions
+
+        :return: Float value
+        """
+        return self.ira_distributions
+
+    def get_ira_taxable(self):
+        """
+        Accessor for ira_taxable
+
+        :return: Float value
+        """
+        return self.ira_taxable
+
+    def get_pensions_annuities(self):
+        """
+        Accessor for pensions_annuities
+
+        :return: Float value
+        """
+        return self.pensions_annuities
+
+    def get_pensions_annuities_taxable(self):
+        """
+        Accessor for pensions_annuities_taxable
+
+        :return: Float value
+        """
+        return self.pensions_annuities_taxable
+
+    def get_social_security_benefits(self):
+        """
+        Accessor for social_security_benefits
+
+        :return: Float value
+        """
+        return self.social_security_benefits
+
+    def get_ss_benefits_taxable(self):
+        """
+        Accessor for ss_benefits_taxable
+
+        :return: Float value
+        """
+        return self.ss_benefits_taxable
+
+    def get_use_lump_sum(self):
+        """
+        Accessor for lump_sum
+
+        :return: Boolean value
+        """
+        return self.use_lump_sum
+
+    def get_capital_gain_or_loss(self):
+        """
+        Accessor for capital_gain_or_loss
+
+        :return: Float value
+        """
+        return self.capital_gain_or_loss
+
+    def get_income_schedule_1(self):
+        """
+        Accessor for income_schedule_1
+
+        :return: Float value
+        """
+        return self.income_schedule_1
+
+    def get_total_income(self):
+        """
+        Accessor for total_income
+
+        :return: Float value
+        """
+        return self.total_income
+
+    def get_adjustments(self):
+        """
+        Accessor for adjustments
+
+        :return: Float value
+        """
+        return self.adjustments
+
+    def get_adjusted_gross_income(self):
+        """
+        Accessor for adjusted_gross_income
+
+        :return: Float value
+        """
+        return self.adjusted_gross_income
+
+    def get_standard_deduction(self):
+        """
+        Accessor for standard_deduction
+
+        :return: Float value
+        """
+        return self.standard_deduction
+
+    def get_qualified_business_income_deduction(self):
+        """
+        Accessor for qualified_business_income_deduction
+
+        :return: Float value
+        """
+        return self.qualified_business_income_deduction
+
+    def get_total_deductions(self):
+        """
+        Accessor for total_deductions
+
+        :return: Float value
+        """
+        return self.total_deductions
+
+    def get_taxable_income(self):
+        """
+        Accessor for taxable_income
+
+        :return: Float value
+        """
+        return self.taxable_income
+
+    def get_tax(self):
+        """
+        Accessor for tax
+
+        :return: Float value
+        """
+        return self.tax
+
+    def get_amount_schedule_2(self):
+        """
+        Accessor for amount_schedule_2
+
+        :return: Float value
+        """
+        return self.amount_schedule_2
+
+    def get_total_16_17(self):
+        """
+        Accessor for total_16_17
+
+        :return: Float value
+        """
+        return self.total_16_17
+
+    def get_child_tax_credit(self):
+        """
+        Accessor for child_tax_credit
+
+        :return: Float value
+        """
+        return self.child_tax_credit
+
+    def get_amount_schedule_3_line_18(self):
+        """
+        Accessor for amount_schedule_3_line_18
+
+        :return: Float value
+        """
+        return self.amount_schedule_3_line_8
+
+    def get_total_19_20(self):
+        """
+        Accessor for total_19_20
+
+        :return: Float value
+        """
+        return self.total_19_20
+
+    def get_subtract_21_from_18(self):
+        """
+        Accessor for subtract_21_from_18
+
+        :return: Float value
+        """
+        return self.subtract_21_from_18
+
+    def get_other_taxes(self):
+        """
+        Accessor for other_taxes
+
+        :return: Float value
+        """
+        return self.other_taxes
+
+    def get_total_tax(self):
+        """
+        Accessor for total_tax
+
+        :return: Float value
+        """
+        return self.total_tax
+
+    def get_tax_withheld_w2(self):
+        """
+        Accessor for tax_withheld_w2
+
+        :return: Float value
+        """
+        return self.tax_withheld_w2
+
+    def get_tax_withheld_1099(self):
+        """
+        Accessor for tax_withheld_1099
+
+        :return: Float value
+        """
+        return self.tax_withheld_1099
+
+    def get_tax_withheld_other(self):
+        """
+        Accessor for tax_withheld_other
+
+        :return: Float value
+        """
+        return self.tax_withheld_other
+
+    def get_total_withheld(self):
+        """
+        Accessor for total_withheld
+
+        :return: Float value
+        """
+        return self.total_withheld
+
+    def get_estimate_tax_payments(self):
+        """
+        Accessor for estimate_tax_payments
+
+        :return: Float value
+        """
+        return self.estimate_tax_payments
+
+    def get_earned_income_credit(self):
+        """
+        Accessor for earned_income_credit
+
+        :return: Float value
+        """
+        return self.earned_income_credit
+
+    def get_additional_child_tax_credit(self):
+        """
+        Accessor for additional_child_tax_credit
+
+        :return: Float value
+        """
+        return self.additional_child_tax_credit
+
+    def get_american_opportunity_credit(self):
+        """
+        Accessor for american_opportunity_credit
+
+        :return: Float value
+        """
+        return self.american_opportunity_credit
+
+    def get_amount_schedule_3_line_15(self):
+        """
+        Accessor for amount_schedule_3_line_15
+
+        :return: Float value
+        """
+        return self.amount_schedule_3_line_15
+
+    def get_total_other_payments(self):
+        """
+        Accessor for total_other_payments
+
+        :return: Float value
+        """
+        return self.total_other_payments
+
+    def get_total_payments(self):
+        """
+        Accessor for total_payments
+
+        :return: Float value
+        """
+        return self.total_payments
+
+    def get_overpaid(self):
+        """
+        Accessor for overpaid
+
+        :return: Float value
+        """
+        return self.overpaid
+
+    def get_amount_owed(self):
+        """
+        Accessor for amount_owed
+
+        :return: Float value
+        """
+        return self.amount_owed
+
+    def get_forms_w2(self):
+        """
+        Accessor for forms_w2
+
+        :return: List of W2 forms
+        """
+        return self.forms_w2
+
+    def get_form_1099_div(self):
+        """
+        Accessor for form_1099_div
+
+        :return: Dictionary 1099-DIV
+        """
+        return self.form_1099_div
+
+    def add_w2(self, form):
+        """
+        Function to append a new W2 form to the end of the list of W2 forms
+
+        :param form: W2 form as a dictionary
+        :return: N/A
+        """
+        self.forms_w2.append(form)
+        self.total_forms_w2()
