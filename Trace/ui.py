@@ -12,10 +12,10 @@ import create_tables_1
 import user_login_info
 import datetime
 import all_user_info
+from reportlab.pdfgen import canvas
+import ctypes
 
 y = create_tables_1
-
-import ctypes
 
 user = ctypes.windll.user32
 screensize = user.GetSystemMetrics(0), user.GetSystemMetrics(1)
@@ -602,8 +602,6 @@ class UserInterface:
         self.ten_ninety_nine_foreign_tax_country = ctk.CTkEntry(master=self.app, placeholder_text="Country", width=200,
                                                                 text_color="#000000", bg_color="white",
                                                                 fg_color="transparent")
-
-
 
         # Cash Liquidation Distributions
         self.ten_ninety_nine_cash_liquidation = ctk.CTkEntry(master=self.app, placeholder_text="Cash Liquidation",
@@ -1197,6 +1195,11 @@ class UserInterface:
         self.submit_and_erase = Button(self.app, text="Submit Federal Income Tax Withheld To 1040", width=35, height=5,
                                        command=self.submit_and_clear)
 
+        self.export_results_as_pdf = Button(self.app, text="Export Results As PDF", width=35, height=5,
+                                            command=self.export_results)
+
+        self.export_results_as_pdf.place(relx=.2, rely=0.85, anchor="center")
+
         self.w2_increasing_number_for_forms = IntVar()
         self.w2_increasing_number_for_forms.set(self.w2_increasing_number_for_forms.get() + 1)
 
@@ -1205,10 +1208,10 @@ class UserInterface:
 
         self.w2_form_counter = ctk.CTkLabel(self.app, textvariable=self.w2_increasing_number_for_forms, width=40)
 
-        self.ten_99_form_counter = ctk.CTkLabel(self.app, textvariable=self.ten_99_increasing_number_for_forms, width=40)
+        self.ten_99_form_counter = ctk.CTkLabel(self.app, textvariable=self.ten_99_increasing_number_for_forms,
+                                                width=40)
 
         self.form_counter_hashtag = ctk.CTkLabel(self.app, text="#", width=5)
-
 
         # End Input Fields
 
@@ -1367,19 +1370,34 @@ class UserInterface:
             self.ten_forty_fields_save_load.pop(index)
 
         # Combine all three lists into one list
-        self.all_fields = self.w_2_fields_save_load + self.ten_ninety_nine_fields_save_load + self.ten_forty_fields_save_load + [
-            self.user_id]
+        self.all_fields = self.w_2_fields_save_load + self.ten_ninety_nine_fields_save_load + \
+                          self.ten_forty_fields_save_load + [
+                              self.user_id]
 
         self.other_all_fields = self.ten_forty_checkboxes_placements + [self.user_password]
 
         self.app.mainloop()
 
+    def export_results(self):
+        # Opening the file explorer
+        filename = filedialog.asksaveasfilename(initialdir="/", title="Save As",
+                                                filetypes=(("PDF Files", "*.pdf"),))
+        if filename:
+            output_pdf_file = os.path.splitext(filename)[0] + ".pdf"
+            c = canvas.Canvas(output_pdf_file)
+            x = self.results_textbox.get("1.0", "end")
+            c.drawString(100, 700, "RESULTS")
+            c.drawString(100, 600, x)
+            c.save()
+
     def submit_and_clear(self):
         """
         Submits the current session and clears any relevant data.
 
-        This method is responsible for submitting the current session to the 1040 form. It first initializes a new session
-        using the `new_session()` method. After successful submission, a message box displays a success notification with
+        This method is responsible for submitting the current session to the 1040 form.
+        It first initializes a new session
+        using the `new_session()` method.
+        After successful submission, a message box displays a success notification with
         the message 'Submitted To 1040'.
 
         Args:
@@ -1401,11 +1419,13 @@ class UserInterface:
                 if len(all_user_info.w2_group_of_fed_income_tax_withheld) == 1:
                     self.ten_forty_withheld_w2.delete("0", "end")
                     self.ten_forty_withheld_w2.insert("end", all_user_info.fed_income_tax_withheld)
-                    all_user_info.overall_total_w2_group_of_fed_income_tax_withheld = all_user_info.fed_income_tax_withheld
+                    all_user_info.overall_total_w2_group_of_fed_income_tax_withheld = \
+                        all_user_info.fed_income_tax_withheld
                 elif len(all_user_info.w2_group_of_fed_income_tax_withheld) > 1:
                     self.ten_forty_withheld_w2.delete("0", "end")
                     self.ten_forty_withheld_w2.insert("end", sum(all_user_info.w2_group_of_fed_income_tax_withheld))
-                    all_user_info.overall_total_w2_group_of_fed_income_tax_withheld = sum(all_user_info.w2_group_of_fed_income_tax_withheld)
+                    all_user_info.overall_total_w2_group_of_fed_income_tax_withheld = sum(
+                        all_user_info.w2_group_of_fed_income_tax_withheld)
                 messagebox.showinfo('Success', 'Submitted To 1040')
         else:
             if self.ten_ninety_nine_federal_tax_withheld.get() == "":
@@ -1413,17 +1433,22 @@ class UserInterface:
             else:
                 self.ten_99_increasing_number_for_forms.set(self.ten_99_increasing_number_for_forms.get() + 1)
 
-                all_user_info.ten_ninety_nine_federal_tax_withheld = float(self.ten_ninety_nine_federal_tax_withheld.get())
+                all_user_info.ten_ninety_nine_federal_tax_withheld = float(
+                    self.ten_ninety_nine_federal_tax_withheld.get())
 
-                all_user_info.ten_99_group_of_fed_income_tax_withheld.append(all_user_info.ten_ninety_nine_federal_tax_withheld)
+                all_user_info.ten_99_group_of_fed_income_tax_withheld.append(
+                    all_user_info.ten_ninety_nine_federal_tax_withheld)
                 self.new_session()
                 if len(all_user_info.ten_99_group_of_fed_income_tax_withheld) == 1:
                     self.ten_forty_withheld_1099.insert("end", all_user_info.ten_ninety_nine_federal_tax_withheld)
-                    all_user_info.overall_total_ten_99_group_of_fed_income_tax_withheld = all_user_info.ten_ninety_nine_federal_tax_withheld
+                    all_user_info.overall_total_ten_99_group_of_fed_income_tax_withheld = \
+                        all_user_info.ten_ninety_nine_federal_tax_withheld
                 elif len(all_user_info.ten_99_group_of_fed_income_tax_withheld) > 1:
                     self.ten_forty_withheld_1099.delete("0", "end")
-                    self.ten_forty_withheld_1099.insert("end", sum(all_user_info.ten_99_group_of_fed_income_tax_withheld))
-                    all_user_info.overall_total_ten_99_group_of_fed_income_tax_withheld = sum(all_user_info.ten_99_group_of_fed_income_tax_withheld)
+                    self.ten_forty_withheld_1099.insert("end",
+                                                        sum(all_user_info.ten_99_group_of_fed_income_tax_withheld))
+                    all_user_info.overall_total_ten_99_group_of_fed_income_tax_withheld = sum(
+                        all_user_info.ten_99_group_of_fed_income_tax_withheld)
                 messagebox.showinfo('Success', 'Submitted To 1040')
 
     def setup_w_2(self):
@@ -1733,13 +1758,13 @@ class UserInterface:
         self.ten_forty_spouse_1959.place(relx=0.624, rely=0.237, anchor="e")
         self.ten_forty_spouse_blind.place(relx=0.881, rely=0.237, anchor="e")
 
-        self.ten_forty_dependent_first_1.place(relx=0.43, rely=0.266, anchor="e")
+        self.ten_forty_dependent_first_1.place(relx=0.43, rely=0.265, anchor="e")
 
-        self.ten_forty_dependent_first_2.place(relx=0.43, rely=0.275, anchor="e")
+        self.ten_forty_dependent_first_2.place(relx=0.43, rely=0.274, anchor="e")
 
-        self.ten_forty_dependent_first_3.place(relx=0.43, rely=0.284, anchor="e")
+        self.ten_forty_dependent_first_3.place(relx=0.43, rely=0.2835, anchor="e")
 
-        self.ten_forty_dependent_first_4.place(relx=0.43, rely=0.293, anchor="e")
+        self.ten_forty_dependent_first_4.place(relx=0.43, rely=0.2925, anchor="e")
 
         self.ten_forty_many_dependents.place(relx=0.130, rely=0.293, anchor="e")
         self.ten_forty_dependent_1_child_credit.place(relx=0.788, rely=0.265, anchor="e")
@@ -2412,7 +2437,8 @@ class UserInterface:
                         - The code iterates through each page in the PDF.
                         - For each page, it retrieves the widgets (form fields).
                         - It then checks if the field name matches any of the specified entry widgets.
-                        - If a match is found and the field value is not empty, it updates the corresponding entry widget
+                        - If a match is found and the field value is not empty,
+                        it updates the corresponding entry widget
                 """
                 # Opening the input PDF
                 pdf = fitz.open(input_pdf)
@@ -2738,7 +2764,8 @@ class UserInterface:
                         - The code iterates through each page in the PDF.
                         - For each page, it retrieves the widgets (form fields).
                         - It then checks if the field name matches any of the specified entry widgets.
-                        - If a match is found and the field value is not empty, it updates the corresponding entry widget
+                        - If a match is found and the field value is not empty,
+                        - it updates the corresponding entry widget
                 """
                 # Opening the input PDF
                 pdf = fitz.open(input_pdf)
@@ -2850,16 +2877,26 @@ class UserInterface:
                                         'topmostSubform[0].Page1[0].c1_10[0]': self.ten_forty_spouse_1959,
                                         'topmostSubform[0].Page1[0].c1_11[0]': self.ten_forty_spouse_blind,
                                         'topmostSubform[0].Page1[0].c1_12[0]': self.ten_forty_many_dependents,
-                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row1[0].c1_13[0]': self.ten_forty_dependent_1_child_credit,
-                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row1[0].c1_14[0]': self.ten_forty_dependent_1_other_credit,
-                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row2[0].c1_15[0]': self.ten_forty_dependent_2_child_credit,
-                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row2[0].c1_16[0]': self.ten_forty_dependent_2_other_credit,
-                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row3[0].c1_17[0]': self.ten_forty_dependent_3_child_credit,
-                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row3[0].c1_18[0]': self.ten_forty_dependent_3_other_credit,
-                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row4[0].c1_19[0]': self.ten_forty_dependent_4_child_credit,
-                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row4[0].c1_20[0]': self.ten_forty_dependent_4_other_credit,
-                                        'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].c1_21[0]': self.ten_forty_lump_sum_method,
-                                        'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].c1_22[0]': self.ten_forty_schedule_d,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row1[0].c1_13[0]':
+                                            self.ten_forty_dependent_1_child_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row1[0].c1_14[0]':
+                                            self.ten_forty_dependent_1_other_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row2[0].c1_15[0]':
+                                            self.ten_forty_dependent_2_child_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row2[0].c1_16[0]':
+                                            self.ten_forty_dependent_2_other_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row3[0].c1_17[0]':
+                                            self.ten_forty_dependent_3_child_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row3[0].c1_18[0]':
+                                            self.ten_forty_dependent_3_other_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row4[0].c1_19[0]':
+                                            self.ten_forty_dependent_4_child_credit,
+                                        'topmostSubform[0].Page1[0].Table_Dependents[0].Row4[0].c1_20[0]':
+                                            self.ten_forty_dependent_4_other_credit,
+                                        'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].c1_21[0]':
+                                            self.ten_forty_lump_sum_method,
+                                        'topmostSubform[0].Page1[0].Line4a-11_ReadOrder[0].c1_22[0]':
+                                            self.ten_forty_schedule_d,
                                         'topmostSubform[0].Page2[0].c2_1[0]': self.ten_forty_8814,
                                         'topmostSubform[0].Page2[0].c2_2[0]': self.ten_forty_4972,
                                         'topmostSubform[0].Page2[0].c2_3[0]': self.ten_forty_other_form_check,
@@ -3208,7 +3245,8 @@ class UserInterface:
                             'ten_forty_standard_deduction_or_itemized_deductions_from_schedule_a,'
                             'ten_forty_qualified_business_income_deduction_from_form_8995_or_form_8995_a,'
                             'ten_forty_add_lines_12_and_13,'
-                            'ten_forty_subtract_line_14_from_line_11_if_zero_or_less_enter_0_this_is_your_taxable_income,'
+                            'ten_forty_subtract_line_14_from_line_11_if_zero_or_less_enter_'
+                            '0_this_is_your_taxable_income,'
 
                             'ten_forty_form_no,'
                             'ten_forty_tax_check_if_any_from_forms,'
@@ -3231,7 +3269,8 @@ class UserInterface:
                             'ten_forty_amount_from_schedule_3_line_15,'
                             'ten_forty_add_lines_27_28_29_31_these_are_your_total_other_payments_refundable_credits,'
                             'ten_forty_add_lines_25d_26_32_these_are_your_total_payments,'
-                            'ten_forty_if_line_33_is_more_than_line_24_subtract_line_24_from_line_33_this_is_the_amount_you_overpaid,'
+                            'ten_forty_if_line_33_is_more_than_line_24_subtract_line_24_'
+                            'from_line_33_this_is_the_amount_you_overpaid,'
                             'ten_forty_subtract_line_33_from_line_24_this_is_the_amount_you_owe,'
                             'ten_forty_estimated_tax_penalty,'
 
@@ -3354,7 +3393,8 @@ class UserInterface:
                                     ten_forty_standard_deduction_or_itemized_deductions_from_schedule_a = ?,
                                     ten_forty_qualified_business_income_deduction_from_form_8995_or_form_8995_a = ?,
                                     ten_forty_add_lines_12_and_13 = ?,
-                                    ten_forty_subtract_line_14_from_line_11_if_zero_or_less_enter_0_this_is_your_taxable_income = ?,
+                                    ten_forty_subtract_line_14_from_line_11_if_zero_or_less_enter_
+                                    0_this_is_your_taxable_income = ?,
 
                                     ten_forty_form_no = ?,
                                     ten_forty_tax_check_if_any_from_forms = ?,
@@ -3375,9 +3415,11 @@ class UserInterface:
                                     ten_forty_additional_child_tax_credit_from_schedule_8812 = ?,
                                     ten_forty_american_opportunity_credit_from_form_8863_line_8 = ?,
                                     ten_forty_amount_from_schedule_3_line_15 = ?,
-                                    ten_forty_add_lines_27_28_29_31_these_are_your_total_other_payments_refundable_credits = ?,
+                                    ten_forty_add_lines_27_28_29_31_these_are_your_total_other_
+                                    payments_refundable_credits = ?,
                                     ten_forty_add_lines_25d_26_32_these_are_your_total_payments = ?,
-                                    ten_forty_if_line_33_is_more_than_line_24_subtract_line_24_from_line_33_this_is_the_amount_you_overpaid = ?,
+                                    ten_forty_if_line_33_is_more_than_line_24_subtract_line_24_from_line_33
+                                    _this_is_the_amount_you_overpaid = ?,
                                     ten_forty_subtract_line_33_from_line_24_this_is_the_amount_you_owe = ?,
                                     ten_forty_estimated_tax_penalty = ?
 
@@ -3526,123 +3568,61 @@ class UserInterface:
                 self.auto_save()
 
     def send_info_calculate(self):
-        # 1099
-        all_user_info.ten_ninety_nine_payer_info = self.ten_ninety_nine_payer_info.get()
-        all_user_info.ten_ninety_nine_payer_tin = self.ten_ninety_nine_payer_tin.get()
-        all_user_info.ten_ninety_nine_recipient_tin, all_user_info.ten_ninety_nine_recipient_name = self.ten_ninety_nine_recipient_tin.get(), self.ten_ninety_nine_recipient_name.get()
-        all_user_info.ten_ninety_nine_recipient_address = self.ten_ninety_nine_recipient_address.get()
-        all_user_info.ten_ninety_nine_recipient_city_etc = self.ten_ninety_nine_recipient_city_etc.get()
-        all_user_info.ten_ninety_nine_account_number = self.ten_ninety_nine_account_number.get()
-        all_user_info.ten_ninety_nine_ordinary_dividends = self.ten_ninety_nine_ordinary_dividends.get()
-        all_user_info.ten_ninety_nine_qualified_dividends = self.ten_ninety_nine_qualified_dividends.get()
-        all_user_info.ten_ninety_nine_capital_gain = self.ten_ninety_nine_capital_gain.get()
-        all_user_info.ten_ninety_nine_1250_gain, all_user_info.ten_ninety_nine_1202_gain = self.ten_ninety_nine_1250_gain.get(), self.ten_ninety_nine_1202_gain.get()
-        all_user_info.ten_ninety_nine_collectibles_gain = self.ten_ninety_nine_collectibles_gain.get()
-        all_user_info.ten_ninety_nine_897_dividends, all_user_info.ten_ninety_nine_897_gain = self.ten_ninety_nine_897_dividends.get(), self.ten_ninety_nine_897_gain.get()
-        all_user_info.ten_ninety_nine_nondividend = self.ten_ninety_nine_nondividend
-        all_user_info.ten_ninety_nine_federal_tax_withheld, all_user_info.ten_ninety_nine_199a = self.ten_ninety_nine_federal_tax_withheld.get(), self.ten_ninety_nine_199a.get()
-        all_user_info.ten_ninety_nine_investment_expenses = self.ten_ninety_nine_investment_expenses.get()
-        all_user_info.ten_ninety_nine_foreign_tax, all_user_info.ten_ninety_nine_foreign_tax_country = self.ten_ninety_nine_foreign_tax.get(), self.ten_ninety_nine_foreign_tax_country.get()
-        all_user_info.ten_ninety_nine_cash_liquidation = self.ten_ninety_nine_cash_liquidation.get()
-        all_user_info.ten_ninety_nine_noncash_liquidation = self.ten_ninety_nine_noncash_liquidation.get()
-        all_user_info.ten_ninety_nine_exempt_dividends = self.ten_ninety_nine_exempt_dividends.get()
-        all_user_info.ten_ninety_nine_specified_bond_dividends = self.ten_ninety_nine_specified_bond_dividends.get()
-        all_user_info.ten_ninety_nine_state, all_user_info.ten_ninety_nine_state_id_number = self.ten_ninety_nine_state.get(), self.ten_ninety_nine_state_id_number.get()
-        all_user_info.ten_ninety_nine_state_tax_withheld = self.ten_ninety_nine_state_tax_withheld.get()
 
-        # W-2
-        all_user_info.essn_entry, all_user_info.ein_entry = self.essn_entry.get(), self.ein_entry.get()
-        all_user_info.employer_name_etc, all_user_info.cn_entry, all_user_info.employee_name_i, all_user_info.employee_last_name = self.employer_name_etc.get(), self.cn_entry.get(), self.employee_name_i.get(), self.employee_last_name.get()
-        all_user_info.employee_suffix, all_user_info.employee_address_etc = self.employee_suffix.get(), self.employee_address_etc.get()
-        all_user_info.state_field, all_user_info.employers_state_id, all_user_info.state_wage_tips, all_user_info.state_income_tax = self.state_field.get(), self.employers_state_id.get(), self.state_wage_tips.get(), self.state_income_tax.get()
-        all_user_info.local_wage_tips, all_user_info.local_income_tax, all_user_info.locality_name, all_user_info.wages_tips_c = self.local_wage_tips.get(), self.local_income_tax.get(), self.locality_name.get(), self.wages_tips_c.get()
-        all_user_info.social_wages, all_user_info.medicare_wages, all_user_info.social_security_tips = self.social_wages.get(), self.medicare_wages.get(), self.social_security_tips.get()
-        all_user_info.non_qualified_plans, all_user_info.other_field, all_user_info.fed_income_tax_withheld = self.non_qualified_plans.get(), self.other_field.get(), self.fed_income_tax_withheld.get()
-        all_user_info.social_security_tax_withheld, all_user_info.medicare_tax_withheld, all_user_info.allocated_tips = self.social_security_tax_withheld.get(), self.medicare_tax_withheld.get(), self.allocated_tips.get()
-        all_user_info.dependent_care_benefits, all_user_info.twelve_a, all_user_info.twelve_b, all_user_info.twelve_c, all_user_info.twelve_d = self.dependent_care_benefits.get(), self.twelve_a.get(), self.twelve_b.get(), self.twelve_c.get(), self.twelve_d.get()
+        from form_1040 import Form1040
 
-        # 1040
-        all_user_info.ten_forty_first_name, all_user_info.ten_forty_last_name = self.ten_forty_first_name.get(), self.ten_forty_last_name.get()
-        all_user_info.ten_forty_spouse_first, all_user_info.ten_forty_spouse_last = self.ten_forty_spouse_first.get(), self.ten_forty_last_name.get()
-        all_user_info.ten_forty_home_address, all_user_info.ten_forty_apt_no, all_user_info.ten_forty_city = self.ten_forty_home_address.get(), self.ten_forty_apt_no.get(), self.ten_forty_city.get()
-        all_user_info.ten_forty_state, all_user_info.ten_forty_zip, all_user_info.ten_forty_foreign_country = self.ten_forty_state.get(), self.ten_forty_zip.get(), self.ten_forty_foreign_country.get()
-        all_user_info.ten_forty_foreign_province, all_user_info.ten_forty_foreign_post_code = self.ten_forty_foreign_province.get(), self.ten_forty_foreign_post_code.get()
+        user_form_1040 = Form1040()
 
-        all_user_info.ten_forty_dependent_first_1, all_user_info.ten_forty_dependent_first_2 = self.ten_forty_dependent_first_1.get(), self.ten_forty_dependent_first_2.get()
-        all_user_info.ten_forty_dependent_first_3 = self.ten_forty_dependent_first_3.get()
-        all_user_info.ten_forty_dependent_first_4 = self.ten_forty_dependent_first_4.get()
+        temp_list = [self.ten_forty_total_w2s.get(), self.ten_forty_household_wages.get(),
+                     self.ten_forty_tip_income.get(), self.ten_forty_medicaid_waiver.get(),
+                     self.ten_forty_dependent_benefits.get(), self.ten_forty_adoption_benefits.get(),
+                     self.ten_forty_8919_wages.get(), self.ten_forty_other_income.get(),
+                     self.ten_forty_taxable_interest.get(), self.ten_forty_ordinary_dividends.get(),
+                     self.ten_forty_taxable_ira.get(), self.ten_forty_taxable_pensions.get(),
+                     self.ten_forty_social_taxable.get(), self.ten_forty_capital_gain.get(),
+                     self.ten_forty_schedule_1.get(), self.ten_forty_income_adjustments.get()]
 
-        all_user_info.ten_forty_total_w2s, all_user_info.ten_forty_household_wages = float(
-            self.ten_forty_total_w2s.get()), float(self.ten_forty_household_wages.get())
-        all_user_info.ten_forty_total_w2s, all_user_info.ten_forty_household_wages = float(
-            self.ten_forty_total_w2s.get()), float(self.ten_forty_household_wages.get())
-        all_user_info.ten_forty_tip_income = self.ten_forty_tip_income.get()
-        all_user_info.ten_forty_medicaid_waiver, all_user_info.ten_forty_dependent_benefits = self.ten_forty_medicaid_waiver.get(), self.ten_forty_dependent_benefits.get()
-        all_user_info.ten_forty_adoption_benefits, all_user_info.ten_forty_8919_wages = self.ten_forty_adoption_benefits.get(), self.ten_forty_8919_wages.get()
-        all_user_info.ten_forty_other_income = self.ten_forty_other_income.get()
-        all_user_info.ten_forty_combat_pay, all_user_info.ten_forty_1_ah_sum = self.ten_forty_combat_pay.get(), self.ten_forty_1_ah_sum.get()
-        all_user_info.ten_forty_tax_exempt_interest = self.ten_forty_tax_exempt_interest.get()
+        for w in temp_list:
+            if w == "":
+                messagebox.showerror("Error", "Please enter all fields 1a-1h, 2b-6b, 7, 8, 10")
+                break
+            else:
+                user_form_1040.set_income_w2(float(self.ten_forty_total_w2s.get()))
+                user_form_1040.set_household_employee_wages(float(self.ten_forty_household_wages.get()))
+                user_form_1040.set_tip_income(float(self.ten_forty_tip_income.get()))
+                user_form_1040.set_medicaid_waiver_payments(float(self.ten_forty_medicaid_waiver.get()))
+                user_form_1040.set_dependent_care_benefits(float(self.ten_forty_dependent_benefits.get()))
+                user_form_1040.set_employer_adoption_benefits(float(self.ten_forty_adoption_benefits.get()))
+                user_form_1040.set_wages_form_8919(float(self.ten_forty_8919_wages.get()))
+                user_form_1040.set_other_income(float(self.ten_forty_other_income.get()))
 
-        all_user_info.ten_forty_taxable_interest, all_user_info.ten_forty_qualified_dividends = self.ten_forty_taxable_interest.get(), self.ten_forty_qualified_dividends.get()
-        all_user_info.ten_forty_ordinary_dividends, all_user_info.ten_forty_ira_distributions = self.ten_forty_ordinary_dividends.get(), self.ten_forty_ira_distributions.get()
-        all_user_info.ten_forty_taxable_ira = self.ten_forty_taxable_ira.get()
-        all_user_info.ten_forty_pensions_annuities, all_user_info.ten_forty_taxable_pensions = self.ten_forty_pensions_annuities.get(), self.ten_forty_taxable_pensions.get()
-        all_user_info.ten_forty_social_security, all_user_info.ten_forty_social_taxable = self.ten_forty_social_security.get(), self.ten_forty_social_taxable.get()
-        all_user_info.ten_forty_capital_gain = self.ten_forty_capital_gain.get()
-        all_user_info.ten_forty_schedule_1, all_user_info.ten_forty_total_income = self.ten_forty_schedule_1.get(), self.ten_forty_total_income.get()
-        all_user_info.ten_forty_income_adjustments, all_user_info.ten_forty_adjusted_income = self.ten_forty_income_adjustments.get(), self.ten_forty_adjusted_income.get()
-        all_user_info.ten_forty_deductions, all_user_info.ten_forty_business_deductions = self.ten_forty_deductions.get(), self.ten_forty_business_deductions.get()
-        all_user_info.ten_forty_total_deductions = self.ten_forty_total_deductions.get()
-        all_user_info.ten_forty_taxable_income = self.ten_forty_taxable_income.get()
-        all_user_info.ten_forty_other_form_no = self.ten_forty_other_form_no.get()
-        all_user_info.ten_forty_other_form_total, all_user_info.ten_forty_schedule_2 = self.ten_forty_other_form_total.get(), self.ten_forty_schedule_2.get()
-        all_user_info.ten_forty_add_16_17 = self.ten_forty_add_16_17.get()
-        all_user_info.ten_forty_child_credit, all_user_info.ten_forty_schedule_3, all_user_info.ten_forty_add_19_20 = self.ten_forty_child_credit.get(), self.ten_forty_schedule_3.get(), self.ten_forty_add_19_20.get()
-        all_user_info.ten_forty_sub_21_18, all_user_info.ten_forty_other_taxes, all_user_info.ten_forty_total_tax = self.ten_forty_sub_21_18.get(), self.ten_forty_other_taxes.get(), self.ten_forty_total_tax.get()
-        all_user_info.ten_forty_withheld_w2, all_user_info.ten_forty_withheld_1099 = self.ten_forty_withheld_w2.get(), self.ten_forty_withheld_1099.get()
-        all_user_info.ten_forty_withheld_other = self.ten_forty_withheld_other.get()
-        all_user_info.ten_forty_withheld_total, all_user_info.ten_forty_previous_year, all_user_info.ten_forty_eic = self.ten_forty_withheld_total.get(), self.ten_forty_previous_year.get(), self.ten_forty_eic.get()
-        all_user_info.ten_forty_8812_child_credit, all_user_info.ten_forty_8863_opportunity_credit = self.ten_forty_8812_child_credit.get(), self.ten_forty_8863_opportunity_credit.get()
-        all_user_info.ten_forty_schedule_3_line_15, all_user_info.ten_forty_other_payments = self.ten_forty_schedule_3_line_15.get(), self.ten_forty_other_payments.get()
-        all_user_info.ten_forty_total_payments = self.ten_forty_total_payments.get()
-        all_user_info.ten_forty_overpaid, all_user_info.ten_forty_owed, all_user_info.ten_forty_penalty = self.ten_forty_overpaid.get(), self.ten_forty_owed.get(), self.ten_forty_penalty.get()
+                user_form_1040.total_lines_1a_to_1h()
 
-        # 1040 checkboxes
-        all_user_info.ten_forty_presidential_you, all_user_info.ten_forty_presidential_spouse = self.ten_forty_presidential_you.get(), self.ten_forty_presidential_spouse.get()
-        all_user_info.ten_forty_filing_single, all_user_info.ten_forty_filing_jointly = self.ten_forty_filing_single.get(), self.ten_forty_filing_jointly.get()
-        all_user_info.ten_forty_filing_separately = self.ten_forty_filing_separately.get()
-        all_user_info.ten_forty_filing_hoh, all_user_info.ten_forty_filing_qss = self.ten_forty_filing_hoh.get(), self.ten_forty_filing_qss.get()
-        all_user_info.ten_forty_digital_assets_yes = self.ten_forty_digital_assets_yes.get()
-        all_user_info.ten_forty_digital_assets_no, all_user_info.ten_forty_are_dependent = self.ten_forty_digital_assets_no.get(), self.ten_forty_are_dependent.get()
-        all_user_info.ten_forty_spouse_dependent = self.ten_forty_spouse_dependent.get()
-        all_user_info.ten_forty_spouse_separate, all_user_info.ten_forty_self_1959 = self.ten_forty_spouse_separate.get(), self.ten_forty_self_1959.get()
-        all_user_info.ten_forty_self_blind = self.ten_forty_self_blind.get()
-        all_user_info.ten_forty_spouse_1959, all_user_info.ten_forty_spouse_blind = self.ten_forty_spouse_1959.get(), self.ten_forty_spouse_blind.get()
-        all_user_info.ten_forty_many_dependents = self.ten_forty_many_dependents.get()
-        all_user_info.ten_forty_dependent_1_child_credit, all_user_info.ten_forty_dependent_1_other_credit = self.ten_forty_dependent_1_child_credit.get(), self.ten_forty_dependent_1_other_credit.get()
-        all_user_info.ten_forty_dependent_2_child_credit, all_user_info.ten_forty_dependent_2_other_credit = self.ten_forty_dependent_2_child_credit.get(), self.ten_forty_dependent_2_other_credit.get()
-        all_user_info.ten_forty_dependent_3_child_credit, all_user_info.ten_forty_dependent_3_other_credit = self.ten_forty_dependent_3_child_credit.get(), self.ten_forty_dependent_3_other_credit.get()
-        all_user_info.ten_forty_dependent_4_child_credit, all_user_info.ten_forty_dependent_4_other_credit = self.ten_forty_dependent_4_child_credit.get(), self.ten_forty_dependent_4_other_credit.get()
-        all_user_info.ten_forty_schedule_d = self.ten_forty_schedule_d.get()
-        all_user_info.ten_forty_lump_sum_method = self.ten_forty_lump_sum_method.get()
-        all_user_info.ten_forty_8814 = self.ten_forty_8814.get()
-        all_user_info.ten_forty_4972 = self.ten_forty_4972.get()
-        all_user_info.ten_forty_other_form_check = self.ten_forty_other_form_check.get()
-        all_user_info.ten_forty_8888 = self.ten_forty_8888.get()
-        all_user_info.ten_forty_route_checking = self.ten_forty_route_checking.get()
-        all_user_info.ten_forty_route_savings = self.ten_forty_route_savings.get()
-        all_user_info.ten_forty_third_party_yes = self.ten_forty_third_party_yes.get()
-        all_user_info.ten_forty_third_party_no = self.ten_forty_third_party_no.get()
-        all_user_info.ten_forty_self_employed = self.ten_forty_self_employed.get()
+                user_form_1040.set_taxable_interest(float(self.ten_forty_taxable_interest.get()))
+                user_form_1040.set_ordinary_dividends(float(self.ten_forty_ordinary_dividends.get()))
+                user_form_1040.set_ira_taxable(float(self.ten_forty_taxable_ira.get()))
+                user_form_1040.set_pensions_annuities_taxable(float(self.ten_forty_taxable_pensions.get()))
+                user_form_1040.set_ss_benefits_taxable(float(self.ten_forty_social_taxable.get()))
+                user_form_1040.set_capital_gain_or_loss(float(self.ten_forty_capital_gain.get()))
+                user_form_1040.set_income_schedule_1(float(self.ten_forty_schedule_1.get()))
 
-        ##############################################################################
-        import form_1040
-        form_1040.Form1040()
+                user_form_1040.calc_total_income()
 
-        self.results_textbox.configure(state="normal")
-        self.results_textbox.delete("1.0", "end")
-        self.results_textbox.insert("end", all_user_info.example_c)
-        self.results_textbox.configure(state="disabled")
+                user_form_1040.set_adjustments(float(self.ten_forty_income_adjustments.get()))
+
+                user_form_1040.calc_adjusted_gross_income()
+
+                self.results_textbox.configure(state="normal")
+                self.results_textbox.delete("1.0", "end")
+                self.results_textbox.insert("end", f"Total from lines 1a-1h: ${user_form_1040.total_1a_to_1h}")
+                self.results_textbox.insert("end", "\n")
+                self.results_textbox.insert("end", f"Total Income: ${user_form_1040.total_income}")
+                self.results_textbox.insert("end", "\n")
+                self.results_textbox.insert("end", f"Adjusted Gross Income: ${user_form_1040.adjusted_gross_income}")
+                self.results_textbox.configure(state="disabled")
+                break
+
+
 
     def view_about(self):
         about_page = ctk.CTkToplevel()

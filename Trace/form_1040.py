@@ -121,17 +121,6 @@ class Form1040:
         :param other_tax_1099: taxes withheld from other 1099 forms
         """
 
-        # Example
-
-        import all_user_info
-        example_a = all_user_info.ten_forty_total_w2s
-        example_b = all_user_info.ten_forty_household_wages
-        example_c = example_a + example_b
-        all_user_info.example_c = example_c
-
-
-        ##########################################
-
         if forms_w2 is None:
             forms_w2 = list()
         if form_1099_div is None:
