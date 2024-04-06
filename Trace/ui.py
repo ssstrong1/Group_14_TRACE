@@ -3639,8 +3639,7 @@ class UserInterface:
         It provides fillable forms for the W2 1099. This information can be sent
         directly to an editable 1040 form, which is then used to calculate
         the potential return.
-        This program was created using 2024 filing forms.
-        Add more information.
+        This program was created using 2023 filing forms.
         """
         help_info = """
         To open a saved or downloaded PDF, click on the Browse button for the
@@ -3655,7 +3654,7 @@ class UserInterface:
         User ID and Password in the fields at the bottom of the screen before
         clicking the Save Session or Load Session buttons.
         After saving or loading your session at least once, autosave will
-        be enabled and save your work every [interval].
+        be enabled and save your data as it is entered.
         """
         creator_info = """
         Programmed by Dylan Arone, Alexi McNabb, and Stephen Strong,
