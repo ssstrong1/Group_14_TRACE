@@ -26,6 +26,7 @@ dict_1099_div = {"ORDINARY_DIVIDENDS": 0000,
                  "FED_TAX_WITHHELD": 0000}
 """
 
+
 class Form1040:
     """
     Class for Form 1040, handles tax return calculations
