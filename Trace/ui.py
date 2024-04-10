@@ -8,16 +8,22 @@ from tkinter import filedialog
 from tkinter import *
 import tkinter as tk
 from PIL import ImageTk, Image
+from fpdf import FPDF
 import create_tables_1
 import user_login_info
 import datetime
-import all_user_info
-from reportlab.pdfgen import canvas
 import ctypes
+from input_validation import FormValidatorW2
+from input_validation import FormValidator1099DIV
+from input_validation import FormValidator1040
 
 from form_1040 import Form1040
 
 user_form_1040 = Form1040()
+
+w2_user_validation = FormValidatorW2()
+ten_99_validation = FormValidator1099DIV()
+ten_40_validation = FormValidator1040()
 
 y = create_tables_1
 
@@ -515,6 +521,13 @@ class UserInterface:
         self.born_1959 = 0
 
         self.calculate_changer = "w2"
+
+        self.auto_save_runner = True
+
+        self.old_new = 00.00
+        self.old_new_w2_withheld = 00.00
+
+        self.loaded = ""
 
         ###############################
 
@@ -1396,11 +1409,17 @@ class UserInterface:
                                                 filetypes=(("PDF Files", "*.pdf"),))
         if filename:
             output_pdf_file = os.path.splitext(filename)[0] + ".pdf"
-            c = canvas.Canvas(output_pdf_file)
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_xy(0, 0)
+            pdf.set_font('arial', 'B', 13)
+
+            # Assuming self.results_textbox contains the text with new lines
             x = self.results_textbox.get("1.0", "end")
-            c.drawString(100, 700, "RESULTS")
-            c.drawString(100, 600, x)
-            c.save()
+            x = "Results:\n\n" + x
+            pdf.multi_cell(0, 5, txt=x, align='L')  # Use multi_cell to handle new lines
+
+            pdf.output(output_pdf_file)
 
     def submit_and_clear(self):
         """
@@ -1418,63 +1437,82 @@ class UserInterface:
         Returns:
             None
         """
+
         if self.submit_changer == 0:
-            if self.fed_income_tax_withheld.get() == "" or self.wages_tips_c.get() == "":
-                messagebox.showerror("Error", "Please Enter Your Information For Box 1 And 2 To Submit It To 1040")
+            if messagebox.askyesno("Alert", "Upon clicking yes, boxes 1 and 2 will be sent to the 1040 form. All other fields will be cleared and autosave will be disabled until saving or loading the session again."):
+                if self.fed_income_tax_withheld.get() == "" or self.wages_tips_c.get() == "":
+                    messagebox.showerror("Error", "Please Enter Your Information For Box 1 And 2 To Submit It To 1040")
 
-            else:
-                self.w2_increasing_number_for_forms.set(self.w2_increasing_number_for_forms.get() + 1)
+                else:
+                    self.w2_increasing_number_for_forms.set(self.w2_increasing_number_for_forms.get() + 1)
 
-                dict_w2 = {"WAGES_TIPS_OTHER_COMP": float(self.wages_tips_c.get()),
-                           "FEDERAL_INCOME_TAX_WITHHELD": float(self.fed_income_tax_withheld.get()),
-                           "SOCIAL_SECURITY_WAGES": 0000, "SOCIAL_SECURITY_TAX_WITHHELD": 0000,
-                           "MEDICARE_WAGES_AND_TIPS": 0000, "MEDICARE_TAX_WITHHELD": 0000,
-                           "DEPENDANT_CARE_BENEFITS": 0000,
-                           "STATES":
-                               [{"STATE": "STATE01", "STATE_INCOME": 0000, "STATE_TAX_WITHHELD": 0000},
-                                {"STATE": "STATE02", "STATE_INCOME": 0000, "STATE_TAX_WITHHELD": 0000}]}
+                    dict_w2 = {"WAGES_TIPS_OTHER_COMP": float(self.wages_tips_c.get()),
+                               "FEDERAL_INCOME_TAX_WITHHELD": float(self.fed_income_tax_withheld.get()),
+                               "SOCIAL_SECURITY_WAGES": 0000, "SOCIAL_SECURITY_TAX_WITHHELD": 0000,
+                               "MEDICARE_WAGES_AND_TIPS": 0000, "MEDICARE_TAX_WITHHELD": 0000,
+                               "DEPENDANT_CARE_BENEFITS": 0000,
+                               "STATES":
+                                   [{"STATE": "STATE01", "STATE_INCOME": 0000, "STATE_TAX_WITHHELD": 0000},
+                                    {"STATE": "STATE02", "STATE_INCOME": 0000, "STATE_TAX_WITHHELD": 0000}]}
 
-                user_form_1040.add_w2(dict_w2)
+                    if str(self.ten_forty_total_w2s.get()) == "":
+                        self.old_new = 00.00
+                        self.old_new_w2_withheld = 00.00
+                        user_form_1040.income_w2 = 00.00
+                    else:
+                        if self.loaded == "yes":
+                            if str(self.ten_forty_total_w2s.get()) == "":
+                                self.old_new = 00.00
+                                self.old_new_w2_withheld = 00.00
+                                user_form_1040.income_w2 = 00.00
+                            else:
+                                self.old_new = float(self.wages_tips_c.get())
+                                self.old_new_w2_withheld = float(self.fed_income_tax_withheld.get())
 
-                self.ten_forty_total_w2s.configure(state="normal")
-                self.ten_forty_total_w2s.delete(0, ctk.END)
-                self.ten_forty_total_w2s.insert("end", user_form_1040.income_w2)
+                    user_form_1040.add_w2(dict_w2, self.old_new, self.old_new_w2_withheld)
 
-                self.ten_forty_withheld_w2.configure(state="normal")
-                self.ten_forty_withheld_w2.delete(0, ctk.END)
-                self.ten_forty_withheld_w2.insert("end", user_form_1040.tax_withheld_w2)
 
-                self.new_session()
+                    self.ten_forty_total_w2s.configure(state="normal")
+                    self.ten_forty_total_w2s.delete(0, ctk.END)
+                    self.ten_forty_total_w2s.insert("end", f"{user_form_1040.income_w2:.2f}")
 
-                messagebox.showinfo('Success', 'Submitted To 1040')
+                    self.ten_forty_withheld_w2.configure(state="normal")
+                    self.ten_forty_withheld_w2.delete(0, ctk.END)
+                    self.ten_forty_withheld_w2.insert("end", f"{user_form_1040.tax_withheld_w2:.2f}")
+
+
+                    self.new_session()
+
+                    messagebox.showinfo('Success', 'Submitted To 1040')
         else:
-            if self.ten_ninety_nine_federal_tax_withheld.get() == "":
-                messagebox.showerror("Error", "Please Enter Your Information For Box 1 And 2 To Submit It To 1040")
+            if messagebox.askyesno("Alert", "Upon clicking yes, box 4 will be sent to the 1040 form. All other fields will be cleared and autosave will be disabled until saving or loading the session again."):
+                if self.ten_ninety_nine_federal_tax_withheld.get() == "":
+                    messagebox.showerror("Error", "Please Enter Your Information For Box 1 And 2 To Submit It To 1040")
 
-            else:
-                self.ten_99_increasing_number_for_forms.set(self.ten_99_increasing_number_for_forms.get() + 1)
+                else:
+                    self.ten_99_increasing_number_for_forms.set(self.ten_99_increasing_number_for_forms.get() + 1)
 
-                dict_1099_div = {"ORDINARY_DIVIDENDS": 0000,
-                                 "QUALIFIED_DIVIDENDS": 0000,
-                                 "CAPITAL_GAIN_DISTR": 0000, "UNRECAP_SEC_1250_GAIN": 0000,
-                                 "SECTION_1202_GAIN": 0000, "COLLECTIBLES_GAIN": 0000,
-                                 "SECTION_897_ORDINARY_DIVIDENDS": 0000, "SECTION_897_CAPITAL_GAIN": 0000,
-                                 "NONDIVIDEND_DISTRIBUTIONS": 0000, "INCOME_TAX_WITHHELD": 0000,
-                                 "SECTION_1999A_DIVIDENDS": 0000, "INVESTMENT_EXPENSES": 0000,
-                                 "FOREIGN_TAX_PAID": 0000, "FOREIGN_COUNTRY_OR_US_POSSESSION": "Country",
-                                 "CASH_LIQUIDATION_DISTRIBUTIONS": 0000, "NONCASH_LIQUIDATION_DISTRIBUTIONS": 0000,
-                                 "EXEMPT_INTEREST_DIVIDENDS": 0000, "PRIVATE_ACTIVITY_BOND_INTEREST_DIVIDENDS": 0000,
-                                 "FED_TAX_WITHHELD": float(self.ten_ninety_nine_federal_tax_withheld.get())}
+                    dict_1099_div = {"ORDINARY_DIVIDENDS": 0000,
+                                     "QUALIFIED_DIVIDENDS": 0000,
+                                     "CAPITAL_GAIN_DISTR": 0000, "UNRECAP_SEC_1250_GAIN": 0000,
+                                     "SECTION_1202_GAIN": 0000, "COLLECTIBLES_GAIN": 0000,
+                                     "SECTION_897_ORDINARY_DIVIDENDS": 0000, "SECTION_897_CAPITAL_GAIN": 0000,
+                                     "NONDIVIDEND_DISTRIBUTIONS": 0000, "INCOME_TAX_WITHHELD": 0000,
+                                     "SECTION_1999A_DIVIDENDS": 0000, "INVESTMENT_EXPENSES": 0000,
+                                     "FOREIGN_TAX_PAID": 0000, "FOREIGN_COUNTRY_OR_US_POSSESSION": "Country",
+                                     "CASH_LIQUIDATION_DISTRIBUTIONS": 0000, "NONCASH_LIQUIDATION_DISTRIBUTIONS": 0000,
+                                     "EXEMPT_INTEREST_DIVIDENDS": 0000, "PRIVATE_ACTIVITY_BOND_INTEREST_DIVIDENDS": 0000,
+                                     "FED_TAX_WITHHELD": float(self.ten_ninety_nine_federal_tax_withheld.get())}
 
-                user_form_1040.add_ten_99(dict_1099_div)
+                    user_form_1040.add_ten_99(dict_1099_div)
 
-                self.ten_forty_withheld_1099.configure(state="normal")
-                self.ten_forty_withheld_1099.delete(0, ctk.END)
-                self.ten_forty_withheld_1099.insert("end", user_form_1040.tax_withheld_1099)
+                    self.ten_forty_withheld_1099.configure(state="normal")
+                    self.ten_forty_withheld_1099.delete(0, ctk.END)
+                    self.ten_forty_withheld_1099.insert("end", f"{user_form_1040.tax_withheld_1099:.2f}")
 
-                self.new_session()
+                    self.new_session()
 
-                messagebox.showinfo('Success', 'Submitted To 1040')
+                    messagebox.showinfo('Success', 'Submitted To 1040')
 
     def setup_w_2(self):
         """
@@ -1884,116 +1922,120 @@ class UserInterface:
         Creates a new session for tax calculations.
         """
 
-        w_2_fields = [self.employee_address_etc, self.employee_suffix,
-                      self.employee_last_name, self.employee_name_i,
-                      self.cn_entry,
-                      self.employer_name_etc, self.other_field, self.locality_name,
-                      self.state_field, self.employers_state_id, self.state_wage_tips,
-                      self.state_income_tax, self.local_wage_tips, self.local_income_tax,
-                      self.twelve_a, self.twelve_b, self.twelve_c, self.twelve_d,
-                      self.dependent_care_benefits, self.allocated_tips, self.medicare_tax_withheld,
-                      self.social_security_tax_withheld, self.fed_income_tax_withheld,
-                      self.non_qualified_plans, self.social_security_tips,
-                      self.medicare_wages, self.social_wages, self.wages_tips_c, self.ein_entry,
-                      self.essn_entry]
+        if messagebox.askyesno("Warning", "Upon clicking yes, all fields will be cleared and autosave will be disabled until saving or loading the session again."):
 
-        ten_ninety_nine_fields = [self.ten_ninety_nine_payer_info,
-                                  self.ten_ninety_nine_payer_tin,
-                                  self.ten_ninety_nine_recipient_tin, self.ten_ninety_nine_recipient_name,
-                                  self.ten_ninety_nine_recipient_address,
-                                  self.ten_ninety_nine_recipient_city_etc,
-                                  self.ten_ninety_nine_account_number,
-                                  self.ten_ninety_nine_ordinary_dividends,
-                                  self.ten_ninety_nine_qualified_dividends,
-                                  self.ten_ninety_nine_capital_gain,
-                                  self.ten_ninety_nine_1250_gain, self.ten_ninety_nine_1202_gain,
-                                  self.ten_ninety_nine_collectibles_gain,
-                                  self.ten_ninety_nine_897_dividends, self.ten_ninety_nine_897_gain,
-                                  self.ten_ninety_nine_nondividend,
-                                  self.ten_ninety_nine_federal_tax_withheld, self.ten_ninety_nine_199a,
-                                  self.ten_ninety_nine_investment_expenses,
-                                  self.ten_ninety_nine_foreign_tax, self.ten_ninety_nine_foreign_tax_country,
-                                  self.ten_ninety_nine_cash_liquidation,
-                                  self.ten_ninety_nine_noncash_liquidation,
-                                  self.ten_ninety_nine_exempt_dividends,
-                                  self.ten_ninety_nine_specified_bond_dividends,
-                                  self.ten_ninety_nine_state, self.ten_ninety_nine_state_id_number,
-                                  self.ten_ninety_nine_state_tax_withheld]
+            self.auto_save_runner = False
 
-        ten_forty_fields = [self.ten_forty_first_name, self.ten_forty_last_name,
-                            self.ten_forty_spouse_first, self.ten_forty_spouse_last,
-                            self.ten_forty_home_address, self.ten_forty_apt_no, self.ten_forty_city,
-                            self.ten_forty_state, self.ten_forty_zip, self.ten_forty_foreign_country,
-                            self.ten_forty_foreign_province, self.ten_forty_foreign_post_code,
-                            self.ten_forty_dependent_first_1, self.ten_forty_dependent_first_2,
-                            self.ten_forty_dependent_first_3,
-                            self.ten_forty_dependent_first_4,
-                            self.ten_forty_total_w2s, self.ten_forty_household_wages,
-                            self.ten_forty_tip_income,
-                            self.ten_forty_medicaid_waiver, self.ten_forty_dependent_benefits,
-                            self.ten_forty_adoption_benefits, self.ten_forty_8919_wages,
-                            self.ten_forty_other_income,
-                            self.ten_forty_combat_pay, self.ten_forty_1_ah_sum,
-                            self.ten_forty_tax_exempt_interest,
-                            self.ten_forty_taxable_interest, self.ten_forty_qualified_dividends,
-                            self.ten_forty_ordinary_dividends, self.ten_forty_ira_distributions,
-                            self.ten_forty_taxable_ira,
-                            self.ten_forty_pensions_annuities, self.ten_forty_taxable_pensions,
-                            self.ten_forty_social_security, self.ten_forty_social_taxable,
-                            self.ten_forty_capital_gain,
-                            self.ten_forty_schedule_1, self.ten_forty_schedule_1, self.ten_forty_total_income,
-                            self.ten_forty_income_adjustments, self.ten_forty_adjusted_income,
-                            self.ten_forty_deductions, self.ten_forty_business_deductions,
-                            self.ten_forty_total_deductions,
-                            self.ten_forty_taxable_income,
-                            self.ten_forty_other_form_no,
-                            self.ten_forty_other_form_total, self.ten_forty_schedule_2,
-                            self.ten_forty_add_16_17,
-                            self.ten_forty_child_credit, self.ten_forty_schedule_3, self.ten_forty_add_19_20,
-                            self.ten_forty_sub_21_18, self.ten_forty_other_taxes, self.ten_forty_total_tax,
-                            self.ten_forty_withheld_w2, self.ten_forty_withheld_1099,
-                            self.ten_forty_withheld_other,
-                            self.ten_forty_withheld_total, self.ten_forty_previous_year, self.ten_forty_eic,
-                            self.ten_forty_8812_child_credit, self.ten_forty_8863_opportunity_credit,
-                            self.ten_forty_schedule_3_line_15, self.ten_forty_other_payments,
-                            self.ten_forty_total_payments,
-                            self.ten_forty_overpaid, self.ten_forty_owed, self.ten_forty_penalty]
+            w_2_fields = [self.employee_address_etc, self.employee_suffix,
+                          self.employee_last_name, self.employee_name_i,
+                          self.cn_entry,
+                          self.employer_name_etc, self.other_field, self.locality_name,
+                          self.state_field, self.employers_state_id, self.state_wage_tips,
+                          self.state_income_tax, self.local_wage_tips, self.local_income_tax,
+                          self.twelve_a, self.twelve_b, self.twelve_c, self.twelve_d,
+                          self.dependent_care_benefits, self.allocated_tips, self.medicare_tax_withheld,
+                          self.social_security_tax_withheld, self.fed_income_tax_withheld,
+                          self.non_qualified_plans, self.social_security_tips,
+                          self.medicare_wages, self.social_wages, self.wages_tips_c, self.ein_entry,
+                          self.essn_entry]
 
-        ten_forty_checkboxes = [self.ten_forty_presidential_you, self.ten_forty_presidential_spouse,
-                                self.ten_forty_filing_single, self.ten_forty_filing_jointly,
-                                self.ten_forty_filing_separately,
-                                self.ten_forty_filing_hoh, self.ten_forty_filing_qss,
-                                self.ten_forty_digital_assets_yes,
-                                self.ten_forty_digital_assets_no, self.ten_forty_are_dependent,
-                                self.ten_forty_spouse_dependent,
-                                self.ten_forty_spouse_separate, self.ten_forty_self_1959,
-                                self.ten_forty_self_blind,
-                                self.ten_forty_spouse_1959, self.ten_forty_spouse_blind,
-                                self.ten_forty_many_dependents,
-                                self.ten_forty_dependent_1_child_credit, self.ten_forty_dependent_1_other_credit,
-                                self.ten_forty_dependent_2_child_credit, self.ten_forty_dependent_2_other_credit,
-                                self.ten_forty_dependent_3_child_credit, self.ten_forty_dependent_3_other_credit,
-                                self.ten_forty_dependent_4_child_credit, self.ten_forty_dependent_4_other_credit,
-                                self.ten_forty_lump_sum_method, self.ten_forty_schedule_d,
-                                self.ten_forty_8814, self.ten_forty_4972,
-                                self.ten_forty_other_form_check, self.ten_forty_8888,
-                                self.ten_forty_route_checking,
-                                self.ten_forty_route_savings,
-                                self.ten_forty_third_party_yes,
-                                self.ten_forty_third_party_no,
-                                self.ten_forty_self_employed]
+            ten_ninety_nine_fields = [self.ten_ninety_nine_payer_info,
+                                      self.ten_ninety_nine_payer_tin,
+                                      self.ten_ninety_nine_recipient_tin, self.ten_ninety_nine_recipient_name,
+                                      self.ten_ninety_nine_recipient_address,
+                                      self.ten_ninety_nine_recipient_city_etc,
+                                      self.ten_ninety_nine_account_number,
+                                      self.ten_ninety_nine_ordinary_dividends,
+                                      self.ten_ninety_nine_qualified_dividends,
+                                      self.ten_ninety_nine_capital_gain,
+                                      self.ten_ninety_nine_1250_gain, self.ten_ninety_nine_1202_gain,
+                                      self.ten_ninety_nine_collectibles_gain,
+                                      self.ten_ninety_nine_897_dividends, self.ten_ninety_nine_897_gain,
+                                      self.ten_ninety_nine_nondividend,
+                                      self.ten_ninety_nine_federal_tax_withheld, self.ten_ninety_nine_199a,
+                                      self.ten_ninety_nine_investment_expenses,
+                                      self.ten_ninety_nine_foreign_tax, self.ten_ninety_nine_foreign_tax_country,
+                                      self.ten_ninety_nine_cash_liquidation,
+                                      self.ten_ninety_nine_noncash_liquidation,
+                                      self.ten_ninety_nine_exempt_dividends,
+                                      self.ten_ninety_nine_specified_bond_dividends,
+                                      self.ten_ninety_nine_state, self.ten_ninety_nine_state_id_number,
+                                      self.ten_ninety_nine_state_tax_withheld]
 
-        if self.new_decision == "w2":
-            for i in w_2_fields:
-                i.delete(0, ctk.END)
-        elif self.new_decision == "1099":
-            for j in ten_ninety_nine_fields:
-                j.delete(0, ctk.END)
-        elif self.new_decision == "1040":
-            for h in ten_forty_fields:
-                h.delete(0, ctk.END)
-            for k in ten_forty_checkboxes:
-                k.deselect()
+            ten_forty_fields = [self.ten_forty_first_name, self.ten_forty_last_name,
+                                self.ten_forty_spouse_first, self.ten_forty_spouse_last,
+                                self.ten_forty_home_address, self.ten_forty_apt_no, self.ten_forty_city,
+                                self.ten_forty_state, self.ten_forty_zip, self.ten_forty_foreign_country,
+                                self.ten_forty_foreign_province, self.ten_forty_foreign_post_code,
+                                self.ten_forty_dependent_first_1, self.ten_forty_dependent_first_2,
+                                self.ten_forty_dependent_first_3,
+                                self.ten_forty_dependent_first_4,
+                                self.ten_forty_total_w2s, self.ten_forty_household_wages,
+                                self.ten_forty_tip_income,
+                                self.ten_forty_medicaid_waiver, self.ten_forty_dependent_benefits,
+                                self.ten_forty_adoption_benefits, self.ten_forty_8919_wages,
+                                self.ten_forty_other_income,
+                                self.ten_forty_combat_pay, self.ten_forty_1_ah_sum,
+                                self.ten_forty_tax_exempt_interest,
+                                self.ten_forty_taxable_interest, self.ten_forty_qualified_dividends,
+                                self.ten_forty_ordinary_dividends, self.ten_forty_ira_distributions,
+                                self.ten_forty_taxable_ira,
+                                self.ten_forty_pensions_annuities, self.ten_forty_taxable_pensions,
+                                self.ten_forty_social_security, self.ten_forty_social_taxable,
+                                self.ten_forty_capital_gain,
+                                self.ten_forty_schedule_1, self.ten_forty_schedule_1, self.ten_forty_total_income,
+                                self.ten_forty_income_adjustments, self.ten_forty_adjusted_income,
+                                self.ten_forty_deductions, self.ten_forty_business_deductions,
+                                self.ten_forty_total_deductions,
+                                self.ten_forty_taxable_income,
+                                self.ten_forty_other_form_no,
+                                self.ten_forty_other_form_total, self.ten_forty_schedule_2,
+                                self.ten_forty_add_16_17,
+                                self.ten_forty_child_credit, self.ten_forty_schedule_3, self.ten_forty_add_19_20,
+                                self.ten_forty_sub_21_18, self.ten_forty_other_taxes, self.ten_forty_total_tax,
+                                self.ten_forty_withheld_w2, self.ten_forty_withheld_1099,
+                                self.ten_forty_withheld_other,
+                                self.ten_forty_withheld_total, self.ten_forty_previous_year, self.ten_forty_eic,
+                                self.ten_forty_8812_child_credit, self.ten_forty_8863_opportunity_credit,
+                                self.ten_forty_schedule_3_line_15, self.ten_forty_other_payments,
+                                self.ten_forty_total_payments,
+                                self.ten_forty_overpaid, self.ten_forty_owed, self.ten_forty_penalty]
+
+            ten_forty_checkboxes = [self.ten_forty_presidential_you, self.ten_forty_presidential_spouse,
+                                    self.ten_forty_filing_single, self.ten_forty_filing_jointly,
+                                    self.ten_forty_filing_separately,
+                                    self.ten_forty_filing_hoh, self.ten_forty_filing_qss,
+                                    self.ten_forty_digital_assets_yes,
+                                    self.ten_forty_digital_assets_no, self.ten_forty_are_dependent,
+                                    self.ten_forty_spouse_dependent,
+                                    self.ten_forty_spouse_separate, self.ten_forty_self_1959,
+                                    self.ten_forty_self_blind,
+                                    self.ten_forty_spouse_1959, self.ten_forty_spouse_blind,
+                                    self.ten_forty_many_dependents,
+                                    self.ten_forty_dependent_1_child_credit, self.ten_forty_dependent_1_other_credit,
+                                    self.ten_forty_dependent_2_child_credit, self.ten_forty_dependent_2_other_credit,
+                                    self.ten_forty_dependent_3_child_credit, self.ten_forty_dependent_3_other_credit,
+                                    self.ten_forty_dependent_4_child_credit, self.ten_forty_dependent_4_other_credit,
+                                    self.ten_forty_lump_sum_method, self.ten_forty_schedule_d,
+                                    self.ten_forty_8814, self.ten_forty_4972,
+                                    self.ten_forty_other_form_check, self.ten_forty_8888,
+                                    self.ten_forty_route_checking,
+                                    self.ten_forty_route_savings,
+                                    self.ten_forty_third_party_yes,
+                                    self.ten_forty_third_party_no,
+                                    self.ten_forty_self_employed]
+
+            if self.new_decision == "w2":
+                for i in w_2_fields:
+                    i.delete(0, ctk.END)
+            elif self.new_decision == "1099":
+                for j in ten_ninety_nine_fields:
+                    j.delete(0, ctk.END)
+            elif self.new_decision == "1040":
+                for h in ten_forty_fields:
+                    h.delete(0, ctk.END)
+                for k in ten_forty_checkboxes:
+                    k.deselect()
 
     def quit(self):
         """
@@ -3533,70 +3575,107 @@ class UserInterface:
         self.user_connect.commit()
 
     def load_session(self):
-        if self.user_id.get() == "":
-            messagebox.showerror('Error', 'Please Enter A Username')
-        elif self.user_password.get() == "":
-            messagebox.showerror('Error', 'Please Enter A Password')
-        else:
-            if self.user_id.get() != user_login_info.username:
-                messagebox.showerror('Error', 'Invalid Username. Please Enter Your Username.')
-            elif self.user_password.get() != user_login_info.password:
-                messagebox.showerror('Error', 'Invalid Password. Please Enter Your Password.')
-            else:
-                self.cursor.execute("SELECT * FROM jk WHERE user_id=?", [user_login_info.username])
-                all_data = self.cursor.fetchall()
-                for i, row in enumerate(all_data):
-                    for j, field in enumerate(self.all_fields):
-                        field.delete(0, "end")  # Clear the existing content
-                        field.insert(0, row[j])  # Insert the value from the database
-                self.cursor.execute("SELECT * FROM checks WHERE user_password=?", [user_login_info.password])
-                all_data2 = self.cursor.fetchall()
-                for x, row2 in enumerate(all_data2):
-                    for y, field2 in enumerate(self.other_all_fields):
-                        if row2[y] == 1:
-                            field2.select()
-                        else:
-                            try:
-                                field2.deselect()
-                            except AttributeError:
-                                continue
+        if messagebox.askyesno("Alert", "Upon clicking yes, all fields will be loaded from a database and autosave will be enabled until clicking new or exiting the program. This process may take several minutes"):
+            self.auto_save_runner = True
 
-                print("Data loaded from the database.")
-                messagebox.showinfo('Success', 'Loaded Session')
+            if self.user_id.get() == "":
+                messagebox.showerror('Error', 'Please Enter A Username')
+            elif self.user_password.get() == "":
+                messagebox.showerror('Error', 'Please Enter A Password')
+            else:
+                if self.user_id.get() != user_login_info.username:
+                    messagebox.showerror('Error', 'Invalid Username. Please Enter Your Username.')
+                elif self.user_password.get() != user_login_info.password:
+                    messagebox.showerror('Error', 'Invalid Password. Please Enter Your Password.')
+                else:
+                    self.cursor.execute("SELECT * FROM jk WHERE user_id=?", [user_login_info.username])
+                    all_data = self.cursor.fetchall()
+                    for i, row in enumerate(all_data):
+                        for j, field in enumerate(self.all_fields):
+                            field.delete(0, "end")  # Clear the existing content
+                            field.insert(0, row[j])  # Insert the value from the database
+                    self.cursor.execute("SELECT * FROM checks WHERE user_password=?", [user_login_info.password])
+                    all_data2 = self.cursor.fetchall()
+                    for x, row2 in enumerate(all_data2):
+                        for y, field2 in enumerate(self.other_all_fields):
+                            if row2[y] == 1:
+                                field2.select()
+                            else:
+                                try:
+                                    field2.deselect()
+                                except AttributeError:
+                                    continue
+
+                    print("Data loaded from the database.")
+                    messagebox.showinfo('Success', 'Loaded Session')
+                    self.loaded = "yes"
+                    self.auto_save()
 
     def auto_save(self):
-        # Increment time by 1 second
-        self.elapsed_time += 1
+        if self.auto_save_runner:
+            # Increment time by 1 second
+            self.elapsed_time += 1
 
-        # Check if allotted time has passed
-        if self.elapsed_time >= 10:
-            print("Auto-Saved Session")
-            self.save_session()
-            self.elapsed_time = 0  # Resetting counter for next autosave
+            # Check if allotted time has passed
+            if self.elapsed_time >= 10:
+                print("Auto-Saved Session")
+                self.save_session()
+                self.elapsed_time = 0  # Resetting counter for next autosave
 
-        # Time next autosave after 1 second
-        self.app.after(1000, self.auto_save)
+            # Time next autosave after 1 second
+            self.app.after(1000, self.auto_save)
 
     def main_save(self):
-        if self.user_id.get() == "":
-            messagebox.showerror('Error', 'Please Enter A Username.')
-        elif self.user_password.get() == "":
-            messagebox.showerror('Error', 'Please Enter A Password.')
-        else:
-            if self.user_id.get() != user_login_info.username:
-                messagebox.showerror('Error', 'Invalid Username. Please Enter Your Username.')
-            elif self.user_password.get() != user_login_info.password:
-                messagebox.showerror('Error', 'Invalid Password. Please Enter Your Password.')
+        if messagebox.askyesno("Alert", "Upon clicking yes, all fields will be saved to a database and autosave will be enabled until clicking new or exiting the program."):
+            self.auto_save_runner = True
+            if self.user_id.get() == "":
+                messagebox.showerror('Error', 'Please Enter A Username.')
+            elif self.user_password.get() == "":
+                messagebox.showerror('Error', 'Please Enter A Password.')
             else:
-                self.program_run = False
-                self.save_session()
-                messagebox.showinfo("Success", f"Saved Session. Time: {self.current_time_date}")
-                print("Data saved to database.")
-                self.auto_save()
+                if self.user_id.get() != user_login_info.username:
+                    messagebox.showerror('Error', 'Invalid Username. Please Enter Your Username.')
+                elif self.user_password.get() != user_login_info.password:
+                    messagebox.showerror('Error', 'Invalid Password. Please Enter Your Password.')
+                else:
+                    self.program_run = False
+                    self.save_session()
+                    messagebox.showinfo("Success", f"Saved Session. Time: {self.current_time_date}")
+                    print("Data saved to database.")
+                    self.auto_save()
 
     def send_info_calculate(self):
 
         if self.calculate_changer == "w2":
+
+            w2_user_validation.validate_essn(self.essn_entry.get())
+            w2_user_validation.validate_ein(self.ein_entry.get())
+            w2_user_validation.validate_employer_name_etc(self.employer_name_etc.get())
+            w2_user_validation.validate_cn(self.cn_entry.get())
+            w2_user_validation.validate_employee_name_i(self.employee_name_i.get())
+            w2_user_validation.validate_employee_last(self.employee_last_name.get())
+            w2_user_validation.validate_employee_address_zip(self.employee_address_etc.get())
+            w2_user_validation.validate_state(self.state_field.get())
+
+            w2_user_validation.validate_wages_tips_other_comp(self.wages_tips_c.get())
+            w2_user_validation.validate_federal_income_tax_withheld(self.fed_income_tax_withheld.get())
+            w2_user_validation.validate_social_security_wages(self.social_wages.get())
+            w2_user_validation.validate_social_security_tax(self.social_security_tax_withheld.get())
+            w2_user_validation.validate_medicare_wages(self.medicare_wages.get())
+            w2_user_validation.validate_medicare_tax(self.medicare_tax_withheld.get())
+            w2_user_validation.validate_social_security_tips(self.social_security_tips.get())
+            w2_user_validation.validate_allocated_tips(self.allocated_tips.get())
+            w2_user_validation.validate_dependant_care_benefits(self.dependent_care_benefits.get())
+            w2_user_validation.validate_nonqualified_plans(self.non_qualified_plans.get())
+            w2_user_validation.validate_12a(self.twelve_a.get())
+            w2_user_validation.validate_12b(self.twelve_b.get())
+            w2_user_validation.validate_12c(self.twelve_c.get())
+            w2_user_validation.validate_12d(self.twelve_d.get())
+            w2_user_validation.validate_state_wages_tips(self.state_wage_tips.get())
+            w2_user_validation.validate_state_income_tax(self.state_income_tax.get())
+            w2_user_validation.validate_local_income(self.local_wage_tips.get())
+            w2_user_validation.validate_local_income_tax(self.local_income_tax.get())
+
             w2_list = [self.employee_name_i.get(), self.employee_last_name.get(),
                        self.employee_address_etc.get(), self.wages_tips_c.get(),
                        self.fed_income_tax_withheld.get()]
@@ -3620,13 +3699,44 @@ class UserInterface:
                     self.results_textbox.insert("end", "\n")
                     self.results_textbox.insert("end", f"Employee Address And ZIP: {self.employee_address_etc.get()}")
                     self.results_textbox.insert("end", "\n")
-                    self.results_textbox.insert("end", f"Wages, Tips, Other Compensation: {self.wages_tips_c.get()}")
+                    self.results_textbox.insert("end", f"Wages, Tips, Other Compensation: {float(self.wages_tips_c.get()):.2f}")
                     self.results_textbox.insert("end", "\n")
                     self.results_textbox.insert("end",
-                                                f"Federal Income Tax Withheld: {self.fed_income_tax_withheld.get()}")
+                                                f"Federal Income Tax Withheld: {float(self.fed_income_tax_withheld.get()):.2f}")
                     self.results_textbox.configure(state="disabled")
                     break
         elif self.calculate_changer == "1099":
+
+            ten_99_validation.validate_payer_name_etc(self.ten_ninety_nine_payer_info.get())
+            ten_99_validation.validate_payer_tin(self.ten_ninety_nine_payer_tin.get())
+            ten_99_validation.validate_recipient_tin(self.ten_ninety_nine_recipient_tin.get())
+            ten_99_validation.validate_recipient_name(self.ten_ninety_nine_recipient_name.get())
+            ten_99_validation.validate_recipient_address(self.ten_ninety_nine_recipient_address.get())
+            ten_99_validation.validate_recipient_city_etc(self.ten_ninety_nine_recipient_city_etc.get())
+            ten_99_validation.validate_account_number(self.ten_ninety_nine_account_number.get())
+            ten_99_validation.validate_state(self.ten_ninety_nine_state.get())
+            ten_99_validation.validate_state_id(self.ten_ninety_nine_state_id_number.get())
+
+            ten_99_validation.validate_ordinary_dividends(self.ten_ninety_nine_ordinary_dividends.get())
+            ten_99_validation.validate_qualified_dividends(self.ten_ninety_nine_qualified_dividends.get())
+            ten_99_validation.validate_capital_gain_distr(self.ten_ninety_nine_capital_gain.get())
+            ten_99_validation.validate_unrecap_sec_1250_gain(self.ten_ninety_nine_1250_gain.get())
+            ten_99_validation.validate_section_1202_gain(self.ten_ninety_nine_1202_gain.get())
+            ten_99_validation.validate_collectibles_gain(self.ten_ninety_nine_collectibles_gain.get())
+            ten_99_validation.validate_ordinary_dividends(self.ten_ninety_nine_ordinary_dividends.get())
+            ten_99_validation.validate_section_897_capital_gain(self.ten_ninety_nine_897_gain.get())
+            ten_99_validation.validate_nondividend_distributions(self.ten_ninety_nine_nondividend.get())
+            ten_99_validation.validate_income_tax_withheld(self.ten_ninety_nine_federal_tax_withheld.get())
+            ten_99_validation.validate_section_199a_dividends(self.ten_ninety_nine_199a.get())
+            ten_99_validation.validate_investment_expenses(self.ten_ninety_nine_investment_expenses.get())
+            ten_99_validation.validate_foreign_tax_paid(self.ten_ninety_nine_foreign_tax.get())
+            ten_99_validation.validate_foreign_country_or_us_possession(self.ten_ninety_nine_foreign_tax_country.get())
+            ten_99_validation.validate_cash_liquidation_distributions(self.ten_ninety_nine_cash_liquidation.get())
+            ten_99_validation.validate_noncash_liquidation_distributions(self.ten_ninety_nine_noncash_liquidation.get())
+            ten_99_validation.validate_exempt_interest_dividends(self.ten_ninety_nine_exempt_dividends.get())
+            ten_99_validation.validate_private_activity_bond_interest_dividends(self.ten_ninety_nine_specified_bond_dividends.get())
+            ten_99_validation.validate_other_states_tax(self.ten_ninety_nine_state_tax_withheld.get())
+
             ten_99_list = [self.ten_ninety_nine_payer_info.get(), self.ten_ninety_nine_payer_tin.get(),
                            self.ten_ninety_nine_recipient_name.get(), self.ten_ninety_nine_recipient_tin.get(),
                            self.ten_ninety_nine_federal_tax_withheld.get()]
@@ -3654,11 +3764,167 @@ class UserInterface:
                     self.results_textbox.insert("end", "\n")
                     self.results_textbox.insert("end",
                                                 f"Federal Income Tax Withheld: "
-                                                f"{self.ten_ninety_nine_federal_tax_withheld.get()}")
+                                                f"{float(self.ten_ninety_nine_federal_tax_withheld.get()):.2f}")
                     self.results_textbox.configure(state="disabled")
                     break
             pass
         elif self.calculate_changer == "1040":
+
+            ten_40_validation.validate_first_name_i(self.ten_forty_first_name.get())
+            ten_40_validation.validate_last_name(self.ten_forty_last_name.get())
+            ten_40_validation.validate_spouse_first_i(self.ten_forty_spouse_first.get())
+            ten_40_validation.validate_spouse_last_name(self.ten_forty_spouse_last.get())
+            ten_40_validation.validate_home_address(self.ten_forty_home_address.get())
+            ten_40_validation.validate_apt_no(self.ten_forty_apt_no.get())
+            ten_40_validation.validate_city_etc(self.ten_forty_city.get())
+            ten_40_validation.validate_state(self.ten_forty_state.get())
+            ten_40_validation.validate_zip_code(self.ten_forty_zip.get())
+            ten_40_validation.validate_foreign_country_name(self.ten_forty_foreign_country.get())
+            ten_40_validation.validate_foreign_province(self.ten_forty_foreign_province.get())
+            ten_40_validation.validate_foreign_postal_code(self.ten_forty_foreign_post_code.get())
+
+            if self.ten_forty_filing_single.get() == 1:
+                self.filing_status = "Single"
+                if self.ten_forty_filing_jointly.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_separately.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_hoh.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_qss.get() == 1:
+                    self.filing_status = ""
+                ten_40_validation.validate_filing_status(self.filing_status)
+
+            elif self.ten_forty_filing_jointly.get() == 1:
+                self.filing_status = "Married Filing Jointly"
+                if self.ten_forty_filing_single.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_separately.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_hoh.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_qss.get() == 1:
+                    self.filing_status = ""
+                ten_40_validation.validate_filing_status(self.filing_status)
+
+            elif self.ten_forty_filing_separately.get() == 1:
+                self.filing_status = "Married Filing Separately"
+                if self.ten_forty_filing_single.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_jointly.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_hoh.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_qss.get() == 1:
+                    self.filing_status = ""
+                ten_40_validation.validate_filing_status(self.filing_status)
+
+            elif self.ten_forty_filing_hoh.get() == 1:
+                self.filing_status = "Head of Household"
+                if self.ten_forty_filing_single.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_jointly.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_separately.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_qss.get() == 1:
+                    self.filing_status = ""
+                user_form_1040.set_filing_status(self.filing_status)
+
+            elif self.ten_forty_filing_qss.get() == 1:
+                self.filing_status = "Qualifying Surviving Spouse"
+                if self.ten_forty_filing_single.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_jointly.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_separately.get() == 1:
+                    self.filing_status = ""
+                elif self.ten_forty_filing_hoh.get() == 1:
+                    self.filing_status = ""
+                user_form_1040.set_filing_status(self.filing_status)
+            else:
+                self.filing_status = ""
+                ten_40_validation.validate_filing_status(self.filing_status)
+
+
+            if self.ten_forty_digital_assets_yes.get() == 1:
+                self.checkbox_checker = True
+                user_form_1040.set_has_digital_assets(self.checkbox_checker)
+            if self.ten_forty_digital_assets_no.get() == 1:
+                self.checkbox_checker = False
+                user_form_1040.set_has_digital_assets(self.checkbox_checker)
+
+            if self.ten_forty_are_dependent.get() == 1:
+                self.checkbox_checker = True
+                user_form_1040.set_is_dependent(self.checkbox_checker)
+
+            if self.ten_forty_spouse_dependent.get() == 1:
+                self.checkbox_checker = True
+                user_form_1040.set_spouse_is_dependent(self.checkbox_checker)
+
+            if self.ten_forty_spouse_separate.get() == 1:
+                self.checkbox_checker = True
+                user_form_1040.set_spouse_itemizes_separately(self.checkbox_checker)
+
+            if self.ten_forty_self_1959.get() == 1:
+                self.born_1959 = 66
+                user_form_1040.set_user_age(self.born_1959)
+
+            if self.ten_forty_self_blind.get() == 1:
+                self.checkbox_checker = True
+                user_form_1040.set_user_is_blind(self.checkbox_checker)
+
+            if self.ten_forty_spouse_1959.get() == 1:
+                self.born_1959 = 66
+                user_form_1040.set_user_age(self.born_1959)
+
+            if self.ten_forty_spouse_blind.get() == 1:
+                self.checkbox_checker = True
+                user_form_1040.set_spouse_is_blind(self.checkbox_checker)
+
+            ten_40_validation.validate_dependets_first_last_1(self.ten_forty_dependent_first_1.get())
+            ten_40_validation.validate_dependets_first_last_2(self.ten_forty_dependent_first_2.get())
+            ten_40_validation.validate_dependets_first_last_3(self.ten_forty_dependent_first_3.get())
+            ten_40_validation.validate_dependets_first_last_4(self.ten_forty_dependent_first_4.get())
+
+            ten_40_validation.validate_income_w2(self.ten_forty_total_w2s.get())
+            ten_40_validation.validate_household_employee_income(self.ten_forty_household_wages.get())
+            ten_40_validation.validate_tip_income(self.ten_forty_tip_income.get())
+            ten_40_validation.validate_medicaid_waiver_payments(self.ten_forty_medicaid_waiver.get())
+            ten_40_validation.validate_dependent_care_benefits(self.ten_forty_dependent_benefits.get())
+            ten_40_validation.validate_employer_adoption_benefits(self.ten_forty_adoption_benefits.get())
+            ten_40_validation.validate_wages_form_8919(self.ten_forty_8919_wages.get())
+            ten_40_validation.validate_other_income(self.ten_forty_other_income.get())
+            ten_40_validation.validate_combat_pay(self.ten_forty_combat_pay.get())
+            ten_40_validation.validate_tax_exempt_interest(self.ten_forty_tax_exempt_interest.get())
+            ten_40_validation.validate_taxable_interest(self.ten_forty_taxable_interest.get())
+            ten_40_validation.validate_qualified_dividends(self.ten_forty_qualified_dividends.get())
+            ten_40_validation.validate_ordinary_dividends(self.ten_forty_ordinary_dividends.get())
+            ten_40_validation.validate_ira_distributions(self.ten_forty_ira_distributions.get())
+            ten_40_validation.validate_ira_taxable(self.ten_forty_taxable_ira.get())
+            ten_40_validation.validate_pensions_annuities(self.ten_forty_pensions_annuities.get())
+            ten_40_validation.validate_pensions_annuities_taxable(self.ten_forty_taxable_pensions.get())
+            ten_40_validation.validate_social_security_benefits(self.ten_forty_social_security.get())
+            ten_40_validation.validate_ss_benefits_taxable(self.ten_forty_social_taxable.get())
+            ten_40_validation.validate_capital_gain_or_loss(self.ten_forty_capital_gain.get())
+            ten_40_validation.validate_income_schedule_1(self.ten_forty_schedule_1.get())
+            ten_40_validation.validate_adjustments(self.ten_forty_income_adjustments.get())
+            ten_40_validation.validate_qualified_business_income_deduction(self.ten_forty_business_deductions.get())
+            ten_40_validation.validate_form_no(self.ten_forty_other_form_no.get())
+            ten_40_validation.validate_tax(self.ten_forty_other_form_total.get())
+            ten_40_validation.validate_amount_schedule_2(self.ten_forty_schedule_2.get())
+            ten_40_validation.validate_child_tax_credit(self.ten_forty_child_credit.get())
+            ten_40_validation.validate_amount_schedule_3_line_8(self.ten_forty_schedule_3.get())
+            ten_40_validation.validate_other_taxes(self.ten_forty_other_taxes.get())
+            ten_40_validation.validate_tax_withheld_w2(self.ten_forty_withheld_w2.get())
+            ten_40_validation.validate_tax_withheld_1099(self.ten_forty_withheld_1099.get())
+            ten_40_validation.validate_tax_withheld_other(self.ten_forty_withheld_other.get())
+            ten_40_validation.validate_estimate_tax_payments(self.ten_forty_previous_year.get())
+            ten_40_validation.validate_earned_income_credit(self.ten_forty_eic.get())
+            ten_40_validation.validate_additional_child_tax_credit(self.ten_forty_8812_child_credit.get())
+            ten_40_validation.validate_american_opportunity_credit(self.ten_forty_8863_opportunity_credit.get())
+            ten_40_validation.validate_amount_schedule_3_line_15(self.ten_forty_schedule_3_line_15.get())
+            ten_40_validation.validate_penality(self.ten_forty_penalty.get())
 
             ten_40_list = self.ten_forty_placements.copy()
             # Creating a list of indexes to remove
@@ -3826,71 +4092,71 @@ class UserInterface:
 
                     self.ten_forty_1_ah_sum.configure(state="normal")
                     self.ten_forty_1_ah_sum.delete(0, ctk.END)
-                    self.ten_forty_1_ah_sum.insert("end", user_form_1040.total_1a_to_1h)
+                    self.ten_forty_1_ah_sum.insert("end", f"{user_form_1040.total_1a_to_1h:.2f}")
 
                     self.ten_forty_total_income.configure(state="normal")
                     self.ten_forty_total_income.delete(0, ctk.END)
-                    self.ten_forty_total_income.insert("end", user_form_1040.total_income)
+                    self.ten_forty_total_income.insert("end", f"{user_form_1040.total_income:.2f}")
 
                     self.ten_forty_adjusted_income.configure(state="normal")
                     self.ten_forty_adjusted_income.delete(0, ctk.END)
-                    self.ten_forty_adjusted_income.insert("end", user_form_1040.adjusted_gross_income)
+                    self.ten_forty_adjusted_income.insert("end", f"{user_form_1040.adjusted_gross_income:.2f}")
 
                     self.ten_forty_add_16_17.configure(state="normal")
                     self.ten_forty_add_16_17.delete(0, ctk.END)
-                    self.ten_forty_add_16_17.insert("end", user_form_1040.total_16_17)
+                    self.ten_forty_add_16_17.insert("end", f"{user_form_1040.total_16_17:.2f}")
 
                     self.ten_forty_add_19_20.configure(state="normal")
                     self.ten_forty_add_19_20.delete(0, ctk.END)
-                    self.ten_forty_add_19_20.insert("end", user_form_1040.total_19_20)
+                    self.ten_forty_add_19_20.insert("end", f"{user_form_1040.total_19_20:.2f}")
 
                     self.ten_forty_sub_21_18.configure(state="normal")
                     self.ten_forty_sub_21_18.delete(0, ctk.END)
-                    self.ten_forty_sub_21_18.insert("end", user_form_1040.subtract_21_from_18)
+                    self.ten_forty_sub_21_18.insert("end", f"{user_form_1040.subtract_21_from_18:.2f}")
 
                     self.ten_forty_total_tax.configure(state="normal")
                     self.ten_forty_total_tax.delete(0, ctk.END)
-                    self.ten_forty_total_tax.insert("end", user_form_1040.total_tax)
+                    self.ten_forty_total_tax.insert("end", f"{user_form_1040.total_tax:.2f}")
 
                     self.ten_forty_withheld_total.configure(state="normal")
                     self.ten_forty_withheld_total.delete(0, ctk.END)
-                    self.ten_forty_withheld_total.insert("end", user_form_1040.total_withheld)
+                    self.ten_forty_withheld_total.insert("end", f"{user_form_1040.total_withheld:.2f}")
 
                     self.ten_forty_other_payments.configure(state="normal")
                     self.ten_forty_other_payments.delete(0, ctk.END)
-                    self.ten_forty_other_payments.insert("end", user_form_1040.total_other_payments)
+                    self.ten_forty_other_payments.insert("end", f"{user_form_1040.total_other_payments:.2f}")
 
                     self.ten_forty_total_payments.configure(state="normal")
                     self.ten_forty_total_payments.delete(0, ctk.END)
-                    self.ten_forty_total_payments.insert("end", user_form_1040.total_payments)
+                    self.ten_forty_total_payments.insert("end", f"{user_form_1040.total_payments:.2f}")
 
                     self.ten_forty_overpaid.configure(state="normal")
                     self.ten_forty_overpaid.delete(0, ctk.END)
-                    self.ten_forty_overpaid.insert("end", user_form_1040.overpaid)
+                    self.ten_forty_overpaid.insert("end", f"{user_form_1040.overpaid:.2f}")
 
                     self.ten_forty_owed.configure(state="normal")
                     self.ten_forty_owed.delete(0, ctk.END)
-                    self.ten_forty_owed.insert("end", user_form_1040.amount_owed)
+                    self.ten_forty_owed.insert("end", f"{user_form_1040.amount_owed:.2f}")
 
                     self.ten_forty_deductions.configure(state="normal")
                     self.ten_forty_deductions.delete(0, ctk.END)
-                    self.ten_forty_deductions.insert("end", user_form_1040.standard_deduction)
+                    self.ten_forty_deductions.insert("end", f"{user_form_1040.standard_deduction:.2f}")
 
                     self.ten_forty_total_deductions.configure(state="normal")
                     self.ten_forty_total_deductions.delete(0, ctk.END)
-                    self.ten_forty_total_deductions.insert("end", user_form_1040.total_deductions)
+                    self.ten_forty_total_deductions.insert("end", f"{user_form_1040.total_deductions:.2f}")
 
                     self.ten_forty_taxable_income.configure(state="normal")
                     self.ten_forty_taxable_income.delete(0, ctk.END)
-                    self.ten_forty_taxable_income.insert("end", user_form_1040.taxable_income)
+                    self.ten_forty_taxable_income.insert("end", f"{user_form_1040.taxable_income:.2f}")
 
                     self.results_textbox.configure(state="normal")
                     self.results_textbox.delete("1.0", "end")
                     self.results_textbox.insert("end", "Form 1040 Information:")
                     self.results_textbox.insert("end", "\n\n")
-                    self.results_textbox.insert("end", f"Amount Overpaid: ${user_form_1040.overpaid}")
+                    self.results_textbox.insert("end", f"Amount Overpaid: ${user_form_1040.overpaid:.2f}")
                     self.results_textbox.insert("end", "\n")
-                    self.results_textbox.insert("end", f"Amount Owed: ${user_form_1040.amount_owed}")
+                    self.results_textbox.insert("end", f"Amount Owed: ${user_form_1040.amount_owed:.2f}")
                     self.results_textbox.configure(state="disabled")
                     break
 

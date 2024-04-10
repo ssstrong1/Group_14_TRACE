@@ -26,7 +26,6 @@ dict_1099_div = {"ORDINARY_DIVIDENDS": 0000,
                  "FED_TAX_WITHHELD": 0000}
 """
 
-
 class Form1040:
     """
     Class for Form 1040, handles tax return calculations
@@ -122,10 +121,10 @@ class Form1040:
         self.forms_w2 = forms_w2
         self.form_1099_div = form_1099_div
 
-    def total_forms_w2(self):
+    def total_forms_w2(self, x, y):
         """Total income and taxes from Form(s) W2"""
-        total_income = 00.00
-        total_withheld = 00.00
+        total_income = x
+        total_withheld = y
 
         # Loop through list of forms
         for form in self.forms_w2:
@@ -138,7 +137,7 @@ class Form1040:
 
     def total_forms_1099(self):
         """Total income and taxes from Form(s) 1099"""
-        tax_withheld_1099 = 0.00
+        tax_withheld_1099 = 00.00
 
         # Total tax withheld from all states
         for form in self.form_1099_div:
@@ -1363,7 +1362,7 @@ class Form1040:
         """
         return self.form_1099_div
 
-    def add_w2(self, form):
+    def add_w2(self, form, x, y):
         """
         Function to append a new W2 form to the end of the list of W2 forms
 
@@ -1371,7 +1370,7 @@ class Form1040:
         :return: N/A
         """
         self.forms_w2.append(form)
-        self.total_forms_w2()
+        self.total_forms_w2(x, y)
 
     def add_ten_99(self, form):
         """
