@@ -527,6 +527,8 @@ class UserInterface:
         self.old_new = 00.00
         self.old_new_w2_withheld = 00.00
 
+        self.old_new_1099 = 00.00
+
         self.loaded = ""
 
         ###############################
@@ -1444,6 +1446,8 @@ class UserInterface:
                     messagebox.showerror("Error", "Please Enter Your Information For Box 1 And 2 To Submit It To 1040")
 
                 else:
+                    w2_user_validation.validate_wages_tips_other_comp(self.wages_tips_c.get())
+                    w2_user_validation.validate_federal_income_tax_withheld(self.fed_income_tax_withheld.get())
                     self.w2_increasing_number_for_forms.set(self.w2_increasing_number_for_forms.get() + 1)
 
                     dict_w2 = {"WAGES_TIPS_OTHER_COMP": float(self.wages_tips_c.get()),
@@ -1457,20 +1461,44 @@ class UserInterface:
 
                     if str(self.ten_forty_total_w2s.get()) == "":
                         self.old_new = 00.00
-                        self.old_new_w2_withheld = 00.00
                         user_form_1040.income_w2 = 00.00
                     else:
                         if self.loaded == "yes":
+                            user_form_1040.forms_w2.clear()
                             if str(self.ten_forty_total_w2s.get()) == "":
                                 self.old_new = 00.00
-                                self.old_new_w2_withheld = 00.00
                                 user_form_1040.income_w2 = 00.00
                             else:
-                                self.old_new = float(self.wages_tips_c.get())
-                                self.old_new_w2_withheld = float(self.fed_income_tax_withheld.get())
+                                self.old_new = float(self.ten_forty_total_w2s.get())
+
+                        else:
+                            user_form_1040.forms_w2.clear()
+                            if str(self.ten_forty_total_w2s.get()) == "":
+                                self.old_new = 00.00
+                                user_form_1040.income_w2 = 00.00
+                            else:
+                                self.old_new = float(self.ten_forty_total_w2s.get())
+
+                    if str(self.ten_forty_withheld_w2.get()) == "":
+                        self.old_new_w2_withheld = 00.00
+                        user_form_1040.tax_withheld_w2 = 00.00
+                    else:
+                        if self.loaded == "yes":
+                            user_form_1040.forms_w2.clear()
+                            if str(self.ten_forty_withheld_w2.get()) == "":
+                                self.old_new_w2_withheld = 00.00
+                                user_form_1040.tax_withheld_w2 = 00.00
+                            else:
+                                self.old_new_w2_withheld = float(self.ten_forty_withheld_w2.get())
+                        else:
+                            user_form_1040.forms_w2.clear()
+                            if str(self.ten_forty_withheld_w2.get()) == "":
+                                self.old_new_w2_withheld = 00.00
+                                user_form_1040.tax_withheld_w2 = 00.00
+                            else:
+                                self.old_new_w2_withheld = float(self.ten_forty_withheld_w2.get())
 
                     user_form_1040.add_w2(dict_w2, self.old_new, self.old_new_w2_withheld)
-
 
                     self.ten_forty_total_w2s.configure(state="normal")
                     self.ten_forty_total_w2s.delete(0, ctk.END)
@@ -1487,9 +1515,10 @@ class UserInterface:
         else:
             if messagebox.askyesno("Alert", "Upon clicking yes, box 4 will be sent to the 1040 form. All other fields will be cleared and autosave will be disabled until saving or loading the session again."):
                 if self.ten_ninety_nine_federal_tax_withheld.get() == "":
-                    messagebox.showerror("Error", "Please Enter Your Information For Box 1 And 2 To Submit It To 1040")
+                    messagebox.showerror("Error", "Please Enter Your Information For Box 4 To Submit It To 1040")
 
                 else:
+                    ten_99_validation.validate_income_tax_withheld(self.ten_ninety_nine_federal_tax_withheld.get())
                     self.ten_99_increasing_number_for_forms.set(self.ten_99_increasing_number_for_forms.get() + 1)
 
                     dict_1099_div = {"ORDINARY_DIVIDENDS": 0000,
@@ -1504,7 +1533,27 @@ class UserInterface:
                                      "EXEMPT_INTEREST_DIVIDENDS": 0000, "PRIVATE_ACTIVITY_BOND_INTEREST_DIVIDENDS": 0000,
                                      "FED_TAX_WITHHELD": float(self.ten_ninety_nine_federal_tax_withheld.get())}
 
-                    user_form_1040.add_ten_99(dict_1099_div)
+                    if str(self.ten_forty_withheld_1099.get()) == "":
+                        self.old_new_1099 = 00.00
+                        user_form_1040.tax_withheld_1099 = 00.00
+                    else:
+                        if self.loaded == "yes":
+                            user_form_1040.form_1099_div.clear()
+                            if str(self.ten_forty_withheld_1099.get()) == "":
+                                self.old_new_1099 = 00.00
+                                user_form_1040.tax_withheld_1099 = 00.00
+                            else:
+                                self.old_new_1099 = float(self.ten_forty_withheld_1099.get())
+
+                        else:
+                            user_form_1040.form_1099_div.clear()
+                            if str(self.ten_forty_withheld_1099.get()) == "":
+                                self.old_new_1099 = 00.00
+                                user_form_1040.tax_withheld_1099 = 00.00
+                            else:
+                                self.old_new_1099 = float(self.ten_forty_withheld_1099.get())
+
+                    user_form_1040.add_ten_99(dict_1099_div, self.old_new_1099)
 
                     self.ten_forty_withheld_1099.configure(state="normal")
                     self.ten_forty_withheld_1099.delete(0, ctk.END)

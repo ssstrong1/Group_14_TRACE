@@ -135,9 +135,9 @@ class Form1040:
         self.income_w2 = total_income
         self.tax_withheld_w2 = total_withheld
 
-    def total_forms_1099(self):
+    def total_forms_1099(self, x):
         """Total income and taxes from Form(s) 1099"""
-        tax_withheld_1099 = 00.00
+        tax_withheld_1099 = x
 
         # Total tax withheld from all states
         for form in self.form_1099_div:
@@ -1372,7 +1372,7 @@ class Form1040:
         self.forms_w2.append(form)
         self.total_forms_w2(x, y)
 
-    def add_ten_99(self, form):
+    def add_ten_99(self, form, x):
         """
         Function to append a new W2 form to the end of the list of W2 forms
 
@@ -1380,7 +1380,7 @@ class Form1040:
         :return: N/A
         """
         self.form_1099_div.append(form)
-        self.total_forms_1099()
+        self.total_forms_1099(x)
 
     def calc_all(self):
         """
