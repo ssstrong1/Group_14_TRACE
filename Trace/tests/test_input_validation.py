@@ -638,7 +638,623 @@ def test_validate_other_states_1099_div(setup_validator_1099_div):
 
 
 # 1040
+def test_validate_first_name_i(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
 
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_first_name_i("test#")
+
+
+def test_validate_last_name(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_last_name("test#")
+
+
+def test_validate_spouse_first_i(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_spouse_first_i("test#")
+
+
+def test_validate_spouse_last_name(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_spouse_last_name("test#")
+
+
+def test_validate_home_address(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_home_address("test#")
+
+
+def test_validate_apt_no(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_apt_no("test")
+        setup_validator_1040.validate_apt_no("-1")
+
+
+def test_validate_city_etc(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_city_etc("test#")
+
+
+def test_validate_state_1040(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_state("test#")
+
+
+def test_validate_zip_code(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_zip_code("test")
+        setup_validator_1040.validate_zip_code("-1")
+
+
+def test_validate_foreign_country_name(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_foreign_country_name("test#")
+
+
+def test_validate_foreign_province(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_foreign_province("test#")
+
+
+def test_validate_postal_code(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_foreign_postal_code("test")
+        setup_validator_1040.validate_foreign_postal_code("-1")
+
+
+def test_validate_dependents_first_last_1(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_dependets_first_last_1("test#")
+
+
+def test_validate_dependents_first_last_2(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_dependets_first_last_2("test#")
+
+
+def test_validate_dependents_first_last_3(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_dependets_first_last_3("test#")
+
+
+def test_validate_dependents_first_last_4(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_dependets_first_last_4("test#")
+
+
+def test_validate_filing_status(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    assert setup_validator_1040.validate_filing_status("Single"), "Entered, filing_status: Single"
+    assert setup_validator_1040.validate_filing_status("Married Filing Jointly"), "Entered filing_status: Married Filing Jointly"
+    assert setup_validator_1040.validate_filing_status("Married Filing Separately"), "Entered filing_status: Married Filing Separately"
+    assert setup_validator_1040.validate_filing_status("Head of Household"), "Entered filing_status: Head of Household"
+    assert setup_validator_1040.validate_filing_status("Qualifying Surviving Spouse"), "Entered filing_status: Qualifying Surviving Spouse"
+
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_filing_status("test")
+
+
+def test_validate_user_age(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_user_age("test")
+        setup_validator_1040.validate_user_age("-1")
+
+
+def test_validate_spouse_age(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_spouse_age("test")
+        setup_validator_1040.validate_spouse_age("-1")
+
+
+def test_validate_income_w2(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_income_w2("test")
+        setup_validator_1040.validate_income_w2("-1")
+
+
+def test_validate_household_employee_income(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_household_employee_income("test")
+        setup_validator_1040.validate_household_employee_income("-1")
+
+
+def test_validate_tip_income(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_tip_income("test")
+        setup_validator_1040.validate_tip_income("-1")
+
+
+def test_validate_medicaid_waiver_payments(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_medicaid_waiver_payments("test")
+        setup_validator_1040.validate_medicaid_waiver_payments("-1")
+
+
+def test_validate_dependent_care_benefits_1040(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_dependent_care_benefits("test")
+        setup_validator_1040.validate_dependent_care_benefits("-1")
+
+
+def test_validate_employer_adoption_benefits(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_employer_adoption_benefits("test")
+        setup_validator_1040.validate_employer_adoption_benefits("-1")
+
+
+def test_validate_wages_form_8919(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_wages_form_8919("test")
+        setup_validator_1040.validate_wages_form_8919("-1")
+
+
+def test_validate_other_income(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_other_income("test")
+        setup_validator_1040.validate_other_income("-1")
+
+
+def test_validate_combat_pay(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_combat_pay("test")
+        setup_validator_1040.validate_combat_pay("-1")
+
+
+def test_validate_tax_exempt_interest(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_tax_exempt_interest("test")
+        setup_validator_1040.validate_tax_exempt_interest("-1")
+
+
+def test_validate_taxable_interest(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_taxable_interest("test")
+        setup_validator_1040.validate_taxable_interest("-1")
+
+
+def test_validate_qualified_dividends_1040(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_qualified_dividends("test")
+        setup_validator_1040.validate_qualified_dividends("-1")
+
+
+def test_validate_ordinary_dividends_1040(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_ordinary_dividends("test")
+        setup_validator_1040.validate_ordinary_dividends("-1")
+
+
+def test_validate_ira_distr(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_ira_distributions("test")
+        setup_validator_1040.validate_ira_distributions("-1")
+
+
+def test_validate_ira_taxable(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_ira_taxable("test")
+        setup_validator_1040.validate_ira_taxable("-1")
+
+
+def test_validate_pensions_annuities(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_pensions_annuities("test")
+        setup_validator_1040.validate_pensions_annuities("-1")
+
+
+def test_validate_pensions_annuities_taxable(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_pensions_annuities_taxable("test")
+        setup_validator_1040.validate_pensions_annuities_taxable("-1")
+
+
+def test_validate_ss_benefits(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_social_security_benefits("test")
+        setup_validator_1040.validate_social_security_benefits("-1")
+
+
+def test_validate_ss_benefits_taxable(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_ss_benefits_taxable("test")
+        setup_validator_1040.validate_ss_benefits_taxable("-1")
+
+
+def test_validate_capital_gain_loss(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_capital_gain_or_loss("test")
+        setup_validator_1040.validate_capital_gain_or_loss("-1")
+
+
+def test_validate_income_schedule_1(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_income_schedule_1("test")
+        setup_validator_1040.validate_income_schedule_1("-1")
+
+
+def test_validate_adjustments(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_adjustments("test")
+        setup_validator_1040.validate_adjustments("-1")
+
+
+def test_validate_qualified_income_business_deduction(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_qualified_business_income_deduction("test")
+        setup_validator_1040.validate_qualified_business_income_deduction("-1")
+
+
+def test_validate_form_no(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_form_no("test")
+        setup_validator_1040.validate_form_no("-1")
+
+
+def test_validate_tax(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_tax("test")
+        setup_validator_1040.validate_tax("-1")
+
+
+def test_validate_amount_schedule_2(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_amount_schedule_2("test")
+        setup_validator_1040.validate_amount_schedule_2("-1")
+
+
+def test_validate_child_tax_credit(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_child_tax_credit("test")
+        setup_validator_1040.validate_child_tax_credit("-1")
+
+
+def test_validate_amount_schedule_3_line_8(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_amount_schedule_3_line_8("test")
+        setup_validator_1040.validate_amount_schedule_3_line_8("-1")
+
+
+def test_validate_other_taxes(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_other_taxes("test")
+        setup_validator_1040.validate_other_taxes("-1")
+
+
+def test_validate_tax_withheld_w2(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_tax_withheld_w2("test")
+        setup_validator_1040.validate_tax_withheld_w2("-1")
+
+
+def test_validate_tax_withheld_1099(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_tax_withheld_1099("test")
+        setup_validator_1040.validate_tax_withheld_1099("-1")
+
+
+def test_validate_tax_withheld_other(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_tax_withheld_other("test")
+        setup_validator_1040.validate_tax_withheld_other("-1")
+
+
+def test_validate_estimate_tax_payments(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_estimate_tax_payments("test")
+        setup_validator_1040.validate_estimate_tax_payments("-1")
+
+
+def test_validate_earned_income_credit(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_earned_income_credit("test")
+        setup_validator_1040.validate_earned_income_credit("-1")
+
+
+def test_validate_additional_child_tax_credit(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_additional_child_tax_credit("test")
+        setup_validator_1040.validate_additional_child_tax_credit("-1")
+
+
+def test_validate_american_opportunity_credit(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_american_opportunity_credit("test")
+        setup_validator_1040.validate_american_opportunity_credit("-1")
+
+
+def test_validate_amount_schedule_3_line_15(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_amount_schedule_3_line_15("test")
+        setup_validator_1040.validate_amount_schedule_3_line_15("-1")
+
+
+def test_validate_penality(setup_validator_1040):
+    """
+    Test to ensure that validator raises an error for invalid input
+
+    :return: N/A
+    """
+    with pytest.raises(ValueError):
+        setup_validator_1040.validate_penality("test")
+        setup_validator_1040.validate_penality("-1")
 
 
 
