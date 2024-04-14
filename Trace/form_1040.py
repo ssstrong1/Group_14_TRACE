@@ -26,6 +26,7 @@ dict_1099_div = {"ORDINARY_DIVIDENDS": 0000,
                  "FED_TAX_WITHHELD": 0000}
 """
 
+
 class Form1040:
     """
     Class for Form 1040, handles tax return calculations
@@ -338,8 +339,8 @@ class Form1040:
         :return: N/A
         """
         self.total_1a_to_1h = (self.income_w2 + self.household_employee_wages + self.tip_income +
-                               self.medicaid_waiver_payments + self.dependent_care_benefits +
-                               self.employer_adoption_benefits + self.wages_form_8919 + self.other_income)
+                                self.medicaid_waiver_payments + self.dependent_care_benefits +
+                                self.employer_adoption_benefits + self.wages_form_8919 + self.other_income)
 
     def set_tax_exempt_interest(self, dollars):
         """
