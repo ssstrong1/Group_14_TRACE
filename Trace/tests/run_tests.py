@@ -5,5 +5,8 @@ Runner file for the automated testing suite. Uses pytest-html command to generat
 import subprocess
 
 if __name__ == "__main__":
+    """
+    Unable to get this file to function properly, just run the command below in the console to run the test suite
+    """
     # pytest-html command call
-    subprocess.call("python -m pytest --html=report.html --self-contained-html")
+    subprocess.call("python -m pytest -v Trace/tests/ --html=report.html --self-contained-html")
