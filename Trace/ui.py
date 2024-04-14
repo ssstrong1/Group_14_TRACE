@@ -911,40 +911,40 @@ class UserInterface:
                                                         fg_color="transparent")
 
         self.ten_forty_presidential_you = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                          checkbox_height=25, height=0, bg_color="white")
+                                                          checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_presidential_spouse = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                             checkbox_height=25, height=0, bg_color="white")
+                                                             checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
 
         self.ten_forty_filing_single = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                       checkbox_height=22, height=0, bg_color="white")
+                                                       checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_filing_jointly = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                        checkbox_height=22, height=0, bg_color="white")
+                                                        checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_filing_separately = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                           checkbox_height=22, height=0, bg_color="white")
+                                                           checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_filing_hoh = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                    checkbox_height=22, height=0, bg_color="white")
+                                                    checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_filing_qss = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                    checkbox_height=22, height=0, bg_color="white")
+                                                    checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_digital_assets_yes = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                            checkbox_height=22, height=0, bg_color="white")
+                                                            checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_digital_assets_no = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                           checkbox_height=22, height=0, bg_color="white")
+                                                           checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_are_dependent = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                       checkbox_height=22, height=0, bg_color="white")
+                                                       checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_spouse_dependent = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                          checkbox_height=22, height=0, bg_color="white")
+                                                          checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_spouse_separate = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                         checkbox_height=22, height=0, bg_color="white")
+                                                         checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_self_1959 = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                   checkbox_height=22, height=0, bg_color="white")
+                                                   checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_self_blind = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                    checkbox_height=22, height=0, bg_color="white")
+                                                    checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_spouse_1959 = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                     checkbox_height=22, height=0, bg_color="white")
+                                                     checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_spouse_blind = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                      checkbox_height=22, height=0, bg_color="white")
+                                                      checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_many_dependents = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                         checkbox_height=22, height=0, bg_color="white")
+                                                         checkbox_height=26, checkbox_width=26, height=0, bg_color="white")
         self.ten_forty_dependent_first_1 = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
                                                         placeholder_text="First and Last",
                                                         width=300, height=32,
@@ -967,28 +967,21 @@ class UserInterface:
 
         self.ten_forty_dependent_1_child_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
                                                                   text="",
-                                                                  checkbox_height=22, height=0, bg_color="white")
+                                                                  checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_dependent_1_other_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0,
-                                                                  bg_color="white")
+                                                                  text="", checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_dependent_2_child_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0,
-                                                                  bg_color="white")
+                                                                  text="", checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_dependent_2_other_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0,
-                                                                  bg_color="white")
+                                                                  text="", checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_dependent_3_child_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0,
-                                                                  bg_color="white")
+                                                                  text="", checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_dependent_3_other_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0,
-                                                                  bg_color="white")
+                                                                  text="", checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_dependent_4_child_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0,
-                                                                  bg_color="white")
+                                                                  text="", checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_dependent_4_other_credit = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                                  text="", checkbox_height=22, height=0,
-                                                                  bg_color="white")
+                                                                  text="", checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_total_w2s = ctk.CTkEntry(master=self.ten_forty_scrolling_frame, placeholder_text="W-2 Total",
                                                 width=125,
                                                 height=32, text_color="#000000", bg_color="white",
@@ -1068,9 +1061,9 @@ class UserInterface:
                                                      fg_color="transparent")
 
         self.ten_forty_lump_sum_method = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                         text="", checkbox_height=22, height=0, bg_color="white")
+                                                         text="", checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_schedule_d = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0,
-                                                    text="", checkbox_height=25, height=0, bg_color="white")
+                                                    text="", checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
 
         self.ten_forty_capital_gain = ctk.CTkEntry(master=self.ten_forty_scrolling_frame,
                                                    placeholder_text="Capital Gain",
@@ -1109,22 +1102,22 @@ class UserInterface:
                                                      fg_color="transparent")
 
         self.ten_forty_8814 = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                              checkbox_height=22, height=0, bg_color="white")
+                                              checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_4972 = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                              checkbox_height=22, height=0, bg_color="white")
+                                              checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_other_form_check = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                          checkbox_height=22, height=0, bg_color="white")
+                                                          checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
 
         self.ten_forty_8888 = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                              checkbox_height=25, height=0, bg_color="white")
+                                              checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_route_checking = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                        checkbox_height=25, height=0, bg_color="white")
+                                                        checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_route_savings = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                       checkbox_height=25, height=0, bg_color="white")
+                                                       checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_third_party_yes = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                         checkbox_height=25, height=0, bg_color="white")
+                                                         checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_third_party_no = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
-                                                        checkbox_height=25, height=0, bg_color="white")
+                                                        checkbox_height=26, height=0, checkbox_width=26, bg_color="#dcfff9")
         self.ten_forty_self_employed = ctk.CTkCheckBox(master=self.ten_forty_scrolling_frame, width=0, text="",
                                                        checkbox_height=25, height=0, bg_color="white")
 
@@ -1858,23 +1851,23 @@ class UserInterface:
         self.ten_forty_presidential_you.place(relx=0.878, rely=0.133, anchor="e")
         self.ten_forty_presidential_spouse.place(relx=0.943, rely=0.133, anchor="e")
 
-        self.ten_forty_filing_single.place(relx=0.164, rely=0.144, anchor="e")
-        self.ten_forty_filing_jointly.place(relx=0.164, rely=0.153, anchor="e")
-        self.ten_forty_filing_separately.place(relx=0.164, rely=0.162, anchor="e")
-        self.ten_forty_filing_hoh.place(relx=0.613, rely=0.144, anchor="e")
-        self.ten_forty_filing_qss.place(relx=0.613, rely=0.162, anchor="e")
+        self.ten_forty_filing_single.place(relx=0.163, rely=0.1435, anchor="e")
+        self.ten_forty_filing_jointly.place(relx=0.163, rely=0.1528, anchor="e")
+        self.ten_forty_filing_separately.place(relx=0.163, rely=0.1623, anchor="e")
+        self.ten_forty_filing_hoh.place(relx=0.613, rely=0.1435, anchor="e")
+        self.ten_forty_filing_qss.place(relx=0.613, rely=0.1618, anchor="e")
 
-        self.ten_forty_digital_assets_yes.place(relx=0.877, rely=0.204, anchor="e")
-        self.ten_forty_digital_assets_no.place(relx=0.942, rely=0.204, anchor="e")
+        self.ten_forty_digital_assets_yes.place(relx=0.877, rely=0.2035, anchor="e")
+        self.ten_forty_digital_assets_no.place(relx=0.942, rely=0.2035, anchor="e")
 
-        self.ten_forty_are_dependent.place(relx=0.309, rely=0.214, anchor="e")
-        self.ten_forty_spouse_dependent.place(relx=0.482, rely=0.214, anchor="e")
-        self.ten_forty_spouse_separate.place(relx=0.151, rely=0.224, anchor="e")
+        self.ten_forty_are_dependent.place(relx=0.305, rely=0.2135, anchor="e")
+        self.ten_forty_spouse_dependent.place(relx=0.482, rely=0.2135, anchor="e")
+        self.ten_forty_spouse_separate.place(relx=0.152, rely=0.2228, anchor="e")
 
-        self.ten_forty_self_1959.place(relx=0.189, rely=0.237, anchor="e")
-        self.ten_forty_self_blind.place(relx=0.448, rely=0.237, anchor="e")
-        self.ten_forty_spouse_1959.place(relx=0.624, rely=0.237, anchor="e")
-        self.ten_forty_spouse_blind.place(relx=0.881, rely=0.237, anchor="e")
+        self.ten_forty_self_1959.place(relx=0.189, rely=0.2365, anchor="e")
+        self.ten_forty_self_blind.place(relx=0.447, rely=0.2365, anchor="e")
+        self.ten_forty_spouse_1959.place(relx=0.627, rely=0.2365, anchor="e")
+        self.ten_forty_spouse_blind.place(relx=0.881, rely=0.2365, anchor="e")
 
         self.ten_forty_dependent_first_1.place(relx=0.43, rely=0.265, anchor="e")
 
@@ -1884,15 +1877,15 @@ class UserInterface:
 
         self.ten_forty_dependent_first_4.place(relx=0.43, rely=0.2925, anchor="e")
 
-        self.ten_forty_many_dependents.place(relx=0.130, rely=0.293, anchor="e")
-        self.ten_forty_dependent_1_child_credit.place(relx=0.788, rely=0.265, anchor="e")
-        self.ten_forty_dependent_1_other_credit.place(relx=0.940, rely=0.265, anchor="e")
-        self.ten_forty_dependent_2_child_credit.place(relx=0.788, rely=0.273, anchor="e")
-        self.ten_forty_dependent_2_other_credit.place(relx=0.940, rely=0.273, anchor="e")
-        self.ten_forty_dependent_3_child_credit.place(relx=0.788, rely=0.283, anchor="e")
-        self.ten_forty_dependent_3_other_credit.place(relx=0.940, rely=0.283, anchor="e")
-        self.ten_forty_dependent_4_child_credit.place(relx=0.788, rely=0.293, anchor="e")
-        self.ten_forty_dependent_4_other_credit.place(relx=0.940, rely=0.293, anchor="e")
+        self.ten_forty_many_dependents.place(relx=0.115, rely=0.292, anchor="e")
+        self.ten_forty_dependent_1_child_credit.place(relx=0.788, rely=0.2648, anchor="e")
+        self.ten_forty_dependent_1_other_credit.place(relx=0.940, rely=0.2648, anchor="e")
+        self.ten_forty_dependent_2_child_credit.place(relx=0.788, rely=0.274, anchor="e")
+        self.ten_forty_dependent_2_other_credit.place(relx=0.940, rely=0.274, anchor="e")
+        self.ten_forty_dependent_3_child_credit.place(relx=0.788, rely=0.2835, anchor="e")
+        self.ten_forty_dependent_3_other_credit.place(relx=0.940, rely=0.2835, anchor="e")
+        self.ten_forty_dependent_4_child_credit.place(relx=0.788, rely=0.2928, anchor="e")
+        self.ten_forty_dependent_4_other_credit.place(relx=0.940, rely=0.2928, anchor="e")
 
         self.ten_forty_total_w2s.place(relx=0.987, rely=0.302, anchor="e")
         self.ten_forty_household_wages.place(relx=0.987, rely=0.3115, anchor="e")
@@ -1902,7 +1895,7 @@ class UserInterface:
         self.ten_forty_adoption_benefits.place(relx=0.987, rely=0.3485, anchor="e")
         self.ten_forty_8919_wages.place(relx=0.987, rely=0.358, anchor="e")
         self.ten_forty_other_income.place(relx=0.987, rely=0.3675, anchor="e")
-        self.ten_forty_combat_pay.place(relx=0.822, rely=0.377, anchor="e")
+        self.ten_forty_combat_pay.place(relx=0.817, rely=0.377, anchor="e")
         self.ten_forty_1_ah_sum.place(relx=0.987, rely=0.386, anchor="e")
         self.ten_forty_tax_exempt_interest.place(relx=0.539, rely=0.3955, anchor="e")
         self.ten_forty_taxable_interest.place(relx=0.987, rely=0.3955, anchor="e")
@@ -1915,22 +1908,22 @@ class UserInterface:
         self.ten_forty_social_security.place(relx=0.539, rely=0.4325, anchor="e")
         self.ten_forty_social_taxable.place(relx=0.987, rely=0.4325, anchor="e")
 
-        self.ten_forty_schedule_d.place(relx=0.82, rely=0.4512, anchor="e")
-        self.ten_forty_lump_sum_method.place(relx=0.822, rely=0.442, anchor="e")
+        self.ten_forty_schedule_d.place(relx=0.815, rely=0.4512, anchor="e")
+        self.ten_forty_lump_sum_method.place(relx=0.815, rely=0.442, anchor="e")
 
-        self.ten_forty_capital_gain.place(relx=0.987, rely=0.4505, anchor="e")
-        self.ten_forty_schedule_1.place(relx=0.987, rely=0.459, anchor="e")
-        self.ten_forty_total_income.place(relx=0.987, rely=0.4685, anchor="e")
-        self.ten_forty_income_adjustments.place(relx=0.987, rely=0.478, anchor="e")
-        self.ten_forty_adjusted_income.place(relx=0.987, rely=0.488, anchor="e")
+        self.ten_forty_capital_gain.place(relx=0.987, rely=0.451, anchor="e")
+        self.ten_forty_schedule_1.place(relx=0.987, rely=0.461, anchor="e")
+        self.ten_forty_total_income.place(relx=0.987, rely=0.47, anchor="e")
+        self.ten_forty_income_adjustments.place(relx=0.987, rely=0.479, anchor="e")
+        self.ten_forty_adjusted_income.place(relx=0.987, rely=0.489, anchor="e")
         self.ten_forty_deductions.place(relx=0.987, rely=0.498, anchor="e")
         self.ten_forty_business_deductions.place(relx=0.987, rely=0.5075, anchor="e")
         self.ten_forty_total_deductions.place(relx=0.987, rely=0.517, anchor="e")
-        self.ten_forty_taxable_income.place(relx=0.987, rely=0.5265, anchor="e")
+        self.ten_forty_taxable_income.place(relx=0.987, rely=0.526, anchor="e")
 
-        self.ten_forty_8814.place(relx=0.5115, rely=0.565, anchor="e")
-        self.ten_forty_4972.place(relx=0.602, rely=0.565, anchor="e")
-        self.ten_forty_other_form_check.place(relx=0.692, rely=0.565, anchor="e")
+        self.ten_forty_8814.place(relx=0.503, rely=0.565, anchor="e")
+        self.ten_forty_4972.place(relx=0.593, rely=0.565, anchor="e")
+        self.ten_forty_other_form_check.place(relx=0.683, rely=0.565, anchor="e")
 
         self.ten_forty_8888.place(relx=0.815, rely=0.7813, anchor="e")
         self.ten_forty_route_checking.place(relx=0.652, rely=0.791, anchor="e")
@@ -1939,32 +1932,32 @@ class UserInterface:
         self.ten_forty_third_party_no.place(relx=0.89, rely=0.8547, anchor="e")
         self.ten_forty_self_employed.place(relx=0.8912, rely=0.9633, anchor="e")
 
-        self.ten_forty_other_form_no.place(relx=0.765, rely=0.565, anchor="e")
+        self.ten_forty_other_form_no.place(relx=0.762, rely=0.565, anchor="e")
         self.ten_forty_other_form_total.place(relx=0.987, rely=0.565, anchor="e")
         self.ten_forty_schedule_2.place(relx=0.987, rely=0.5745, anchor="e")
-        self.ten_forty_add_16_17.place(relx=0.987, rely=0.584, anchor="e")
-        self.ten_forty_child_credit.place(relx=0.987, rely=0.5935, anchor="e")
-        self.ten_forty_schedule_3.place(relx=0.987, rely=0.603, anchor="e")
-        self.ten_forty_add_19_20.place(relx=0.987, rely=0.6125, anchor="e")
-        self.ten_forty_sub_21_18.place(relx=0.987, rely=0.622, anchor="e")
-        self.ten_forty_other_taxes.place(relx=0.987, rely=0.6315, anchor="e")
-        self.ten_forty_total_tax.place(relx=0.987, rely=0.641, anchor="e")
+        self.ten_forty_add_16_17.place(relx=0.987, rely=0.5835, anchor="e")
+        self.ten_forty_child_credit.place(relx=0.987, rely=0.593, anchor="e")
+        self.ten_forty_schedule_3.place(relx=0.987, rely=0.6025, anchor="e")
+        self.ten_forty_add_19_20.place(relx=0.987, rely=0.612, anchor="e")
+        self.ten_forty_sub_21_18.place(relx=0.987, rely=0.6215, anchor="e")
+        self.ten_forty_other_taxes.place(relx=0.987, rely=0.6305, anchor="e")
+        self.ten_forty_total_tax.place(relx=0.987, rely=0.64, anchor="e")
 
-        self.ten_forty_withheld_w2.place(relx=0.811, rely=0.660, anchor="e")
-        self.ten_forty_withheld_1099.place(relx=0.811, rely=0.6695, anchor="e")
-        self.ten_forty_withheld_other.place(relx=0.811, rely=0.679, anchor="e")
-        self.ten_forty_withheld_total.place(relx=0.987, rely=0.6885, anchor="e")
-        self.ten_forty_previous_year.place(relx=0.987, rely=0.698, anchor="e")
-        self.ten_forty_eic.place(relx=0.811, rely=0.706, anchor="e")
-        self.ten_forty_8812_child_credit.place(relx=0.811, rely=0.715, anchor="e")
-        self.ten_forty_8863_opportunity_credit.place(relx=0.811, rely=0.725, anchor="e")
-        self.ten_forty_schedule_3_line_15.place(relx=0.811, rely=0.744, anchor="e")
-        self.ten_forty_other_payments.place(relx=0.987, rely=0.754, anchor="e")
-        self.ten_forty_total_payments.place(relx=0.987, rely=0.763, anchor="e")
+        self.ten_forty_withheld_w2.place(relx=0.817, rely=0.659, anchor="e")
+        self.ten_forty_withheld_1099.place(relx=0.817, rely=0.668, anchor="e")
+        self.ten_forty_withheld_other.place(relx=0.817, rely=0.6775, anchor="e")
+        self.ten_forty_withheld_total.place(relx=0.987, rely=0.687, anchor="e")
+        self.ten_forty_previous_year.place(relx=0.987, rely=0.6965, anchor="e")
+        self.ten_forty_eic.place(relx=0.817, rely=0.706, anchor="e")
+        self.ten_forty_8812_child_credit.place(relx=0.817, rely=0.715, anchor="e")
+        self.ten_forty_8863_opportunity_credit.place(relx=0.817, rely=0.725, anchor="e")
+        self.ten_forty_schedule_3_line_15.place(relx=0.817, rely=0.7435, anchor="e")
+        self.ten_forty_other_payments.place(relx=0.987, rely=0.753, anchor="e")
+        self.ten_forty_total_payments.place(relx=0.987, rely=0.762, anchor="e")
 
-        self.ten_forty_overpaid.place(relx=0.987, rely=0.773, anchor="e")
-        self.ten_forty_owed.place(relx=0.987, rely=0.829, anchor="e")
-        self.ten_forty_penalty.place(relx=0.811, rely=0.838, anchor="e")
+        self.ten_forty_overpaid.place(relx=0.987, rely=0.7715, anchor="e")
+        self.ten_forty_owed.place(relx=0.987, rely=0.828, anchor="e")
+        self.ten_forty_penalty.place(relx=0.817, rely=0.837, anchor="e")
 
     def new_session(self):
         """
