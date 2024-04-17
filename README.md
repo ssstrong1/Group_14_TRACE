@@ -48,7 +48,6 @@ The application uses an SQLite library to create and read its saved files.
 
 ### Contributors
 - Stephen Strong - Project Manager
-- Sydney Angelica Southerland
 - Alexi McNabb
 - Dylan Arone
 
