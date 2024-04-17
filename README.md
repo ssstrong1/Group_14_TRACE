@@ -12,6 +12,7 @@
   <a href="#introduction">Introduction</a>
   <ul>
     <li><a href="#purpose">Purpose</a></li>
+    <li><a href="#contributors">Contributors</a></li>
   </ul>
 </li>
 
