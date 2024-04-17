@@ -8,7 +8,10 @@
 <!-- TABLE OF CONTENTS -->
 
 # Table of Contents
-> Insert ToC Here
+> Introduction
+> Contributors
+> Setup
+> Tutorial
 
 
 <!-- ABOUT THE PROJECT -->
