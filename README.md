@@ -81,11 +81,11 @@ The application uses an SQLite library to create and read its saved files.
 
 # Resources Required
 ### System Requirements
-> The minimum requirements for a user's computer is any operating system and machine that can run Python 3.10. Additionally, some disk space is needed to store the application and its files.
+> - The minimum requirements for a user's computer is any operating system and machine that can run Python 3.10. Additionally, some disk space is needed to store the application and its files.
 > 
-> Windows OS
+> - Windows OS
 > 
-> Machine capable of running 1920x1080p or 2160x1440p resolution
+> - Machine capable of running 1920x1080p or 2160x1440p resolution
 ### Internet Connection
-> The only requirements for an Internet connection is for downloading the application. Otherwise, the application does not communicate over the Internet whatsoever.
+> - The only requirements for an Internet connection is for downloading the application. Otherwise, the application does not communicate over the Internet whatsoever.
 
