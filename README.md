@@ -15,6 +15,18 @@
     <li><a href="#contributors">Contributors</a></li>
   </ul>
 </li>
+<li>
+  <a href="#setup">Setup</a>
+  <ul>
+    <li><a href="#installation-guide">Installation Guide</a></li>
+  </ul>
+</li>
+<li>
+  <a href="#tutorial">Tutorial</a>
+  <ul>
+    <li><a href="#user-guide">User Guide</a></li>
+  </ul>
+</li>
 
 
 <!-- ABOUT THE PROJECT -->
@@ -31,11 +43,10 @@
 
 
 # Setup
-> Insert Setup and Installation Instructions Here.
-> 
-> Such as installing required dependencies such as the requirements.txt file.
+### Installation Guide
+> install required dependencies.
 
 
 # Tutorial
-> Insert Tutorial/User Guide Here
+### User Guide
 
