@@ -34,6 +34,7 @@
 # Introduction
 ### About
 > Objectives (Main): TRACE is a simple form-based tax calculation software, allowing a user to see what they owe and what their potential return could be. The program can calculate the estimated tax liability or refund for a given year based on the user’s income, deductions, etc.
+> 
 > Objectives (Details)
 > - Provide a simple interface for calculating a user’s tax returns.
 > - Reduce the number of errors in tax estimates
