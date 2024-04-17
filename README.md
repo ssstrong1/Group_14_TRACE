@@ -11,7 +11,7 @@
 <li>
   <a href="#introduction">Introduction</a>
   <ul>
-    <li><a href="#purpose">Testing Tools and Software Development Processes</a></li>
+    <li><a href="#purpose">Purpose</a></li>
   </ul>
 </li>
 
