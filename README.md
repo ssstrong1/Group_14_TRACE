@@ -28,14 +28,23 @@
     <li><a href="#user-guide">User Guide</a></li>
   </ul>
 </li>
+<li>
+  <a href="#resources-required">Resources Required</a>
+  <ul>
+    <li><a href="#system-requirements">System Requirements</a></li>
+    <li><a href="#internet-connection">Internet Connection</a></li>
+  </ul>
+</li>
 
 
 <!-- ABOUT THE PROJECT -->
 # Introduction
 ### About
+> Goal: To provide an accurate estimate of the amount of tax owed by an individual or business entity to the government, based on their income and other relevant factors.
+> 
 > Objectives (Main): TRACE is a simple form-based tax calculation software, allowing a user to see what they owe and what their potential return could be. The program can calculate the estimated tax liability or refund for a given year based on the user’s income, deductions, etc.
 > 
-> Objectives (Details)
+> Objectives (Details):
 > - Provide a simple interface for calculating a user’s tax returns.
 > - Reduce the number of errors in tax estimates
 > - Complete all planned deliverables within our deadline.
@@ -69,4 +78,12 @@ The application uses an SQLite library to create and read its saved files.
 
 # Tutorial
 ### User Guide
+
+# Resources Required
+### System Requirements
+> The minimum requirements for a user's computer is any operating system and machine that can run Python 3.10. Additionally, some disk space is needed to store the application and its files.
+> Windows OS
+> Machine capable of running 1920x1080p or 2160x1440p resolution
+### Internet Connection
+> The only requirements for an Internet connection is for downloading the application. Otherwise, the application does not communicate over the Internet whatsoever.
 
