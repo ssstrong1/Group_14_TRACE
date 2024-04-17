@@ -8,10 +8,12 @@
 <!-- TABLE OF CONTENTS -->
 
 # Table of Contents
-> Introduction
-> Contributors
-> Setup
-> Tutorial
+<li>
+  <a href="#introduction">Introduction</a>
+  <ul>
+    <li><a href="#purpose">Testing Tools and Software Development Processes</a></li>
+  </ul>
+</li>
 
 
 <!-- ABOUT THE PROJECT -->
