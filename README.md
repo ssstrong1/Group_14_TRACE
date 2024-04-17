@@ -35,6 +35,7 @@
 ### About
 > Objectives: TRACE is a simple form-based tax calculation software, allowing a user to see what they owe and what their potential return could be. The program can calculate the estimated tax liability or refund for a given year based on the user’s income, deductions, etc.
 > - something
+>   
 > Scope: The application takes forms 1040, 1099, and W2 as input for its calculations. The application does not consider any dynamic values as all calculations are done offline. The application accepts input and displays output through a simple form interface. Users from other states are not taken into consideration by the application; it is only used to calculate income taxes in North Carolina. The application uses SQLite database files as a portable means of saving the user’s input and its own output for later use. Multiple files can be opened in multiple instances of the application.
 > 
 > Overview: A user can enter values from their 1099 and W2 forms, and based on that, the application will calculate what they owe and their potential tax return. The user can export all their entered and returned values in a file which can be saved to disk and opened in the application later on.
