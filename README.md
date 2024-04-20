@@ -171,7 +171,7 @@ Support and Contact Information:
 
 Links: 
 
-<a href="#[installation-guide](https://www.makeuseof.com/tag/try-windows-software-wont-install/)">Unable to Install Apps or Software on Windows? Here's What to Do (makeuseof.com)</a>
+<a href="#(https://www.makeuseof.com/tag/try-windows-software-wont-install/)">Unable to Install Apps or Software on Windows? Here's What to Do (makeuseof.com)</a>
 
 Top 6 Ways to Fix Unable to Install Programs or Software on Windows 11 - Guiding Tech 
 
