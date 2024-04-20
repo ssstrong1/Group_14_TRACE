@@ -143,6 +143,7 @@ The application uses an SQLite library to create and read its saved files.
 > There are two options to running the application:
 > 1. You can right click on the TRACE icon inside the location where you installed it and select run as an administrator
 > 2. You can right click on the TRACE icon inside the location where you installed it and click on properties:
+> 
 > Next:
 > 1. From there you can customize how you run the program by selecting the compatibility tab and choosing run this program as an administrator and clicking apply:
 > 2. If you opted to create a Desktop Shortcut you can now double-click it from your Desktop and use the program if you have changed the mentioned settings for the program
