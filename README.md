@@ -140,35 +140,23 @@ The application uses an SQLite library to create and read its saved files.
 > 
 > Launching the Software:
 > 
-> There are two options to running the application.
->
-> 1st you can right click on the TRACE icon inside the location where you installed it and select run as an administrator
->
-> 2nd you can right click on the TRACE icon inside the location where you installed it and click on properties:
->
-> From there you can customize how you run the program by selecting the compatibility tab and choosing run this program as an administrator and clicking apply:
->
-> If you opted to create a Desktop Shortcut you can now double-click it from your Desktop and use the program if you have changed the mentioned settings for the program
->
-> If you have not changed the settings for the program, then you will need to right-click the application and run it as an administrator every time.
->
-> If you are logged in as an administrator, then you do not need to right-click the program and do any of the above. All you need to do is double click the application to run it.
->
-> Alternatively, you can find trace_main.exe in the Program Files (x86)/TRACE.
+> There are two options to running the application:
+> 1. You can right click on the TRACE icon inside the location where you installed it and select run as an administrator
+> 2. You can right click on the TRACE icon inside the location where you installed it and click on properties:
+> Next:
+> 1. From there you can customize how you run the program by selecting the compatibility tab and choosing run this program as an administrator and clicking apply:
+> 2. If you opted to create a Desktop Shortcut you can now double-click it from your Desktop and use the program if you have changed the mentioned settings for the program
+> 3. If you have not changed the settings for the program, then you will need to right-click the application and run it as an administrator every time.
+> 4. If you are logged in as an administrator, then you do not need to right-click the program and do any of the above. All you need to do is double click the application to run it.
+> 5. Alternatively, you can find trace_main.exe in the Program Files (x86)/TRACE.
 >
 > Uninstalling the Software:
->
-> Open the Control Panel.
->
-> Go to "Programs" or "Programs and Features."
->
-> Find TRACE version 1.0.0.0 in the list of installed programs.
->
-> Click on TRACE version 1.0.0.0 and select "Uninstall."
->
-> Follow the on-screen prompts to complete the uninstallation process.
->
-> Alternatively, you can just delete the folder where it is installed 
+> 1. Open the Control Panel.
+> 2. Go to "Programs" or "Programs and Features."
+> 3. Find TRACE version 1.0.0.0 in the list of installed programs.
+> 4. Click on TRACE version 1.0.0.0 and select "Uninstall."
+> 5. Follow the on-screen prompts to complete the uninstallation process.
+> 6. Alternatively, you can just delete the folder where it is installed 
 
  
 
