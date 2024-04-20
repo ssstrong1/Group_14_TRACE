@@ -161,19 +161,17 @@ The application uses an SQLite library to create and read its saved files.
 
  
 
-Troubleshooting 
+Troubleshooting:
 
-If you have installed everything correctly but cannot see what you downloaded or installed, you will have to restore it from windows defender see Downloading the Installer (Download Troubleshooting) and follow the steps provided or install it as an administrator. In many cases windows defender flags many apps as viruses when they currently are not. 
+1. If you have installed everything correctly but cannot see what you downloaded or installed, you will have to restore it from windows defender see Downloading the Installer (Download Troubleshooting) and follow the steps provided or install it as an administrator. In many cases windows defender flags many apps as viruses when they currently are not.
+2. Once logged in, if you are not using the recommended resolutions settings you may want to change them for proper use of the application.
+3. If you get an error message such as (this program does not have the elevated level it needs or something else) it is because you are not running it as an administrator: 
 
-Once logged in, if you are not using the recommended resolutions settings you may want to change them for proper use of the application. 
-
-If you get an error message such as (this program does not have the elevated level it needs or something else) it is because you are not running it as an administrator: 
-
-Support and Contact Information 
+Support and Contact Information: 
 
 Links: 
 
-Unable to Install Apps or Software on Windows? Here's What to Do (makeuseof.com) 
+<a href="#[installation-guide](https://www.makeuseof.com/tag/try-windows-software-wont-install/)">Unable to Install Apps or Software on Windows? Here's What to Do (makeuseof.com)</a>
 
 Top 6 Ways to Fix Unable to Install Programs or Software on Windows 11 - Guiding Tech 
 
