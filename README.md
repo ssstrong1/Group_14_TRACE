@@ -75,67 +75,45 @@ The application uses an SQLite library to create and read its saved files.
 ### Installation Guide
 > Purpose of Installation Guide:
 >   
-> Simplified Installation: This manual simplifies difficult installation procedures into clear directions. Installing, uninstalling, and upgrading the software is made simple and straightforward for all users, regardless of expertise level.  
-
-Improved Understanding: By providing information about the software's functionality, this guide helps users better comprehend the underlying technology. It encourages self-sufficiency by giving users the ability to configure the software on their own.  
-
-Error Prevention: Instructions that are clear can help users avoid common installation difficulties and errors. Carefully following the instructions reduces the likelihood of problems for users.  
-
-Good User Experience: Having an installation manual available helps make the user experience better overall. User satisfaction increases when consumers can install the software successfully. 
-
- 
-
-System Requirements 
-
-Operating System: Windows 10 or later 
-
-Processor: Intel Core i5 or newer 
-
-RAM: 8 GB or more 
-
-Disk Space: 1 GB or more free space 
-
-Monitor/Display with 1920x1080p minimum resolution and 2160x1440p maximum resolution 
-
-Trace Installer 
-
-Browser app capable of viewing/opening PDFs, For Example chrome, Firefox, Edge, etc. 
-
-Browser capable of surfing the web 
-
-May need to turn off windows defender to allow installation of exe. 
-
-Internet Connection: Required for installation and updates 
-
- 
-
-Downloading the Installer 
-
-Download TRACE Installer 
-
-Visit the official GitHub pages of TRACE at GitHub - ssstrong1/Group_14_TRACE: TRACE Project 
-
-You can click Code and click download zip:You can also click on TRACE Release under Releases: Then click on source code (zip). Optionally, you can follow the instructions below for an alternative 
-
-If you don't want to download the zip, instead navigate to the "Installer" Folder. 
-
-From here you can click on tracesetup.exe, then click on the three dots in the right-hand corner and click download:Make sure to check your browser downloads area. If you get this message: make sure to click on the three dots next to your file and select keep. This message will pop up next: Select Show more and select Keep anyway. Your file should now be downloaded. 
-
- 
-
-Download Troubleshooting 
-
- 
-
-If you get this message: Navigate to your windows security. 
-
-From there click Virus and Threat Protection: 
-
-Then click Protection History: 
-
-Next Navigate to the file that was blocked: 
-
- and select actions then restore. Your download is now restored and ready to be used. Navigate to your download folder and see that it is accessible now: 
+> Simplified Installation: This manual simplifies difficult installation procedures into clear directions. Installing, uninstalling, and upgrading the software is made simple and straightforward for all users, regardless of expertise level.
+> 
+> Improved Understanding: By providing information about the software's functionality, this guide helps users better comprehend the underlying technology. It encourages self-sufficiency by giving users the ability to configure the software on their own.
+> 
+> Error Prevention: Instructions that are clear can help users avoid common installation difficulties and errors. Carefully following the instructions reduces the likelihood of problems for users.
+> 
+> Good User Experience: Having an installation manual available helps make the user experience better overall. User satisfaction increases when consumers can install the software successfully.
+> 
+> System Requirements:
+> 
+> 1. Operating System: Windows 10 or later
+> 2. Processor: Intel Core i5 or newer
+> 3. RAM: 8 GB or more
+> 4. Disk Space: 1 GB or more free space
+> 5. Monitor/Display with 1920x1080p minimum resolution and 2160x1440p maximum resolution
+> 6. Trace Installer
+> 7. Browser app capable of viewing/opening PDFs, For Example chrome, Firefox, Edge, etc.
+> 8. Browser capable of surfing the web
+> 9. May need to turn off windows defender to allow installation of exe.
+> 10. Internet Connection: Required for installation and updates
+>
+> Downloading the Installer:
+>  
+> Download TRACE Installer:
+> 
+> 1. Visit the official GitHub pages of TRACE at GitHub - ssstrong1/Group_14_TRACE: TRACE Project
+> 2. You can click Code and click download zip:You can also click on TRACE Release under Releases: Then click on source code (zip). Optionally, you can follow the instructions below for an alternative
+> 3. If you don't want to download the zip, instead navigate to the "Installer" Folder.
+> 4. From here you can click on tracesetup.exe, then click on the three dots in the right-hand corner and click download:Make sure to check your browser downloads area. If you get this message: make sure to click on the three dots next to your file and select keep. This message will pop up next: Select Show more and select Keep anyway. Your file should now be downloaded.
+>    
+> Download Troubleshooting:
+> 1. If you get this message: Navigate to your windows security.
+> 2.  From there click Virus and Threat Protection:
+> 
+> Then click Protection History:
+>
+> Next Navigate to the file that was blocked:
+>
+> and select actions then restore. Your download is now restored and ready to be used. Navigate to your download folder and see that it is accessible now: 
 
  
 
