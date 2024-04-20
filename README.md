@@ -107,103 +107,67 @@ The application uses an SQLite library to create and read its saved files.
 >    
 > Download Troubleshooting:
 > 1. If you get this message: Navigate to your windows security.
-> 2.  From there click Virus and Threat Protection:
+> 2. From there click Virus and Threat Protection:
+> 3. Then click Protection History:
+> 4. Next Navigate to the file that was blocked:
+> 5. Select actions then restore. Your download is now restored and ready to be used. Navigate to your download folder and see that it is accessible now:
+>    
+> Installing the Software:
 > 
-> Then click Protection History:
+> Running the Installer File with the Zipped Folder:
+> 1. Find the downloaded zip folder (either Group_14_TRACE-main.zip or Group_14_TRACE-1.0.0.0.zip if installed from releases) in your system's Downloads folder.
+> 2. Double-click on the zipped folder and extract the contents
+> 3. Navigate to your new extracted folder and inside locate tracesetup.exe in the installer folder
+> 4. Double-click on the installer file (tracesetup.exe) to run it
+> Follow the Installation Wizard:
+> 1. The installation wizard will help you through the installation process.
+> 2. Choose the installation directory where you want to install TRACE.
+> 3. Click "Next" to proceed with the installation.
+> Complete the Installation:
+> 1. Once the installation is complete, click "Finish" to exit the installation wizard.
+> 2. TRACE is now installed on your system and ready to use.
+> Running the Installer File without the Zipped Folder:
+> 1. Find the downloaded installer file (tracesetup.exe) in your system's Downloads folder.
+> 2. Double-click on the installer file to run it.
+> Follow the Installation Wizard:
+> 1. The installation wizard will help you through the installation process.
+> 2. Choose the installation directory where you want to install TRACE.
+> 3. Click "Next" to proceed with the installation.
+> Complete the Installation:
+> 1. Once the installation is complete, click "Finish" to exit the installation wizard.
+> 2. TRACE is now installed on your system and ready to use.
+> 
+> Launching the Software:
+> 
+> There are two options to running the application.
 >
-> Next Navigate to the file that was blocked:
+> 1st you can right click on the TRACE icon inside the location where you installed it and select run as an administrator
 >
-> and select actions then restore. Your download is now restored and ready to be used. Navigate to your download folder and see that it is accessible now: 
-
- 
-
-Installing the Software 
-
-Running the Installer File with the Zipped Folder 
-
-Find the downloaded zip folder (either Group_14_TRACE-main.zip or Group_14_TRACE-1.0.0.0.zip if installed from releases) in your system's Downloads folder. 
-
-Double-click on the zipped folder and extract the contents 
-
-Navigate to your new extracted folder and inside locate tracesetup.exe in the installer folder 
-
-Double-click on the installer file (tracesetup.exe) to run it 
-
-Follow the Installation Wizard 
-
-The installation wizard will help you through the installation process. 
-
-Choose the installation directory where you want to install TRACE. 
-
-Click "Next" to proceed with the installation. 
-
-Complete the Installation 
-
-Once the installation is complete, click "Finish" to exit the installation wizard. 
-
-TRACE is now installed on your system and ready to use. 
-
- 
-
-Running the Installer File without the Zipped Folder 
-
-Find the downloaded installer file (tracesetup.exe) in your system's Downloads folder. 
-
-Double-click on the installer file to run it. 
-
-Follow the Installation Wizard 
-
-The installation wizard will help you through the installation process. 
-
-Choose the installation directory where you want to install TRACE. 
-
-Click "Next" to proceed with the installation. 
-
-Complete the Installation 
-
-Once the installation is complete, click "Finish" to exit the installation wizard. 
-
-TRACE is now installed on your system and ready to use. 
-
- 
-
- 
-
-Launching the Software 
-
-There are two options to running the application. 
-
-1st you can right click on the TRACE icon inside the location where you installed it and select run as an administrator 
-
-2nd you can right click on the TRACE icon inside the location where you installed it and click on properties: 
-
-From there you can customize how you run the program by selecting the compatibility tab and choosing run this program as an administrator and clicking apply: 
-
-If you opted to create a Desktop Shortcut you can now double-click it from your Desktop and use the program if you have changed the mentioned settings for the program 
-
-If you have not changed the settings for the program, then you will need to right-click the application and run it as an administrator every time. 
-
-If you are logged in as an administrator, then you do not need to right-click the program and do any of the above. All you need to do is double click the application to run it. 
-
-Alternatively, you can find trace_main.exe in the Program Files (x86)/TRACE. 
-
- 
-
- 
-
-Uninstalling the Software 
-
-Open the Control Panel. 
-
-Go to "Programs" or "Programs and Features." 
-
-Find TRACE version 1.0.0.0 in the list of installed programs. 
-
-Click on TRACE version 1.0.0.0 and select "Uninstall." 
-
-Follow the on-screen prompts to complete the uninstallation process. 
-
-Alternatively, you can just delete the folder where it is installed 
+> 2nd you can right click on the TRACE icon inside the location where you installed it and click on properties:
+>
+> From there you can customize how you run the program by selecting the compatibility tab and choosing run this program as an administrator and clicking apply:
+>
+> If you opted to create a Desktop Shortcut you can now double-click it from your Desktop and use the program if you have changed the mentioned settings for the program
+>
+> If you have not changed the settings for the program, then you will need to right-click the application and run it as an administrator every time.
+>
+> If you are logged in as an administrator, then you do not need to right-click the program and do any of the above. All you need to do is double click the application to run it.
+>
+> Alternatively, you can find trace_main.exe in the Program Files (x86)/TRACE.
+>
+> Uninstalling the Software:
+>
+> Open the Control Panel.
+>
+> Go to "Programs" or "Programs and Features."
+>
+> Find TRACE version 1.0.0.0 in the list of installed programs.
+>
+> Click on TRACE version 1.0.0.0 and select "Uninstall."
+>
+> Follow the on-screen prompts to complete the uninstallation process.
+>
+> Alternatively, you can just delete the folder where it is installed 
 
  
 
