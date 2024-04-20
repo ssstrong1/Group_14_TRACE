@@ -101,16 +101,16 @@ The application uses an SQLite library to create and read its saved files.
 > Download TRACE Installer:
 > 
 > 1. Visit the official GitHub pages of TRACE at GitHub - ssstrong1/Group_14_TRACE: TRACE Project
-> 2. You can click Code and click download zip:You can also click on TRACE Release under Releases: Then click on source code (zip). Optionally, you can follow the instructions below for an alternative
+> 2. You can click Code and click download zip:You can also click on TRACE Release under Releases. Then click on source code (zip). Optionally, you can follow the instructions below for an alternative
 > 3. If you don't want to download the zip, instead navigate to the "Installer" Folder.
-> 4. From here you can click on tracesetup.exe, then click on the three dots in the right-hand corner and click download:Make sure to check your browser downloads area. If you get this message: make sure to click on the three dots next to your file and select keep. This message will pop up next: Select Show more and select Keep anyway. Your file should now be downloaded.
+> 4. From here you can click on tracesetup.exe, then click on the three dots in the right-hand corner and click download. Make sure to check your browser downloads area. If you get a message pertaining to viruses make sure to click on the three dots next to your file and select keep. Select Show more and select Keep anyway. Your file should now be downloaded.
 >    
 > Download Troubleshooting:
-> 1. If you get this message: Navigate to your windows security.
-> 2. From there click Virus and Threat Protection:
-> 3. Then click Protection History:
-> 4. Next Navigate to the file that was blocked:
-> 5. Select actions then restore. Your download is now restored and ready to be used. Navigate to your download folder and see that it is accessible now:
+> 1. If you get a message pertaining to viruses navigate to your windows security.
+> 2. From there click Virus and Threat Protection
+> 3. Then click Protection History
+> 4. Next Navigate to the file that was blocked
+> 5. Select actions then restore. Your download is now restored and ready to be used. Navigate to your download folder and see that it is accessible now
 >    
 > Installing the Software:
 > 
@@ -142,10 +142,10 @@ The application uses an SQLite library to create and read its saved files.
 > 
 > There are two options to running the application:
 > 1. You can right click on the TRACE icon inside the location where you installed it and select run as an administrator
-> 2. You can right click on the TRACE icon inside the location where you installed it and click on properties:
+> 2. You can right click on the TRACE icon inside the location where you installed it and click on properties
 > 
 > Next:
-> 1. From there you can customize how you run the program by selecting the compatibility tab and choosing run this program as an administrator and clicking apply:
+> 1. From there you can customize how you run the program by selecting the compatibility tab and choosing run this program as an administrator and clicking apply
 > 2. If you opted to create a Desktop Shortcut you can now double-click it from your Desktop and use the program if you have changed the mentioned settings for the program
 > 3. If you have not changed the settings for the program, then you will need to right-click the application and run it as an administrator every time.
 > 4. If you are logged in as an administrator, then you do not need to right-click the program and do any of the above. All you need to do is double click the application to run it.
