@@ -73,8 +73,10 @@ The application uses an SQLite library to create and read its saved files.
 
 # Setup
 ### Installation Guide
-> Software Installation Guide: TRACE 
-> Purpose of Installation Guide:  
+> Software Installation Guide: TRACE
+>  
+> Purpose of Installation Guide:
+>   
 > Simplified Installation: This manual simplifies difficult installation procedures into clear directions. Installing, uninstalling, and upgrading the software is made simple and straightforward for all users, regardless of expertise level.  
 
 Improved Understanding: By providing information about the software's functionality, this guide helps users better comprehend the underlying technology. It encourages self-sufficiency by giving users the ability to configure the software on their own.  
