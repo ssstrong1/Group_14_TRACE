@@ -126,6 +126,7 @@ The application uses an SQLite library to create and read its saved files.
 > Complete the Installation:
 > 1. Once the installation is complete, click "Finish" to exit the installation wizard.
 > 2. TRACE is now installed on your system and ready to use.
+> 
 > Running the Installer File without the Zipped Folder:
 > 1. Find the downloaded installer file (tracesetup.exe) in your system's Downloads folder.
 > 2. Double-click on the installer file to run it.
