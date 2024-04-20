@@ -170,23 +170,17 @@ Troubleshooting:
 Support and Contact Information: 
 
 Links: 
-<a href="#contributors">
 
-<a href="#https://www.makeuseof.com/tag/try-windows-software-wont-install/">Unable to Install Apps or Software on Windows? Here's What to Do (makeuseof.com)</a>
-
-Top 6 Ways to Fix Unable to Install Programs or Software on Windows 11 - Guiding Tech 
-
-Windows 11 common problems — and the fixes | Windows Central 
-
-9 Ways to Fix Unable to Install Apps or Software on Windows 11 - Gadgets To Use 
+1. https://www.makeuseof.com/tag/try-windows-software-wont-install/
+2. https://www.guidingtech.com/top-ways-to-fix-unable-to-install-programs-or-software-on-windows-11/
+3. https://www.windowscentral.com/windows-11-common-problems-and-fixes
+4. https://gadgetstouse.com/blog/2022/05/23/9-ways-to-fix-unable-to-install-apps-or-software-on-windows-11/
 
 Contact Information: 
 
-Project Manager: Stephen Strong – ssstrong@my.waketech.edu 
-
-User Interface Specialist: Alexi Mcnab - acmcnabb@my.waketech.edu 
-
-Back-End Specialist: Dyaln Arone - daarone@my.waketech.edu 
+1. Project Manager: Stephen Strong – ssstrong@my.waketech.edu
+2. User Interface Specialist: Alexi Mcnab - acmcnabb@my.waketech.edu
+3. Back-End Specialist: Dyaln Arone - daarone@my.waketech.edu 
 
 
 # Tutorial
