@@ -74,18 +74,8 @@ The application uses an SQLite library to create and read its saved files.
 # Setup
 ### Installation Guide
 > Software Installation Guide: TRACE 
-
- 
-
-Introduction 
-
-Brief Introduction of Program: The application takes forms 1040, 1099, and W-2 as input for its calculations. The application does not consider any dynamic values as all calculations are done offline. The application accepts input and displays output through a simple form interface. The application will only handle standardized deductions and not additional tax credits. 
-
-The application uses SQLite database files as a portable means of saving the user’s input and its own output for later use. Multiple files can be opened in multiple instances of the application. 
-
-Purpose of Installation Guide:  
-
-Simplified Installation: This manual simplifies difficult installation procedures into clear directions. Installing, uninstalling, and upgrading the software is made simple and straightforward for all users, regardless of expertise level.  
+> Purpose of Installation Guide:  
+> Simplified Installation: This manual simplifies difficult installation procedures into clear directions. Installing, uninstalling, and upgrading the software is made simple and straightforward for all users, regardless of expertise level.  
 
 Improved Understanding: By providing information about the software's functionality, this guide helps users better comprehend the underlying technology. It encourages self-sufficiency by giving users the ability to configure the software on their own.  
 
