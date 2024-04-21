@@ -186,6 +186,45 @@ Contact Information:
 
 # Tutorial
 ### User Guide
+> Getting Started:
+> 1. TRACE can be downloaded from https://github.com/ssstrong1/Group_14_TRACE. TRACE requires a computer with Windows 10 or later capable of running Python 3.10. Greater detail is provided in the Installation Guide, included in the same download.
+> 
+> Features Overview:
+> 1. There are three main screens in TRACE: the W2 form, the 1099 form, and the 1040 form. Data entered in the W2 and 1099 forms, or imported from a downloaded PDF, can be sent to a 1040 form. After data has been entered in the 1040 form, or imported from a downloaded PDF, the program will take your information and estimate your tax return.
+> 
+> Using TRACE:
+> 
+> W2 and 1099 Form Entry:
+> 1. After logging in, TRACE will display the W2 form entry page. You can switch to the 1099 form by clicking on the 1099 button under the Form drop-down. You can switch to the W2 form from the 1099 or 1040 under the same drop-down.
+> 2. By either importing a downloaded PDF (see below) or manually entering your information, you can put together your data to send to the 1040 form.
+> 3. To submit your information once it has been entered, click Submit to 1040. Make sure your data is correct. Your data will be sent to the 1040 form, and a new form of the same type will be set up for you.
+> 
+> Saving and Loading Forms:
+> 1. Forms created within TRACE are saved and loaded natively. To save your work, enter the username and password you logged in with into the boxes below the Results header (1, 2) and click Auto/Save Session (3). This will save your work and allow you to retrieve it later. To restore your work after closing the application, enter your username and password into the boxes below the Results header (1, 2) and click Load Session (4).
+> 2. Forms can also be saved as and loaded from PDFs through the File drop-down menu (1). A form you filled out in TRACE can be saved as a PDF (2). A W2, 1099, or 1040 form downloaded from the internet can be opened in TRACE (3). Importing scanned forms is not supported yet.
+> 
+> Viewing your Potential Return with the 1040:
+> 1. Once you have submitted your W2 and 1099 forms, you can view your potential tax return with the 1040. Select the Forms dropdown (1) and then 1040 (2).
+> 2. Once you have either imported your 1040 or filled out the other fields, inputting 0 or N/A for inapplicable fields, click Calculate (1) to view your potential return. As with the W2 and 1099, you can export these results as a PDF (2).
+> 
+> Troubleshooting:
+> 
+> Unable to Log In:
+> 1. Ensure that “Log In” is visible above the Username and Password fields. Ensure you are clicking the “Log In” button instead of the “Sign Up" button. The button locations swap between views.
+> 
+> Unable to Save Session:
+> 1. Ensure that you have entered your username and password into the boxes below “Results” before clicking “Auto/Save Session.” They must be the same username and password you used to log in.
+> 
+> Unable to Calculate:
+> 1. Ensure that all fields have something entered in them. Number fields can have a 0 input if they do not apply, and text fields require at least one character to be accepted. Error messages display the first unfilled or invalid field.
+> 
+> Frequently Asked Questions (FAQs):
+>
+> Does TRACE file my taxes for me?
+> 1. This program does not submit any filing information to the US Government. It provides an estimate of how much you will get when you do, but you must file your taxes separately.
+> 
+> Does TRACE connect to the internet?
+> 1. After installation is completed, TRACE does not connect to the internet. TRACE runs completely offline.
 
 # Resources Required
 ### System Requirements
