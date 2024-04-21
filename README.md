@@ -165,7 +165,8 @@ Troubleshooting:
 
 1. If you have installed everything correctly but cannot see what you downloaded or installed, you will have to restore it from windows defender see Downloading the Installer (Download Troubleshooting) and follow the steps provided or install it as an administrator. In many cases windows defender flags many apps as viruses when they currently are not.
 2. Once logged in, if you are not using the recommended resolutions settings you may want to change them for proper use of the application.
-3. If you get an error message such as (this program does not have the elevated level it needs or something else) it is because you are not running it as an administrator: 
+3. If you get an error message such as (this program does not have the elevated level it needs or something else) it is because you are not running it as an administrator.
+4. If you are the application loads but you cannot create a new user, it is because you are not running it as an administrator. 
 
 Support and Contact Information: 
 
