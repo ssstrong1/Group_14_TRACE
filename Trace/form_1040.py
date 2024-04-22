@@ -1374,9 +1374,9 @@ class Form1040:
 
     def add_ten_99(self, form, x):
         """
-        Function to append a new W2 form to the end of the list of W2 forms
+        Function to append a new 1099 form to the end of the list of 1099 forms
 
-        :param form: W2 form as a dictionary
+        :param form: 1099 form as a dictionary
         :return: N/A
         """
         self.form_1099_div.append(form)
