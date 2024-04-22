@@ -130,26 +130,3 @@ ten_99_group_of_fed_income_tax_withheld = []
 overall_total_w2_group_of_fed_income_tax_withheld = 00.00
 
 overall_total_ten_99_group_of_fed_income_tax_withheld = 00.00
-
-#def send_info(self):
-#    info_attributes = [
-#        "ten_ninety_nine_payer_info",
-#        "ten_ninety_nine_payer_tin",
-#        "ten_ninety_nine_recipient_tin",
-#        "ten_ninety_nine_recipient_name",
-#        "ten_ninety_nine_recipient_address",
-#        "ten_ninety_nine_recipient_city_etc",
-#        "ten_ninety_nine_account_number",
-#        "ten_ninety_nine_ordinary_dividends",
-#        "ten_ninety_nine_qualified_dividends",
-#        "ten_ninety_nine_capital_gain",
-#        "ten_ninety_nine_1250_gain",
-#        "ten_ninety_nine_1202_gain",
-#        "ten_ninety_nine_collectibles_gain",
-#        "ten_ninety_nine_897_dividends",
-#        "ten_ninety_nine_897_gain",
-#        "ten_ninety_nine_nondividend"
-#    ]#
-#
-#    for attr in info_attributes:
-#        setattr(self, attr, getattr(all_user_info, attr))"""
